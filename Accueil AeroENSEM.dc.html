@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<title>Club AéroENSEM — Accueil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f2f5f8; --surface:#ffffff; --text:#33475c; --ink:#0b2545; --muted:#657a90;
+    --line:#dbe3ec; --cyan:#0a9fc4; --cyanSoft:#e2f4fa; --orange:#e2612c; --navy:#0b2545;
+    --bgB:#f7f5f1; --surfaceB:#ffffff; --textB:#4a473f; --inkB:#15130f; --lineB:#e4ded4;
+    --shadow:0 1px 2px rgba(11,37,69,.05),0 12px 32px -12px rgba(11,37,69,.14);
+  }
+  [data-theme="dark"]{
+    --bg:#050a12; --surface:#0c1524; --text:#a9bccf; --ink:#f2f8fc; --muted:#7b90a6;
+    --line:#1a2a3f; --cyan:#2ed3f0; --cyanSoft:#0d2734; --orange:#ff7a45; --navy:#e8f4fb;
+    --bgB:#0a0a0c; --surfaceB:#141417; --textB:#a5a29b; --inkB:#f4f2ee; --lineB:#26262b;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 16px 40px -14px rgba(0,0,0,.7);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#e9edf2;font-family:'Space Grotesk',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  [data-theme="dark"] body{background:#04070d}
+  a{color:var(--cyan);text-decoration:none}
+  a:hover{color:var(--orange)}
+  @keyframes flyPath{0%{offset-distance:0%;opacity:0}6%{opacity:1}94%{opacity:1}100%{offset-distance:100%;opacity:0}}
+  @keyframes trailDraw{0%{stroke-dashoffset:1400;opacity:0}8%{opacity:.9}100%{stroke-dashoffset:0;opacity:.9}}
+  @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  @keyframes driftSlow{from{transform:translateX(0)}to{transform:translateX(-80px)}}
+  @keyframes pulseRing{0%{transform:scale(.9);opacity:.55}70%{transform:scale(1.5);opacity:0}100%{opacity:0}}
+  @keyframes hover3{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+  [data-logo]{filter:drop-shadow(0 0 11px rgba(255,255,255,.62)) drop-shadow(0 2px 8px rgba(0,0,0,.45))}
+  [data-theme="light"] [data-logo="mark"]{filter:drop-shadow(0 2px 10px rgba(11,37,69,.18))}
+  @keyframes wordUp{from{opacity:0;transform:translateY(18px) rotateX(-40deg);filter:blur(5px)}to{opacity:1;transform:none;filter:blur(0)}}
+  @keyframes wordWave{0%,55%,100%{transform:translateY(0);color:#dbeaf4;text-shadow:none}18%{transform:translateY(-6px);color:#ffffff;text-shadow:0 0 22px rgba(110,220,250,.75)}}
+  @keyframes shine{0%{background-position:-140% 0}60%,100%{background-position:240% 0}}
+  @keyframes sweep{0%{transform:translateX(-120%)}100%{transform:translateX(320%)}}
+</style>
+</helmet>
+
+<div style="position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9000;display:flex;gap:8px;align-items:center;padding:8px;border-radius:999px;background:rgba(12,21,36,.88);backdrop-filter:blur(14px);box-shadow:0 10px 30px -8px rgba(0,0,0,.5);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em">
+  <span style="color:#7b90a6;padding-left:10px;text-transform:uppercase">AéroENSEM</span>
+  <button onClick="{{ toggleLang }}" style="border:1px solid rgba(255,255,255,.16);background:transparent;color:#e8f2f8;padding:7px 14px;border-radius:999px;cursor:pointer;font-family:inherit;font-size:11px;letter-spacing:.08em" style-hover="border-color:#2ed3f0;color:#2ed3f0">{{ langLabel }}</button>
+  <button onClick="{{ toggleTheme }}" style="border:1px solid rgba(255,255,255,.16);background:transparent;color:#e8f2f8;padding:7px 14px;border-radius:999px;cursor:pointer;font-family:inherit;font-size:11px;letter-spacing:.08em" style-hover="border-color:#2ed3f0;color:#2ed3f0">{{ themeLabel }}</button>
+</div>
+
+<section style="display:flex;flex-wrap:nowrap;gap:64px;padding:96px 48px;align-items:flex-start;justify-content:flex-start;width:max-content;margin:0 auto">
+
+  <div id="1a" style="width:1440px;flex:0 0 auto">
+
+    <div style="border-radius:20px;overflow:hidden;background:var(--bg);color:var(--text);box-shadow:var(--shadow)">
+
+      <!-- HERO -->
+      <div style="position:relative;height:840px;overflow:hidden;background:linear-gradient(160deg,#04101f 0%,#071a2e 45%,#04101f 100%)">
+        <video src="assets/hero-bg.mp4" data-bg="" autoplay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.92;filter:brightness(1.45) contrast(.96) saturate(.85)"></video>
+        <div style="position:absolute;inset:0;background:linear-gradient(150deg,rgba(4,16,31,.5) 0%,rgba(7,26,46,.24) 42%,rgba(4,16,31,.66) 100%)"></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,16,31,.86) 0%,rgba(4,16,31,.6) 46%,rgba(4,16,31,0) 78%)"></div>
+
+        <!-- trajectoire + B-2 -->
+        <svg viewBox="0 0 1440 840" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%">
+          <defs>
+            <linearGradient id="trailA" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#2ed3f0" stop-opacity="0"></stop>
+              <stop offset="55%" stop-color="#2ed3f0" stop-opacity=".55"></stop>
+              <stop offset="100%" stop-color="#ff7a45" stop-opacity=".9"></stop>
+            </linearGradient>
+          </defs>
+          <path d="M-60,700 C300,640 520,300 820,250 C1080,206 1280,150 1520,90" fill="none" stroke="url(#trailA)" stroke-width="2" stroke-dasharray="1400" style="animation:trailDraw 14s cubic-bezier(.35,.1,.2,1) infinite"></path>
+          <path d="M-60,700 C300,640 520,300 820,250 C1080,206 1280,150 1520,90" fill="none" stroke="rgba(46,211,240,.14)" stroke-width="1" stroke-dasharray="4 10"></path>
+        </svg>
+        <div data-plane="a" style="position:absolute;inset:0;offset-path:path('M-60,700 C300,640 520,300 820,250 C1080,206 1280,150 1520,90');offset-rotate:auto;width:0;height:0;animation:flyPath 14s cubic-bezier(.35,.1,.2,1) infinite">
+          <svg viewBox="0 0 220 120" style="width:60px;height:33px;transform:translate(-30px,-16px);overflow:visible">
+            <path d="M204,60 C196,50 170,45 122,45 L112,45 L70,10 L58,13 L92,45 L44,47 L22,26 L13,29 L28,50 L14,60 L28,70 L13,91 L22,94 L44,73 L92,75 L58,107 L70,110 L112,75 L122,75 C170,75 196,70 204,60 Z" fill="none" stroke="#ffffff" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"></path>
+          </svg>
+        </div>
+
+        <!-- nav -->
+        <div style="position:relative;display:flex;align-items:center;justify-content:space-between;padding:30px 64px">
+          <a href="#1a" style="display:flex;align-items:center;transition:opacity .3s,transform .3s cubic-bezier(.2,.7,.2,1)" style-hover="opacity:.85;transform:translateY(-2px)">
+            <img src="assets/logo-club-aero-v2.png" alt="Club AéroENSEM" data-logo="nav" style="display:block;height:46px;width:auto"></a>
+          <div style="display:flex;gap:38px;font-size:14px;font-weight:500;color:#b9cddd">
+            <a href="#1a" style="color:#fff" data-en="Home">Accueil</a>
+            <a href="#1a" style="color:#b9cddd" data-en="Cells">Cellules</a>
+            <a href="#1a" style="color:#b9cddd" data-en="Events">Événements</a>
+            <a href="#1a" style="color:#b9cddd" data-en="Team">Bureau</a>
+            <a href="#1a" style="color:#b9cddd" data-en="Store">Store</a>
+            <a href="#1a" style="color:#b9cddd" data-en="Partners">Partenaires</a>
+            <a href="#1a" style="color:#b9cddd" data-en="Contact">Contact</a>
+          </div>
+          <a href="#1a" style="padding:12px 22px;border-radius:999px;background:#2ed3f0;color:#04101f;font-weight:600;font-size:14px" style-hover="background:#ff7a45;color:#fff" data-en="Join us">Se connecter</a>
+        </div>
+
+        <!-- hero copy -->
+        <div style="position:relative;padding:96px 64px 0;max-width:1000px">
+          <div style="display:inline-flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.24em;color:#2ed3f0;border:1px solid rgba(46,211,240,.3);border-radius:999px;padding:8px 16px;margin-bottom:34px">
+            <span style="width:6px;height:6px;border-radius:50%;background:#ff7a45;display:inline-block"></span>
+            <span data-en="ENSEM CASABLANCA — SINCE 2016">ENSEM CASABLANCA — DEPUIS 2014</span>
+          </div>
+          <h1 style="margin: 0; font-size: 112px; line-height: .92; font-weight: 700; letter-spacing: -.035em; color: #fff; text-wrap: balance; font-family: Lora; width: 910px; height: 212px; text-decoration-line: none">Club Aéro<span style="color:#2ed3f0">ENSEM</span></h1>
+          <p data-anim="slogan" style="margin:30px 0 0;font-size:26px;line-height:1.4;color:#dbeaf4;max-width:640px;font-weight:400;text-wrap:pretty">Together we fly, together we climb the sky.</p>
+          <p style="margin:18px 0 0;font-size:17px;line-height:1.7;color:#b6cddd;max-width:560px;text-wrap:pretty" data-en="Seven cells, one trajectory: turning student curiosity into real aerospace engineering projects.">Sept cellules, une seule trajectoire : transformer la curiosité des étudiants en véritables projets d'ingénierie aéronautique.</p>
+          <div style="display:flex;gap:16px;margin-top:44px">
+            <a href="#1a" style="padding:18px 34px;border-radius:999px;background:#2ed3f0;color:#04101f;font-weight:600;font-size:16px;box-shadow:0 14px 34px -10px rgba(46,211,240,.6)" style-hover="background:#fff" data-en="Discover the club">Découvrir le club</a>
+            <a href="#1a" style="padding:18px 34px;border-radius:999px;border:1px solid rgba(255,255,255,.22);color:#fff;font-weight:600;font-size:16px" style-hover="border-color:#ff7a45;color:#ff7a45" data-en="Join us">Nous rejoindre</a>
+          </div>
+        </div>
+
+        <div style="position:absolute;bottom:30px;left:64px;display:flex;gap:44px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;color:#9fc0d4;text-shadow:0 1px 8px rgba(4,16,31,.9)">
+          <span>ALT 10 400 M</span><span>HDG 042°</span><span data-en="SCROLL ↓">DÉFILER ↓</span>
+        </div>
+      </div>
+
+      <!-- QUI SOMMES-NOUS -->
+      <div data-reveal="" style="padding:120px 64px;display:grid;grid-template-columns:380px 1fr;gap:80px;background:var(--bg)">
+
+        <div>
+
+
+          <div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;text-align:center">
+            <img src="assets/logo-club-aero-v2.png" alt="Logo du Club AéroENSEM" data-logo="mark" style="width:100%;max-width:360px;height:auto;animation:hover3 6s ease-in-out infinite">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--muted)" data-en="TOGETHER WE FLY · ENSEM CASABLANCA">TOGETHER WE FLY · ENSEM CASABLANCA</div>
+          </div>
+
+        </div><div style="display:grid;gap:22px;align-content:start;align-items:start;font-size:17px;line-height:1.75;color:var(--text);max-width:720px">
+          <p style="margin:0;text-wrap:pretty" data-en="Club AéroENSEM brings together students of the École Nationale Supérieure d'Électricité et de Mécanique around a shared passion: flight. Founded in 2016, it has grown from a handful of enthusiasts into seven specialised cells covering everything from design to sponsorship.">Le Club AéroENSEM est l'association étudiante de l'École Nationale Supérieure d'Électricité et de Mécanique dédiée à la passion de l'air et de l'espace. Notre mission est d'offrir un cadre concret où les futurs ingénieurs mettent en pratique leurs connaissances en conception, modélisme, systèmes embarqués et mécanique de vol, tout en développant de solides compétences techniques et managériales.</p>
+          <p style="margin:0;text-wrap:pretty" data-en="Every year the club runs workshops, technical training, factory visits and its flagship event: the Journées Aéronautiques, which bring together students, engineers and industry partners on campus in Casablanca.">À travers la réalisation de prototypes, l'organisation d'ateliers, la participation à des compétitions et la collaboration avec le secteur industriel, nous faisons le pont entre la formation académique et les exigences du monde professionnel. Organisé en pôles spécialisés — technique, logistique, sponsoring et communication —, le club permet à chaque membre de concrétiser ses idées au sein d'une aventure collective stimulante qui fait rayonner notre école.</p>
+
+        </div>
+      </div>
+
+      <!-- CHIFFRES -->
+      <div data-reveal="" style="padding:0 64px 120px">
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)">
+          <div style="padding:44px 32px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+            <div data-count="128" style="font-size:72px;font-weight:700;letter-spacing:-.04em;color:var(--ink);line-height:1">0</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--muted);margin-top:10px" data-en="MEMBERS">MEMBRES</div>
+          </div>
+          <div style="padding:44px 32px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+            <div data-count="7" style="font-size:72px;font-weight:700;letter-spacing:-.04em;color:var(--cyan);line-height:1">0</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--muted);margin-top:10px" data-en="CELLS">CELLULES</div>
+          </div>
+          <div style="padding:44px 32px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+            <div data-count="46" style="font-size:72px;font-weight:700;letter-spacing:-.04em;color:var(--ink);line-height:1">0</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--muted);margin-top:10px" data-en="EVENTS RUN">ÉVÉNEMENTS ORGANISÉS</div>
+          </div>
+          <div style="padding:44px 32px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)">
+            <div data-count="8" style="font-size:72px;font-weight:700;letter-spacing:-.04em;color:var(--orange);line-height:1">0</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--muted);margin-top:10px" data-en="EDITIONS OF THE JOURNÉES">ÉDITIONS DES JOURNÉES</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GALERIE -->
+      <div data-reveal="" style="padding:110px 64px;background:var(--bg)">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.24em;color:var(--cyan);margin-bottom:18px">— <span data-en="GALLERY">GALERIE</span></div>
+        <h2 style="margin:0 0 44px;font-size:46px;letter-spacing:-.03em;color:var(--ink);font-weight:700" data-en="The club at work">Le club en action</h2>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:180px;gap:14px">
+          <div data-lb="Journées Aéronautiques 2026 — conférence d'ouverture" style="grid-column:span 2;grid-row:span 2;border-radius:14px;cursor:pointer;overflow:hidden;background-image:repeating-linear-gradient(45deg,var(--cyanSoft) 0 10px,transparent 10px 20px);border:1px solid var(--line);display:flex;align-items:flex-end;padding:18px;transition:transform .35s" style-hover="transform:scale(1.015)"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);background:var(--surface);padding:6px 10px;border-radius:6px">photo — conférence d'ouverture</span></div>
+          <div data-lb="Atelier soufflerie — cellule Projets" style="border-radius:14px;cursor:pointer;background-image:repeating-linear-gradient(45deg,var(--cyanSoft) 0 10px,transparent 10px 20px);border:1px solid var(--line);display:flex;align-items:flex-end;padding:14px;transition:transform .35s" style-hover="transform:scale(1.015)"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);background:var(--surface);padding:5px 8px;border-radius:6px">photo — atelier</span></div>
+          <div data-lb="Vol d'essai du drone Falcon-2" style="border-radius:14px;cursor:pointer;background-image:repeating-linear-gradient(45deg,var(--cyanSoft) 0 10px,transparent 10px 20px);border:1px solid var(--line);display:flex;align-items:flex-end;padding:14px;transition:transform .35s" style-hover="transform:scale(1.015)"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);background:var(--surface);padding:5px 8px;border-radius:6px">photo — vol d'essai</span></div>
+          <div data-lb="Visite industrielle — Casablanca" style="grid-column:span 2;border-radius:14px;cursor:pointer;background-image:repeating-linear-gradient(45deg,var(--cyanSoft) 0 10px,transparent 10px 20px);border:1px solid var(--line);display:flex;align-items:flex-end;padding:14px;transition:transform .35s" style-hover="transform:scale(1.015)"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);background:var(--surface);padding:5px 8px;border-radius:6px">photo — visite industrielle</span></div>
+        </div>
+      </div>
+
+      <!-- PARTENAIRES -->
+      <div data-reveal="" style="padding:60px 0;background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden">
+        <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.24em;color:var(--muted);margin-bottom:36px" data-en="THEY SUPPORT THE CLUB">ILS SOUTIENNENT LE CLUB</div>
+        <div style="display:flex;width:200%;animation:marquee 28s linear infinite">
+          <div style="display:flex;gap:60px;width:50%;flex:0 0 50%;align-items:center;justify-content:space-around">
+            <span style="font-family:'Archivo',sans-serif;font-weight:800;font-size:24px;color:var(--muted);opacity:.6">AEROTECH</span>
+            <span style="font-family:'Archivo',sans-serif;font-weight:800;font-size:24px;color:var(--muted);opacity:.6">RAM ENGINEERING</span>
+            <span style="font-family:'Archivo',sans-serif;font-weight:800;font-size:24px;color:var(--muted);opacity:.6">MIDPARC</span>
+            <span style="font-family:'Archivo',sans-serif;font-weight:800;font-size:24px;color:var(--muted);opacity:.6">GIMAS</span>
+            <span style="font-family:'Archivo',sans-serif;font-weight:800;font-size:24px;color:var(--muted);opacity:.6">ENSEM</span>
+          </div>
+          <div style="display:flex;gap:60px;width:50%;flex:0 0 50%;align-items:center;justify-content:space-around">
+            <span style="font-family:'Archivo',sans-serif;font-weight:800;font-size:24px;color:var(--muted);opacity:.6">AEROTECH</span>
+            <span style="font-family:'Archivo',sans-serif;font-weight:800;font-size:24px;color:var(--muted);opacity:.6">RAM ENGINEERING</span>
+            <span style="font-family:'Archivo',sans-serif;font-weight:800;font-size:24px;color:var(--muted);opacity:.6">MIDPARC</span>
+            <span style="font-family:'Archivo',sans-serif;font-weight:800;font-size:24px;color:var(--muted);opacity:.6">GIMAS</span>
+            <span style="font-family:'Archivo',sans-serif;font-weight:800;font-size:24px;color:var(--muted);opacity:.6">ENSEM</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- REJOINDRE -->
+      <div data-reveal="" style="padding:110px 64px;background:var(--bg);border-top:1px solid var(--line)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center">
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.24em;color:var(--cyan);margin-bottom:20px">— <span data-en="JOIN US">NOUS REJOINDRE</span></div>
+            <h2 style="margin:0;font-size:52px;line-height:1.02;letter-spacing:-.03em;color:var(--ink);font-weight:700;text-wrap:balance" data-en="Ready for take-off?">Prêt à assister&nbsp;?</h2>
+            <p style="margin:22px 0 0;font-size:17px;line-height:1.75;color:var(--text);max-width:480px;text-wrap:pretty" data-en="Applications open at the start of each semester. Pick a cell, tell us what you want to build, and we take it from there.">Ne manquez pas votre chance de participer ! Les candidatures ouvrent avant chaque événement. &nbsp;</p>
+            <a href="#1a" style="display:inline-block;margin-top:34px;padding:17px 32px;border-radius:999px;background:var(--cyan);color:#04101f;font-weight:600;font-size:16px" style-hover="background:var(--orange);color:#fff" data-en="Apply">S'inscrire</a>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div style="padding:24px;border:1px solid var(--line);border-radius:14px;background:var(--surface)">
+
+
+            <div style="font-size:15px;font-weight:600;color:var(--ink);margin-bottom:8px" data-en="Real projects">Des projets réels</div></div>
+            <div style="padding:24px;border:1px solid var(--line);border-radius:14px;background:var(--surface)">
+              <div style="font-size:15px;font-weight:600;color:var(--ink);margin-bottom:8px" data-en="Free training">Formations gratuites</div>
+              <p style="margin:0;font-size:14px;line-height:1.6;color:var(--muted)" data-en="CAD, simulation, aerodynamics — taught by members.">CAO, simulation, aérodynamique — animées par des experts.</p>
+            </div>
+            <div style="padding:24px;border:1px solid var(--line);border-radius:14px;background:var(--surface)">
+              <div style="font-size:15px;font-weight:600;color:var(--ink);margin-bottom:8px" data-en="Industry network">Un réseau industriel</div>
+              <p style="margin:0;font-size:14px;line-height:1.6;color:var(--muted)" data-en="Engineers, partners and alumni you meet on campus.">Ingénieurs, partenaires et alumni rencontrés sur le campus.</p>
+            </div>
+            <div style="padding:24px;border:1px solid var(--line);border-radius:14px;background:var(--surface)">
+              <div style="font-size:15px;font-weight:600;color:var(--ink);margin-bottom:8px" data-en="No experience needed">Aucun prérequis</div>
+              <p style="margin:0;font-size:14px;line-height:1.6;color:var(--muted)" data-en="Curiosity and follow-through are enough.">La curiosité et la constance suffisent.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div style="padding:80px 64px 40px;background:#04101f">
+        <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1.3fr;gap:48px">
+          <div>
+            <div style="font-weight:700;font-size:20px;color:#fff;letter-spacing:.02em;margin-bottom:14px">CLUB AÉRO<span style="color:#2ed3f0">ENSEM</span></div>
+            <p style="margin:0;font-size:14px;line-height:1.7;color:#6f8ea6;max-width:280px">Together we fly, together we climb the sky.</p>
+            <div style="display:flex;gap:10px;margin-top:24px">
+              <a href="#1a" style="width:38px;height:38px;border-radius:10px;border:1px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:12px;color:#8fb3c9;font-family:'IBM Plex Mono',monospace" style-hover="border-color:#2ed3f0;color:#2ed3f0">in</a>
+              <a href="#1a" style="width:38px;height:38px;border-radius:10px;border:1px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:12px;color:#8fb3c9;font-family:'IBM Plex Mono',monospace" style-hover="border-color:#2ed3f0;color:#2ed3f0">ig</a>
+              <a href="#1a" style="width:38px;height:38px;border-radius:10px;border:1px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:12px;color:#8fb3c9;font-family:'IBM Plex Mono',monospace" style-hover="border-color:#2ed3f0;color:#2ed3f0">fb</a>
+              <a href="#1a" style="width:38px;height:38px;border-radius:10px;border:1px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:12px;color:#8fb3c9;font-family:'IBM Plex Mono',monospace" style-hover="border-color:#2ed3f0;color:#2ed3f0">gh</a>
+            </div>
+          </div>
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#4d6a80;margin-bottom:18px" data-en="NAVIGATION">NAVIGATION</div>
+            <div style="display:grid;gap:11px;font-size:14px">
+              <a href="#1a" data-en="Cells" style="color: rgb(143, 179, 201);">Cellules</a>
+              <a href="#1a" data-en="Events" style="color: rgb(143, 179, 201);">Événements</a>
+              <a href="#1a" data-en="Team" style="color: rgb(143, 179, 201);">Bureau</a>
+              <a href="#1a" data-en="Join us" style="color: rgb(143, 179, 201);">Store</a>
+            </div>
+          </div>
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#4d6a80;margin-bottom:18px" data-en="CONTACT">CONTACT</div>
+            <div style="display:grid;gap:11px;font-size:14px;color:#8fb3c9">
+              <span>club-aeronautique@ensem.ac.ma</span>
+              <span>+212 770-190444</span>
+              <span>ENSEM, Route d'El Jadida<br>Casablanca, Maroc</span>
+            </div>
+          </div>
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#4d6a80;margin-bottom:18px" data-en="NEWSLETTER">NEWSLETTER</div>
+            <p style="margin:0 0 16px;font-size:14px;line-height:1.6;color:#6f8ea6" data-en="One email per event. Nothing else.">Un e-mail par événement. Rien d'autre.</p>
+            <div style="display:flex;gap:8px">
+              <input type="email" placeholder="votre@email.ma" style="flex:1;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:#fff;font-family:inherit;font-size:14px;outline:none">
+              <button style="padding:12px 18px;border-radius:10px;border:none;background:#2ed3f0;color:#04101f;font-weight:600;font-family:inherit;font-size:14px;cursor:pointer" style-hover="background:#ff7a45;color:#fff">OK</button>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:56px;display:grid;grid-template-columns:1fr 1.6fr;gap:32px;align-items:stretch">
+          <div style="padding:26px;border:1px solid rgba(255,255,255,.1);border-radius:14px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#4d6a80;margin-bottom:14px" data-en="THE SCHOOL">L'ÉCOLE</div>
+            <div style="font-size:16px;font-weight:600;color:#fff;margin-bottom:8px">ENSEM</div>
+            <p style="margin:0;font-size:14px;line-height:1.7;color:#8fb3c9">École Nationale Supérieure d'Électricité et de Mécanique<br>Route d'El Jadida, km 7<br>Casablanca 20460, Maroc</p>
+            <a href="#1a" style="display:inline-block;margin-top:16px;font-size:14px;font-weight:600" data-en="Get directions →">Itinéraire →</a>
+          </div>
+          <div style="position:relative;min-height:220px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.1);background:#061524">
+            <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(46,211,240,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(46,211,240,.1) 1px,transparent 1px);background-size:40px 40px"></div>
+            <div style="position:absolute;left:0;right:0;top:58%;height:2px;background:rgba(46,211,240,.22)"></div>
+            <div style="position:absolute;top:0;bottom:0;left:34%;width:2px;background:rgba(46,211,240,.22)"></div>
+            <div style="position:absolute;left:34%;top:58%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:#ff7a45;box-shadow:0 0 0 6px rgba(255,122,69,.22)"></div>
+            <div style="position:absolute;left:34%;top:58%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;border:2px solid #ff7a45;animation:pulseRing 2.6s ease-out infinite"></div>
+            <div style="position:absolute;left:calc(34% + 20px);top:58%;transform:translateY(-50%);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#cfe6f2;background:rgba(4,16,31,.72);padding:6px 10px;border-radius:6px">ENSEM · 33.5461° N, 7.6570° W</div>
+            <div style="position:absolute;right:14px;bottom:12px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;color:#3f5a70" data-en="schematic map — embed Google Maps here">carte schématique — intégrer Google Maps ici</div>
+          </div>
+        </div>
+        <div style="margin-top:40px;padding-top:24px;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#3f5a70">
+          <span>© 2026 CLUB AÉROENSEM</span><span>CASABLANCA · 33.5461° N, 7.6570° W</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+</section>
+
+{{ lightbox }}
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#2ed3f0&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#2ed3f0&quot;,&quot;#0a9fc4&quot;,&quot;#4f9cf9&quot;,&quot;#39d3a0&quot;],&quot;section&quot;:&quot;Identité&quot;},&quot;secondaryAccent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#f5b544&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#ff7a45&quot;,&quot;#e2612c&quot;,&quot;#f5b544&quot;,&quot;#e5484d&quot;],&quot;section&quot;:&quot;Identité&quot;},&quot;planeSpeed&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:14,&quot;min&quot;:6,&quot;max&quot;:30,&quot;step&quot;:1,&quot;unit&quot;:&quot;s&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Animation&quot;},&quot;eventDate&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;2027-03-18T09:00:00&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Événement&quot;}}">
+class Component extends DCLogic {
+  state = { lang: 'fr', theme: 'dark', lb: null };
+
+  componentDidMount() {
+    this.applyTheme();
+    this.applyAccent();
+    if (document.querySelector('[data-cd]')) this.startCountdown();
+    this.setupReveal();
+    this.setupLightbox();
+    this.startVideos();
+    this.animateSlogan();
+  }
+
+  animateSlogan() {
+    const el = document.querySelector('[data-anim="slogan"]');
+    if (!el || el.dataset.split) return;
+    el.dataset.split = '1';
+    const words = (el.textContent || '').trim().split(/\s+/);
+    el.textContent = '';
+    words.forEach((w, i) => {
+      const s = document.createElement('span');
+      s.textContent = w;
+      s.style.cssText = 'display:inline-block;opacity:0;animation:wordUp .85s cubic-bezier(.2,.75,.2,1) forwards;animation-delay:' + (0.25 + i * 0.11).toFixed(2) + 's';
+      el.appendChild(s);
+      if (i < words.length - 1) el.appendChild(document.createTextNode(' '));
+    });
+    const done = (0.25 + (words.length - 1) * 0.11 + 0.85) * 1000;
+    setTimeout(() => {
+      el.querySelectorAll('span').forEach((s, i) => {
+        s.style.opacity = '1';
+        s.style.animation = 'wordWave 4.6s ease-in-out ' + (i * 0.12).toFixed(2) + 's infinite';
+      });
+    }, done);
+  }
+
+  startVideos() {
+    const go = () => document.querySelectorAll('video[data-bg]').forEach(v => {
+      v.muted = true; v.loop = true; v.playsInline = true;
+      const p = v.play(); if (p && p.catch) p.catch(() => {});
+    });
+    go();
+    setTimeout(go, 400);
+    setTimeout(go, 1500);
+  }
+  componentDidUpdate(prev) {
+    if (prev !== this.props) this.applyAccent();
+    this.applyTheme();
+  }
+  componentWillUnmount() { clearInterval(this._cd); if (this._io) this._io.disconnect(); }
+
+  applyTheme() { document.documentElement.setAttribute('data-theme', this.state.theme); }
+
+  applyAccent() {
+    const a = this.props.accentColor;
+    const o = this.props.secondaryAccent;
+    const r = document.documentElement.style;
+    if (a) r.setProperty('--cyan', a);
+    if (o) r.setProperty('--orange', o);
+    const sp = this.props.planeSpeed;
+    if (sp) {
+      document.querySelectorAll('[data-plane]').forEach(function (el) {
+        el.style.animationDuration = sp + 's';
+        const svg = el.parentElement && el.parentElement.querySelector('path[stroke-dasharray]');
+        if (svg) svg.style.animationDuration = sp + 's';
+      });
+    }
+  }
+
+  startCountdown() {
+    const target = new Date(this.props.eventDate || '2027-03-18T09:00:00').getTime();
+    const tick = () => {
+      let d = Math.max(0, target - Date.now());
+      const day = Math.floor(d / 864e5); d -= day * 864e5;
+      const h = Math.floor(d / 36e5); d -= h * 36e5;
+      const m = Math.floor(d / 6e4); d -= m * 6e4;
+      const s = Math.floor(d / 1e3);
+      const pad = (n, l) => String(n).padStart(l || 2, '0');
+      const map = { d: pad(day, 3), h: pad(h), m: pad(m), s: pad(s) };
+      document.querySelectorAll('[data-cd]').forEach(el => { el.textContent = map[el.getAttribute('data-cd')]; });
+    };
+    tick();
+    this._cd = setInterval(tick, 1000);
+  }
+
+  setupReveal() {
+    const els = Array.prototype.slice.call(document.querySelectorAll('[data-reveal]'));
+    const ease = 'opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1)';
+    els.forEach(el => {
+      const r = el.getBoundingClientRect();
+      if (r.top > window.innerHeight * 0.9) {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(34px)';
+        el.style.transition = ease;
+      }
+    });
+    this._io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target;
+        el.style.transition = ease;
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+        this.runCounters(el);
+        this._io.unobserve(el);
+      });
+    }, { threshold: 0.15 });
+    els.forEach(el => this._io.observe(el));
+    setTimeout(() => els.forEach(el => { el.style.opacity = '1'; el.style.transform = 'none'; }), 6000);
+  }
+
+  runCounters(scope) {
+    scope.querySelectorAll('[data-count]').forEach(el => {
+      if (el.dataset.done) return;
+      el.dataset.done = '1';
+      const to = parseInt(el.getAttribute('data-count'), 10) || 0;
+      const t0 = performance.now(), dur = 1400;
+      const step = now => {
+        const p = Math.min(1, (now - t0) / dur);
+        const e = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(to * e);
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    });
+  }
+
+  setupLightbox() {
+    document.addEventListener('click', e => {
+      const t = e.target.closest && e.target.closest('[data-lb]');
+      if (t) this.setState({ lb: t.getAttribute('data-lb') });
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') this.setState({ lb: null }); });
+  }
+
+  toggleLang = () => {
+    const to = this.state.lang === 'fr' ? 'en' : 'fr';
+    document.querySelectorAll('[data-en]').forEach(el => {
+      if (!el.dataset.fr) el.dataset.fr = el.textContent;
+      el.textContent = to === 'en' ? el.getAttribute('data-en') : el.dataset.fr;
+    });
+    this.setState({ lang: to });
+  };
+
+  toggleTheme = () => this.setState(s => ({ theme: s.theme === 'dark' ? 'light' : 'dark' }));
+
+  renderVals() {
+    const h = React.createElement;
+    const lb = this.state.lb ? h('div', {
+      onClick: () => this.setState({ lb: null }),
+      style: { position: 'fixed', inset: 0, zIndex: 9500, background: 'rgba(4,8,14,.88)', backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '64px', cursor: 'zoom-out' }
+    }, h('div', { style: { width: 'min(1000px,86vw)', aspectRatio: '16/10', borderRadius: '12px', border: '1px solid rgba(46,211,240,.35)', backgroundImage: 'repeating-linear-gradient(45deg, rgba(46,211,240,.16) 0 12px, transparent 12px 24px)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '14px', color: '#cfe6f2', fontFamily: "'IBM Plex Mono', monospace", fontSize: '13px', letterSpacing: '.06em', textAlign: 'center', padding: '24px' } },
+      h('span', { style: { opacity: .6 } }, this.state.lang === 'fr' ? 'EMPLACEMENT PHOTO' : 'PHOTO PLACEHOLDER'),
+      h('span', { style: { fontSize: '18px', fontFamily: "'Space Grotesk', sans-serif", color: '#fff' } }, this.state.lb),
+      h('span', { style: { opacity: .45 } }, 'ESC')
+    )) : null;
+
+    return {
+      lightbox: lb,
+      toggleLang: this.toggleLang,
+      toggleTheme: this.toggleTheme,
+      langLabel: this.state.lang === 'fr' ? 'FR / EN' : 'EN / FR',
+      themeLabel: this.state.theme === 'dark' ? 'MODE CLAIR' : 'MODE SOMBRE'
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:5000/api/v1";
-
+// URL relative : même origine en production (le backend sert le build),
+// et Vite proxifie /api vers le backend en développement (vite.config.js).
 export const axiosClient = axios.create({
-  baseURL: API_URL,
+  baseURL: "/api/v1",
   withCredentials: true, // le cookie httpOnly voyage avec chaque requête
 });
 

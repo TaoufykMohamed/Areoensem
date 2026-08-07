@@ -19,5 +19,8 @@ Thumbs.db
 .vscode/
 !.vscode/extensions.json
 
+# Config locale Claude Code (jamais partagée)
+.claude/settings.local.json
+
 # Données Mongo locales (docker-compose)
 .mongo-data/

@@ -20,7 +20,11 @@ export const login = asyncHandler(async (req, res, next) => {
 });
 
 export const logout = (req, res) => {
-  res.clearCookie(env.COOKIE_NAME, authCookieOptions());
+  // Mêmes options qu'au login, SAUF maxAge : sinon il prime sur le
+  // Expires du passé qu'ajoute clearCookie (RFC 6265), et le cookie
+  // n'est jamais réellement supprimé côté navigateur.
+  const { maxAge, ...clearOptions } = authCookieOptions();
+  res.clearCookie(env.COOKIE_NAME, clearOptions);
   res.json({ success: true, data: null, message: null });
 };
 

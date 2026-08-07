@@ -1,3 +1,5 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import express from "express";
 import helmet from "helmet";
 import cors from "cors";
@@ -20,15 +22,25 @@ import messageRoutes from "./routes/message.routes.js";
 import { contentRouter, statsRouter } from "./routes/content.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// backend/src -> backend -> racine du monorepo -> frontend/dist
+const frontendDist = path.resolve(__dirname, "../../frontend/dist");
+
 export const app = express();
 
 app.use(helmet());
-app.use(
-  cors({
-    origin: env.CLIENT_URL,
-    credentials: true,
-  })
-);
+
+// En production, frontend et backend sont servis depuis la même origine :
+// pas besoin de CORS. Utile seulement pour le dev (Vite sur un autre port).
+if (!isProd) {
+  app.use(
+    cors({
+      origin: env.CLIENT_URL,
+      credentials: true,
+    })
+  );
+}
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -55,6 +67,18 @@ app.use("/api/v1/messages", messageRoutes);
 app.use("/api/v1/content", contentRouter);
 app.use("/api/v1/stats", statsRouter);
 app.use("/api/v1/dashboard", dashboardRoutes);
+
+// Sert le build React et lui laisse gérer toutes les routes non-API,
+// pour que le déploiement Render n'ait qu'un seul service/domaine et
+// que React Router fonctionne sur un rechargement d'URL profonde.
+// Désactivé en dev : c'est Vite qui sert le frontend sur son propre port.
+if (isProd) {
+  app.use(express.static(frontendDist));
+  app.use((req, res, next) => {
+    if (req.method !== "GET" || req.path.startsWith("/api")) return next();
+    res.sendFile(path.join(frontendDist, "index.html"));
+  });
+}
 
 app.use(notFoundHandler);
 app.use(errorHandler);

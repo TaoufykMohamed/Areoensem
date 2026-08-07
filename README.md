@@ -5,9 +5,15 @@ Express/MongoDB et frontend React/Vite, dans un monorepo à deux dossiers
 séparés. Le frontend ne parle au backend que via l'API REST — aucune
 logique métier, requête base de données ou secret côté client.
 
+En production, le backend sert aussi le build du frontend (fichiers
+statiques + fallback SPA) : un seul service, une seule URL, pas de CORS.
+En développement, deux serveurs séparés (Vite + Express) reliés par un
+proxy — voir [Déploiement](#déploiement).
+
 ## Structure
 
 ```
+package.json         Scripts racine (install/build/start) pour Render
 backend/            API REST (Express, Mongoose, JWT en cookie httpOnly)
   src/config/        env, MongoDB, Cloudinary
   src/models/        13 schémas Mongoose
@@ -18,7 +24,7 @@ backend/            API REST (Express, Mongoose, JWT en cookie httpOnly)
   src/seed/          données de démo
   scripts/           script de vérification du modèle de permissions
 frontend/            Application React (Vite, Tailwind, React Router)
-  src/api/            clients Axios par ressource
+  src/api/            clients Axios par ressource (URL relative /api/v1)
   src/pages/          une page par route publique
   src/pages/dashboard/ écrans admin et chef de cellule
   src/context/        AuthContext, ThemeContext
@@ -46,15 +52,17 @@ npm run dev            # http://localhost:5000
 
 # Frontend (autre terminal)
 cd frontend
-cp .env.example .env
 npm install
-npm run dev             # http://localhost:5173
+npm run dev             # http://localhost:5173 — proxifie /api vers :5000
 ```
+
+Le frontend n'a besoin d'aucune variable d'environnement : il appelle
+toujours `/api/v1` en relatif (proxifié par Vite en dev, même origine en
+prod).
 
 ## Variables d'environnement
 
-Voir `backend/.env.example` et `frontend/.env.example`. À renseigner pour
-un fonctionnement complet :
+Voir `backend/.env.example`. À renseigner pour un fonctionnement complet :
 
 - `MONGO_URI`, `JWT_SECRET` — obligatoires
 - `CLOUDINARY_*` — sans eux, l'upload d'images échoue (le reste du site
@@ -63,20 +71,26 @@ un fonctionnement complet :
 
 ## Comptes de démonstration
 
-Créés par `npm run seed`, tous avec le même mot de passe
-`change-me-in-production` (à changer avant toute mise en production —
-le script refuse de s'exécuter si `NODE_ENV=production`) :
+Créés par `npm run seed`, tous avec le même mot de passe (défini par
+`SEED_ADMIN_PASSWORD` dans `backend/.env`, voir `backend/.env.example` —
+à changer avant toute mise en production réelle ; le script refuse de
+s'exécuter si `NODE_ENV=production`) :
 
 | Rôle | Email |
 |---|---|
 | Admin | `admin@aeroensem.ma` |
 | Chef de cellule | `chef.<slug-cellule>@aeroensem.ma` (ex. `chef.conception-cao@aeroensem.ma`) |
 
-La liste complète des 7 comptes chefs s'affiche à la fin du script de seed.
+Le mot de passe et la liste complète des 7 comptes chefs s'affichent à la
+fin de l'exécution de `npm run seed`.
 
 ## Commandes utiles
 
 ```bash
+# racine (ce que Render exécute)
+npm install && npm run build   # installe backend+frontend, build le frontend
+npm start                       # démarre le backend, qui sert aussi le build
+
 # backend/
 npm run seed                # réinitialise et repeuple la base
 npm run verify:permissions  # vérifie requireRole/requireCellOwnership contre le seed
@@ -84,7 +98,7 @@ npm run dev                 # serveur avec rechargement (nodemon)
 npm start                   # serveur de production
 
 # frontend/
-npm run dev      # serveur de développement
+npm run dev      # serveur de développement (proxy /api -> :5000)
 npm run build    # build de production dans dist/
 npm run preview  # sert le build de production en local
 ```
@@ -99,25 +113,27 @@ fichier, même structure partout : `requireAuth` → `requireRole`/
 
 ## Déploiement
 
-**Backend sur Render** (`render.yaml` à la racine, Render Blueprint) :
-1. Fournir une base MongoDB managée (Render n'héberge pas Mongo — utiliser
-   [MongoDB Atlas](https://www.mongodb.com/atlas), offre gratuite suffisante).
-2. Connecter le repo sur Render, il détecte `render.yaml` automatiquement.
-3. Renseigner dans le dashboard Render les variables marquées `sync: false`
-   (MONGO_URI, CLIENT_URL, CLOUDINARY_*, EMAIL_*, SEED_ADMIN_*).
-4. Après le premier déploiement, lancer `npm run seed` une fois via le
-   shell Render (ou une Job) pour peupler la base — jamais en laissant
-   `NODE_ENV=production` actif pendant le seed initial si vous voulez
-   remplacer les mots de passe de démo tout de suite après.
+Service unique sur **Render** : le backend Express sert son API sous
+`/api/v1` et le build statique du frontend sur tout le reste (voir le
+bloc `if (isProd)` dans `backend/src/app.js`). Pas de Vercel, pas de CORS
+en production, un seul domaine.
 
-**Frontend sur Vercel** (`vercel.json` dans `frontend/` pour le routing
-React Router) :
-1. Importer le repo sur Vercel, root directory = `frontend`.
-2. Framework détecté automatiquement (Vite).
-3. Variable d'environnement `VITE_API_URL` = URL du backend Render +
-   `/api/v1`.
-4. Une fois le frontend déployé, mettre à jour `CLIENT_URL` côté backend
-   avec l'URL Vercel finale (CORS + cookie ne fonctionneront pas sinon).
+1. Fournir une base MongoDB managée — Render n'héberge pas Mongo, utiliser
+   [MongoDB Atlas](https://www.mongodb.com/atlas) (offre gratuite
+   suffisante).
+2. Créer un Web Service Render à partir du repo, root directory = racine
+   du monorepo (pas `backend/`).
+   - **Build command** : `npm install && npm run build`
+   - **Start command** : `npm start`
+3. Renseigner les variables d'environnement du backend dans le dashboard
+   Render : `NODE_ENV=production`, `MONGO_URI`, `JWT_SECRET` (généré),
+   `CLOUDINARY_*`, `EMAIL_*`, `SEED_ADMIN_EMAIL`/`SEED_ADMIN_PASSWORD`.
+   `CLIENT_URL` n'est plus utilisé en production (même origine), inutile
+   de le renseigner sur Render.
+4. Render fournit `PORT` automatiquement — `backend/src/server.js` l'utilise
+   déjà (`env.PORT`, défaut 5000 en local).
+5. Après le premier déploiement, lancer `npm run seed --prefix backend`
+   une fois via le shell Render pour peupler la base.
 
 ## Limites connues
 
@@ -154,4 +170,4 @@ simplifications assumées, à traiter avant une mise en production réelle :
 - [x] Étape 5 — socle frontend (layout, routing, thème, i18n, auth)
 - [x] Étape 6 — pages publiques
 - [x] Étape 7 — dashboard admin / chef de cellule
-- [x] Étape 8 — finitions, README, déploiement
+- [x] Étape 8 — finitions, README, déploiement (service unique Render)

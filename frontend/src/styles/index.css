@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #f2f5f8;
+  --surface: #ffffff;
+  --text: #33475c;
+  --ink: #0b2545;
+  --muted: #657a90;
+  --line: #dbe3ec;
+}
+
+[data-theme="dark"] {
+  --bg: #0a0e14;
+  --surface: #0c1524;
+  --text: #a9bccf;
+  --ink: #f2f8fc;
+  --muted: #7b90a6;
+  --line: #1a2a3f;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}

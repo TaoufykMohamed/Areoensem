@@ -1,0 +1,23 @@
+# Dépendances
+node_modules/
+
+# Environnement
+.env
+.env.local
+
+# Build
+frontend/dist/
+backend/dist/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Éditeur / OS
+.DS_Store
+Thumbs.db
+.vscode/
+!.vscode/extensions.json
+
+# Données Mongo locales (docker-compose)
+.mongo-data/

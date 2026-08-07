@@ -1,5 +1,141 @@
 {
   "common": {
-    "loading": "Chargement…"
+    "loading": "Chargement…",
+    "error": "Une erreur est survenue.",
+    "readMore": "En savoir plus",
+    "seeAll": "Tout voir",
+    "submit": "Envoyer",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "create": "Créer",
+    "confirm": "Confirmer",
+    "name": "Nom",
+    "email": "Email",
+    "phone": "Téléphone",
+    "close": "Fermer",
+    "empty": "Rien à afficher pour l'instant.",
+    "status": "Statut",
+    "actions": "Actions",
+    "date": "Date",
+    "back": "Retour"
+  },
+  "nav": {
+    "home": "Accueil",
+    "cells": "Cellules",
+    "events": "Événements",
+    "board": "Bureau",
+    "store": "Store",
+    "partners": "Partenaires",
+    "contact": "Contact",
+    "join": "Nous rejoindre",
+    "login": "Connexion",
+    "logout": "Déconnexion",
+    "dashboard": "Tableau de bord"
+  },
+  "footer": {
+    "navigation": "Navigation",
+    "contact": "Contact",
+    "newsletter": "Newsletter",
+    "newsletterText": "Un e-mail par événement. Rien d'autre.",
+    "address": "ENSEM, Route d'El Jadida, Casablanca, Maroc",
+    "rights": "Club AéroENSEM"
+  },
+  "theme": {
+    "light": "Mode clair",
+    "dark": "Mode sombre"
+  },
+  "home": {
+    "tagline": "ENSEM CASABLANCA",
+    "scrollDown": "DÉFILER ↓",
+    "discover": "Découvrir le club",
+    "joinUs": "Nous rejoindre",
+    "cellsTitle": "Nos cellules",
+    "nextEventTitle": "Prochain événement",
+    "galleryTitle": "Le club en action",
+    "partnersTitle": "Ils soutiennent le club",
+    "readyTitle": "Prêt à décoller ?"
+  },
+  "cells": {
+    "title": "Nos cellules",
+    "subtitle": "Sept cellules, une seule trajectoire.",
+    "lead": "Responsable",
+    "members": "Membres",
+    "technologies": "Technologies",
+    "projects": "Projets",
+    "detailTitle": "La cellule"
+  },
+  "events": {
+    "title": "Événements",
+    "upcoming": "À venir",
+    "ongoing": "En cours",
+    "past": "Passés",
+    "registration": "Inscription",
+    "registrationsOpen": "Inscriptions ouvertes",
+    "registrationsClosed": "Inscriptions fermées",
+    "capacity": "Places",
+    "registerCta": "S'inscrire",
+    "registerSuccess": "Inscription confirmée, à bientôt !",
+    "fields": {
+      "filiere": "Filière",
+      "annee": "Année",
+      "motivation": "Motivation (optionnel)"
+    }
+  },
+  "board": {
+    "title": "Le bureau"
+  },
+  "store": {
+    "title": "Store",
+    "orderCta": "Commander",
+    "orderSuccess": "Commande enregistrée, nous vous recontactons rapidement.",
+    "size": "Taille",
+    "quantity": "Quantité",
+    "price": "Prix"
+  },
+  "partners": {
+    "title": "Partenaires",
+    "subtitle": "Ils rendent nos projets possibles."
+  },
+  "contact": {
+    "title": "Contact",
+    "subject": "Sujet",
+    "message": "Message",
+    "success": "Message envoyé, nous vous répondrons rapidement."
+  },
+  "join": {
+    "title": "Nous rejoindre",
+    "subtitle": "Pourquoi nous rejoindre ?",
+    "cellWish": "Cellule souhaitée",
+    "success": "Candidature envoyée, nous vous recontactons rapidement.",
+    "reason1Title": "Des projets réels",
+    "reason1Text": "Drones, maquettes, systèmes embarqués — vous construisez des choses qui volent vraiment.",
+    "reason2Title": "Formations gratuites",
+    "reason2Text": "CAO, simulation, aérodynamique — animées par les membres les plus expérimentés.",
+    "reason3Title": "Aucun prérequis",
+    "reason3Text": "La curiosité et la constance suffisent pour commencer."
+  },
+  "login": {
+    "title": "Connexion",
+    "subtitle": "Réservé aux membres du bureau et chefs de cellule.",
+    "cta": "Se connecter",
+    "error": "Email ou mot de passe incorrect."
+  },
+  "dashboard": {
+    "overview": "Vue d'ensemble",
+    "cells": "Cellules",
+    "events": "Événements",
+    "registrations": "Inscriptions",
+    "gallery": "Galerie",
+    "users": "Utilisateurs",
+    "board": "Bureau",
+    "partners": "Partenaires",
+    "store": "Boutique",
+    "orders": "Commandes",
+    "content": "Contenu accueil",
+    "messages": "Messages",
+    "applications": "Candidatures",
+    "welcome": "Bonjour"
   }
 }

@@ -1,5 +1,141 @@
 {
   "common": {
-    "loading": "Loading…"
+    "loading": "Loading…",
+    "error": "Something went wrong.",
+    "readMore": "Read more",
+    "seeAll": "See all",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "confirm": "Confirm",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "close": "Close",
+    "empty": "Nothing to show yet.",
+    "status": "Status",
+    "actions": "Actions",
+    "date": "Date",
+    "back": "Back"
+  },
+  "nav": {
+    "home": "Home",
+    "cells": "Cells",
+    "events": "Events",
+    "board": "Team",
+    "store": "Store",
+    "partners": "Partners",
+    "contact": "Contact",
+    "join": "Join us",
+    "login": "Log in",
+    "logout": "Log out",
+    "dashboard": "Dashboard"
+  },
+  "footer": {
+    "navigation": "Navigation",
+    "contact": "Contact",
+    "newsletter": "Newsletter",
+    "newsletterText": "One email per event. Nothing else.",
+    "address": "ENSEM, Route d'El Jadida, Casablanca, Morocco",
+    "rights": "Club AéroENSEM"
+  },
+  "theme": {
+    "light": "Light mode",
+    "dark": "Dark mode"
+  },
+  "home": {
+    "tagline": "ENSEM CASABLANCA",
+    "scrollDown": "SCROLL ↓",
+    "discover": "Discover the club",
+    "joinUs": "Join us",
+    "cellsTitle": "Our cells",
+    "nextEventTitle": "Next event",
+    "galleryTitle": "The club at work",
+    "partnersTitle": "They support the club",
+    "readyTitle": "Ready for take-off?"
+  },
+  "cells": {
+    "title": "Our cells",
+    "subtitle": "Seven cells, one trajectory.",
+    "lead": "Lead",
+    "members": "Members",
+    "technologies": "Technologies",
+    "projects": "Projects",
+    "detailTitle": "The cell"
+  },
+  "events": {
+    "title": "Events",
+    "upcoming": "Upcoming",
+    "ongoing": "Ongoing",
+    "past": "Past",
+    "registration": "Registration",
+    "registrationsOpen": "Registrations open",
+    "registrationsClosed": "Registrations closed",
+    "capacity": "Spots",
+    "registerCta": "Register",
+    "registerSuccess": "Registration confirmed, see you there!",
+    "fields": {
+      "filiere": "Program",
+      "annee": "Year",
+      "motivation": "Motivation (optional)"
+    }
+  },
+  "board": {
+    "title": "The team"
+  },
+  "store": {
+    "title": "Store",
+    "orderCta": "Order",
+    "orderSuccess": "Order placed, we'll be in touch shortly.",
+    "size": "Size",
+    "quantity": "Quantity",
+    "price": "Price"
+  },
+  "partners": {
+    "title": "Partners",
+    "subtitle": "They make our projects possible."
+  },
+  "contact": {
+    "title": "Contact",
+    "subject": "Subject",
+    "message": "Message",
+    "success": "Message sent, we'll get back to you shortly."
+  },
+  "join": {
+    "title": "Join us",
+    "subtitle": "Why join us?",
+    "cellWish": "Cell of interest",
+    "success": "Application sent, we'll get back to you shortly.",
+    "reason1Title": "Real projects",
+    "reason1Text": "Drones, scale models, embedded systems — you build things that actually fly.",
+    "reason2Title": "Free training",
+    "reason2Text": "CAD, simulation, aerodynamics — taught by the club's most experienced members.",
+    "reason3Title": "No experience needed",
+    "reason3Text": "Curiosity and follow-through are enough to get started."
+  },
+  "login": {
+    "title": "Log in",
+    "subtitle": "For board members and cell leads only.",
+    "cta": "Log in",
+    "error": "Incorrect email or password."
+  },
+  "dashboard": {
+    "overview": "Overview",
+    "cells": "Cells",
+    "events": "Events",
+    "registrations": "Registrations",
+    "gallery": "Gallery",
+    "users": "Users",
+    "board": "Team",
+    "partners": "Partners",
+    "store": "Store",
+    "orders": "Orders",
+    "content": "Home content",
+    "messages": "Messages",
+    "applications": "Applications",
+    "welcome": "Hello"
   }
 }

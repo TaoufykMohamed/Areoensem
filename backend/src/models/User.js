@@ -33,8 +33,18 @@ const userSchema = new mongoose.Schema(
     linkedin: { type: String, default: "" },
     actif: { type: Boolean, default: true },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: {
+      transform(doc, ret) {
+        delete ret.motDePasse;
+        return ret;
+      },
+    },
+  }
 );
+
+userSchema.index({ cellule: 1 });
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("motDePasse")) return next();

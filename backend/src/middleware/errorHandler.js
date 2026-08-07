@@ -7,6 +7,15 @@ export function notFoundHandler(req, res, next) {
 
 // eslint-disable-next-line no-unused-vars
 export function errorHandler(err, req, res, next) {
+  if (err.code === 11000) {
+    const field = Object.keys(err.keyValue || {})[0] ?? "valeur";
+    return res.status(409).json({
+      success: false,
+      data: null,
+      message: `Cette valeur pour "${field}" est déjà utilisée.`,
+    });
+  }
+
   const isApiError = err instanceof ApiError;
   const statusCode = isApiError ? err.statusCode : 500;
   const message = isApiError ? err.message : "Erreur interne du serveur";

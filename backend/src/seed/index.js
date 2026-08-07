@@ -15,7 +15,6 @@ import {
   SiteContent,
   Stat,
 } from "../models/index.js";
-import { slugify } from "../utils/slugify.js";
 import {
   cellsData,
   eventsData,
@@ -66,7 +65,9 @@ async function seedCellsWithChefs() {
 
     const cell = await Cell.create(cellFields);
 
-    const chef = await User.create({
+    // User.cellule est la seule source de vérité pour la relation
+    // chef ↔ cellule (voir le virtual populate "chef" sur le modèle Cell).
+    await User.create({
       nom: chefNom,
       email: `chef.${cell.slug}@aeroensem.ma`,
       motDePasse: env.SEED_ADMIN_PASSWORD,
@@ -75,9 +76,6 @@ async function seedCellsWithChefs() {
       actif: true,
     });
 
-    cell.chef = chef._id;
-    await cell.save();
-
     cellsByNom.set(data.nomFr, cell);
   }
 
@@ -85,23 +83,31 @@ async function seedCellsWithChefs() {
 }
 
 async function seedEvents(cellsByNom) {
-  const events = eventsData.map(({ celluleNom, dateDebut, dateFin, ...rest }) => {
+  // Créés un par un (pas insertMany) pour garantir l'exécution du hook
+  // pre("validate") qui génère le slug unique de chaque événement.
+  for (const { celluleNom, dateDebut, dateFin, ...rest } of eventsData) {
     const cell = cellsByNom.get(celluleNom);
     if (!cell) {
       throw new Error(`Cellule inconnue pour l'événement "${rest.titreFr}" : ${celluleNom}`);
     }
-    return {
+    // eslint-disable-next-line no-await-in-loop
+    await Event.create({
       ...rest,
       cellule: cell._id,
       dateDebut: toDate(dateDebut),
       dateFin: toDate(dateFin),
-    };
-  });
-
-  return Event.insertMany(events);
+    });
+  }
 }
 
 async function main() {
+  if (env.NODE_ENV === "production") {
+    console.error(
+      "[seed] refus de s'exécuter avec NODE_ENV=production (mot de passe de démo partagé sur tous les comptes)."
+    );
+    process.exit(1);
+  }
+
   await connectDB();
 
   console.log("[seed] nettoyage des collections…");

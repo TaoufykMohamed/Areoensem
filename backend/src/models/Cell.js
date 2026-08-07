@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
-import { slugify } from "../utils/slugify.js";
+import { slugify, ensureUniqueSlug } from "../utils/slugify.js";
 
 const membreSchema = new mongoose.Schema(
   {
     nom: { type: String, required: true, trim: true },
     roleFr: { type: String, required: true },
-    roleEn: { type: String, required: true },
+    roleEn: { type: String, default: "" },
     photo: { type: String, default: "" },
   },
   { _id: true }
@@ -14,7 +14,7 @@ const membreSchema = new mongoose.Schema(
 const projetSchema = new mongoose.Schema(
   {
     titreFr: { type: String, required: true },
-    titreEn: { type: String, required: true },
+    titreEn: { type: String, default: "" },
     descriptionFr: { type: String, default: "" },
     descriptionEn: { type: String, default: "" },
     image: { type: String, default: "" },
@@ -31,29 +31,45 @@ const projetSchema = new mongoose.Schema(
 const cellSchema = new mongoose.Schema(
   {
     nomFr: { type: String, required: true, trim: true },
-    nomEn: { type: String, required: true, trim: true },
+    nomEn: { type: String, default: "", trim: true },
     slug: { type: String, required: true, unique: true, lowercase: true },
     descriptionCourteFr: { type: String, required: true },
-    descriptionCourteEn: { type: String, required: true },
+    descriptionCourteEn: { type: String, default: "" },
     descriptionLongueFr: { type: String, default: "" },
     descriptionLongueEn: { type: String, default: "" },
     icone: { type: String, default: "" },
     image: { type: String, default: "" },
-    chef: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     membres: [membreSchema],
     technologies: [{ type: String, trim: true }],
     projets: [projetSchema],
     ordre: { type: Number, default: 0 },
     actif: { type: Boolean, default: true },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
 );
 
-cellSchema.pre("validate", function (next) {
-  if (!this.slug && this.nomFr) {
-    this.slug = slugify(this.nomFr);
+// Le chef de cellule n'est PAS stocké ici : User.cellule est la seule
+// source de vérité (sinon les deux finissent par diverger le jour où un
+// admin réaffecte un chef). Il faut appeler .populate("chef") côté
+// contrôleur pour le récupérer.
+cellSchema.virtual("chef", {
+  ref: "User",
+  localField: "_id",
+  foreignField: "cellule",
+  justOne: true,
+  match: { role: "chef_cellule" },
+});
+
+// Slug généré une seule fois, à la création — jamais régénéré si le nom
+// change ensuite, pour ne pas casser les URL déjà partagées.
+cellSchema.pre("validate", async function () {
+  if (this.isNew && !this.slug && this.nomFr) {
+    this.slug = await ensureUniqueSlug(this.constructor, slugify(this.nomFr));
   }
-  next();
 });
 
 cellSchema.index({ ordre: 1 });

@@ -4,10 +4,10 @@ const boardMemberSchema = new mongoose.Schema(
   {
     nom: { type: String, required: true, trim: true },
     posteFr: { type: String, required: true },
-    posteEn: { type: String, required: true },
+    posteEn: { type: String, default: "" },
     photo: { type: String, default: "" },
     linkedin: { type: String, default: "" },
-    email: { type: String, default: "" },
+    email: { type: String, default: "", lowercase: true, trim: true },
     mandat: { type: String, required: true },
     ordre: { type: Number, default: 0 },
   },

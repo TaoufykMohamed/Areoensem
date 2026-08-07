@@ -4,7 +4,7 @@ const statSchema = new mongoose.Schema(
   {
     cle: { type: String, required: true, unique: true, trim: true },
     labelFr: { type: String, required: true },
-    labelEn: { type: String, required: true },
+    labelEn: { type: String, default: "" },
     valeur: { type: Number, required: true },
   },
   { timestamps: true }

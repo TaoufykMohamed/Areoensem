@@ -4,7 +4,7 @@ const siteContentSchema = new mongoose.Schema(
   {
     cle: { type: String, required: true, unique: true, trim: true },
     valeurFr: { type: String, required: true },
-    valeurEn: { type: String, required: true },
+    valeurEn: { type: String, default: "" },
   },
   { timestamps: true }
 );

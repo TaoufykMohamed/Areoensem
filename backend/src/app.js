@@ -6,6 +6,7 @@ import morgan from "morgan";
 
 import { env, isProd } from "./config/env.js";
 import { notFoundHandler, errorHandler } from "./middleware/errorHandler.js";
+import authRoutes from "./routes/auth.routes.js";
 
 export const app = express();
 
@@ -24,11 +25,14 @@ if (!isProd) {
   app.use(morgan("dev"));
 }
 
-// Les routes par ressource (auth, cells, events, ...) sont montées ici
-// au fur et à mesure de leur implémentation (étape 4).
 app.get("/api/v1/health", (req, res) => {
   res.json({ success: true, data: { status: "ok" }, message: null });
 });
+
+app.use("/api/v1/auth", authRoutes);
+
+// Les routes par ressource (cells, events, ...) sont montées ici au fur
+// et à mesure de leur implémentation (étape 4).
 
 app.use(notFoundHandler);
 app.use(errorHandler);

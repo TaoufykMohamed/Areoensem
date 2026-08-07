@@ -3,8 +3,8 @@
 Monorepo du site du Club AéroENSEM (ENSEM Casablanca) : backend Express/MongoDB
 et frontend React/Vite, dans deux dossiers séparés.
 
-> Ce README correspond à l'étape 1 (arborescence + configuration). Il sera
-> complété au fil des étapes suivantes (comptes de démo, déploiement, etc. à
+> Ce README correspond à l'étape 2 (modèles + seed). Il sera complété au fil
+> des étapes suivantes (comptes de démo détaillés, déploiement, etc. à
 > l'étape 8).
 
 ## Structure
@@ -35,6 +35,7 @@ cd backend
 cp .env.example .env
 npm install
 npm run dev        # http://localhost:5000
+npm run seed        # peuple la base (admin, cellules, événements, ...)
 
 # Frontend (autre terminal)
 cd frontend
@@ -53,7 +54,7 @@ Voir `backend/.env.example` et `frontend/.env.example`.
 ## Avancement
 
 - [x] Étape 1 — arborescence, package.json, configuration
-- [ ] Étape 2 — modèles Mongoose, connexion base, seed
+- [x] Étape 2 — modèles Mongoose, connexion base, seed
 - [ ] Étape 3 — authentification et middlewares de permissions
 - [ ] Étape 4 — contrôleurs et routes API
 - [ ] Étape 5 — socle frontend (layout, routing, thème, i18n, auth)

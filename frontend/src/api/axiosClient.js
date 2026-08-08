@@ -1,14 +1,21 @@
 import axios from "axios";
 
 // Frontend et backend sur des domaines différents (Vercel/Render) :
-// VITE_API_URL doit pointer vers l'URL complète du backend, ex.
-// https://areoensem.onrender.com/api/v1. Sans cette variable, on retombe
-// sur une URL relative (utile seulement si un jour le backend sert à
-// nouveau le frontend en service unique, même origine).
-const API_URL = import.meta.env.VITE_API_URL || "/api/v1";
+// VITE_API_URL doit pointer vers le backend. On tolère qu'elle soit
+// fournie avec ou sans le suffixe /api/v1 (erreur de saisie courante,
+// ex. "https://mon-backend.onrender.com" au lieu de ".../api/v1") pour
+// ne pas retomber en silence sur des 404 juste à cause d'une variable
+// d'environnement mal renseignée.
+function resolveApiUrl() {
+  const raw = import.meta.env.VITE_API_URL;
+  if (!raw) return "/api/v1"; // même origine (dev proxy Vite, ou service unique)
+
+  const trimmed = raw.replace(/\/+$/, "");
+  return trimmed.endsWith("/api/v1") ? trimmed : `${trimmed}/api/v1`;
+}
 
 export const axiosClient = axios.create({
-  baseURL: API_URL,
+  baseURL: resolveApiUrl(),
   withCredentials: true, // le cookie httpOnly voyage avec chaque requête
 });
 

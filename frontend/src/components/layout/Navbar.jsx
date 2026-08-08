@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { useTheme } from "../../hooks/useTheme.js";
 import { useAuth } from "../../hooks/useAuth.js";
+import { useScrolled } from "../../hooks/useScrolled.js";
 import ContinuousTabs from "../ui/ContinuousTabs.jsx";
 
 const LINKS = [
@@ -24,13 +25,20 @@ export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const { isAuthenticated } = useAuth();
   const [open, setOpen] = useState(false);
+  const scrolled = useScrolled();
 
   const toggleLang = () => i18n.changeLanguage(i18n.language === "fr" ? "en" : "fr");
 
   const tabs = LINKS.map((l) => ({ to: l.to, end: l.to === "/", label: t(`nav.${l.key}`) }));
 
   return (
-    <header className="sticky top-0 z-40 bg-[#04101f]">
+    <header
+      className={`fixed inset-x-0 top-0 z-40 transition-[background-color,backdrop-filter,border-color] duration-300 ${
+        scrolled || open
+          ? "border-b border-white/10 bg-[#04101f]/90 backdrop-blur"
+          : "border-b border-transparent bg-transparent"
+      }`}
+    >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <Link to="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
           <img src="/assets/logo-club-aero.png" alt="Club AéroENSEM" className="h-9 w-auto" />

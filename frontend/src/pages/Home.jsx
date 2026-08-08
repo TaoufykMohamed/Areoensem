@@ -173,11 +173,20 @@ export default function Home() {
             <div className="mb-8 text-center font-mono text-[11px] uppercase tracking-instrument text-[#657a90] dark:text-white/40">
               {t("home.partnersTitle")}
             </div>
-            <div className="flex flex-wrap items-center justify-center gap-12 px-6">
+            <div className="flex flex-wrap items-center justify-center gap-6 px-6">
               {partners.map((p) => (
-                <span key={p._id} className="text-xl font-extrabold text-[#657a90] opacity-70 dark:text-white/50">
-                  {p.nom}
-                </span>
+                <div
+                  key={p._id}
+                  className="flex h-24 w-44 items-center justify-center rounded-xl border border-black/10 bg-white px-6 py-4 shadow-sm dark:border-white/10 dark:bg-white/5"
+                >
+                  {p.logo ? (
+                    <img src={p.logo} alt={p.nom} className="max-h-12 max-w-full object-contain" />
+                  ) : (
+                    <span className="text-center text-sm font-extrabold text-[#657a90] dark:text-white/50">
+                      {p.nom}
+                    </span>
+                  )}
+                </div>
               ))}
             </div>
           </section>

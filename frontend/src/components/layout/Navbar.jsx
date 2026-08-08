@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { useTheme } from "../../hooks/useTheme.js";
 import { useAuth } from "../../hooks/useAuth.js";
+import ContinuousTabs from "../ui/ContinuousTabs.jsx";
 
 const LINKS = [
   { to: "/", key: "home" },
@@ -26,6 +27,8 @@ export default function Navbar() {
 
   const toggleLang = () => i18n.changeLanguage(i18n.language === "fr" ? "en" : "fr");
 
+  const tabs = LINKS.map((l) => ({ to: l.to, end: l.to === "/", label: t(`nav.${l.key}`) }));
+
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-[#04101f]/90 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
@@ -33,13 +36,9 @@ export default function Navbar() {
           <img src="/assets/logo-club-aero.png" alt="Club AéroENSEM" className="h-9 w-auto" />
         </Link>
 
-        <nav className="hidden items-center gap-7 text-sm font-medium md:flex">
-          {LINKS.map((l) => (
-            <NavLink key={l.to} to={l.to} end={l.to === "/"} className={linkClass}>
-              {t(`nav.${l.key}`)}
-            </NavLink>
-          ))}
-        </nav>
+        <div className="hidden md:flex">
+          <ContinuousTabs tabs={tabs} />
+        </div>
 
         <div className="hidden items-center gap-3 md:flex">
           <button

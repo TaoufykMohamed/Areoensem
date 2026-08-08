@@ -1,9 +1,14 @@
 import axios from "axios";
 
-// URL relative : même origine en production (le backend sert le build),
-// et Vite proxifie /api vers le backend en développement (vite.config.js).
+// Frontend et backend sur des domaines différents (Vercel/Render) :
+// VITE_API_URL doit pointer vers l'URL complète du backend, ex.
+// https://areoensem.onrender.com/api/v1. Sans cette variable, on retombe
+// sur une URL relative (utile seulement si un jour le backend sert à
+// nouveau le frontend en service unique, même origine).
+const API_URL = import.meta.env.VITE_API_URL || "/api/v1";
+
 export const axiosClient = axios.create({
-  baseURL: "/api/v1",
+  baseURL: API_URL,
   withCredentials: true, // le cookie httpOnly voyage avec chaque requête
 });
 

@@ -11,6 +11,7 @@ import Counter from "../components/ui/Counter.jsx";
 import Countdown from "../components/ui/Countdown.jsx";
 import CellCard from "../components/cards/CellCard.jsx";
 import Spinner from "../components/ui/Spinner.jsx";
+import HeroPlane from "../components/ui/HeroPlane.jsx";
 
 export default function Home() {
   const { t } = useTranslation();
@@ -51,6 +52,8 @@ export default function Home() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#04101f]/50 via-[#071a2e]/25 to-[#04101f]/70" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#04101f]/90 via-[#04101f]/55 to-transparent" />
+
+        <HeroPlane />
 
         <div className="relative mx-auto w-full max-w-7xl px-6">
           <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-brand-cyan/30 px-4 py-2 font-mono text-[11px] uppercase tracking-instrument text-brand-cyan">

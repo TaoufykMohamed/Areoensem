@@ -25,3 +25,69 @@ body {
   color: var(--text);
   transition: background-color 0.2s ease, color 0.2s ease;
 }
+
+/* HeroPlane — avion décoratif animé dans le hero de l'accueil.
+   Le suivi (.hero-plane) fait la taille du hero : on peut donc animer sa
+   translation en % pour parcourir exactement la largeur/hauteur du hero,
+   quel que soit le ratio d'écran (contrairement à des unités vw/vh). */
+.hero-plane {
+  --plane-size: clamp(26px, 3.4vw, 52px);
+  --plane-opacity: 0.8;
+  --plane-rotate: -10deg;
+  --plane-dx: 120%;
+  --plane-dy: -38%;
+  --plane-duration: 22s;
+  --plane-delay: 1.2s;
+
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+  animation: hero-plane-fly var(--plane-duration) ease-out var(--plane-delay) infinite both;
+}
+
+.hero-plane__icon {
+  position: absolute;
+  left: -10%;
+  top: 58%;
+  width: var(--plane-size);
+  height: auto;
+  color: #fff;
+  opacity: var(--plane-opacity);
+  transform: rotate(var(--plane-rotate));
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.45));
+}
+
+@keyframes hero-plane-fly {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+    animation-timing-function: ease-out;
+  }
+  3% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--plane-dx), var(--plane-dy), 0);
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-plane {
+    --plane-size: clamp(18px, 5.5vw, 30px);
+    --plane-dy: -20%;
+    --plane-rotate: -18deg;
+    --plane-opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-plane {
+    animation: none;
+    opacity: 0;
+  }
+}

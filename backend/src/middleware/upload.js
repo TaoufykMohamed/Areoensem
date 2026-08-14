@@ -1,7 +1,10 @@
 import multer from "multer";
 import { ApiError } from "../utils/ApiError.js";
 
-const MAX_SIZE = 5 * 1024 * 1024; // 5 Mo
+// Les images sont stockées en base64 dans MongoDB (voir partner.controller.js) :
+// on garde cette limite basse pour ne pas alourdir la réponse /partners à chaque
+// chargement de la page d'accueil.
+const MAX_SIZE = 1 * 1024 * 1024; // 1 Mo
 
 const storage = multer.memoryStorage();
 
@@ -21,7 +24,7 @@ export function uploadSingleImage(fieldName) {
     middleware(req, res, (err) => {
       if (err instanceof multer.MulterError) {
         const message =
-          err.code === "LIMIT_FILE_SIZE" ? "Fichier trop volumineux (5 Mo max)." : err.message;
+          err.code === "LIMIT_FILE_SIZE" ? "Fichier trop volumineux (1 Mo max)." : err.message;
         return next(ApiError.badRequest(message));
       }
       if (err) return next(err);

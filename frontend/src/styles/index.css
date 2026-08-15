@@ -110,13 +110,10 @@ body {
 
 .logo-loop__track {
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
   width: max-content;
   animation: logo-loop-scroll var(--logo-loop-duration) linear infinite;
-}
-
-.logo-loop--reverse .logo-loop__track {
-  animation-direction: reverse;
 }
 
 .logo-loop:hover .logo-loop__track {

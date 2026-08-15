@@ -100,7 +100,7 @@ body {
    visible, quelle que soit la largeur réelle de chaque logo. */
 .logo-loop {
   --logo-loop-height: 70px;
-  --logo-loop-gap: 3rem;
+  --logo-loop-gap: 2rem;
   --logo-loop-duration: 11s;
 
   overflow: hidden;
@@ -113,6 +113,10 @@ body {
   align-items: center;
   width: max-content;
   animation: logo-loop-scroll var(--logo-loop-duration) linear infinite;
+}
+
+.logo-loop--reverse .logo-loop__track {
+  animation-direction: reverse;
 }
 
 .logo-loop:hover .logo-loop__track {

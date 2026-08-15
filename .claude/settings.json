@@ -34,7 +34,12 @@
       "Bash(taskkill //F //T //PID 16420)",
       "Bash(rm -f \"C:/Users/taouf/AppData/Local/Temp/claude/c--Users-taouf-OneDrive-Desktop-aeroensem-website/1d50dfb9-eb97-4ed4-9c69-ad9f2ea1bb1f/scratchpad/test_grid_item.json\")",
       "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('count:',j.data.length\\); j.data.forEach\\(m=>console.log\\(m.nom, m.posteFr, m.mandat, !!m.photo\\)\\);}\\)\")",
-      "Bash(node check_board_team.js)"
+      "Bash(node check_board_team.js)",
+      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\(j.data[0]._id, j.data[0].nom\\);}\\)\")",
+      "Bash(curl -s -X PATCH http://localhost:5000/api/v1/board/6a808090a874f1474894e8c4 -H 'Cookie: aeroensem_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YTc3M2Y1ZWE1YmI1OGQ4ZjI2ZTE5MjgiLCJyb2xlIjoiYWRtaW4iLCJjZWxsdWxlIjpudWxsLCJpYXQiOjE3ODY4MTQ2MjksImV4cCI6MTc4NjgxODIyOX0.xTCP8FFFfZ3t5JbhBF91qYGFlQ043vUK4Mb19Nn3Bes' -H 'Content-Type: application/json' -d '{\"linkedin\":\"https://linkedin.com/in/test\",\"email\":\"test@example.com\"}')",
+      "Bash(node check_board_v2.js)",
+      "Bash(curl -s -X PATCH http://localhost:5000/api/v1/board/6a808090a874f1474894e8c4 -H 'Cookie: aeroensem_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YTc3M2Y1ZWE1YmI1OGQ4ZjI2ZTE5MjgiLCJyb2xlIjoiYWRtaW4iLCJjZWxsdWxlIjpudWxsLCJpYXQiOjE3ODY4MTQ2MjksImV4cCI6MTc4NjgxODIyOX0.xTCP8FFFfZ3t5JbhBF91qYGFlQ043vUK4Mb19Nn3Bes' -H 'Content-Type: application/json' -d '{\"linkedin\":\"\",\"email\":\"\"}')",
+      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('linkedin:',JSON.stringify\\(j.data.linkedin\\),'email:',JSON.stringify\\(j.data.email\\)\\);}\\)\")"
     ]
   }
 }

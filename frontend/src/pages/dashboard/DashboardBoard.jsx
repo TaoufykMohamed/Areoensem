@@ -5,7 +5,7 @@ import { useLocale } from "../../hooks/useLocale.js";
 import { boardApi } from "../../api/board.js";
 import FileUpload from "../../components/ui/FileUpload.jsx";
 
-const emptyForm = { nom: "", posteFr: "", posteEn: "", mandat: "", ordre: 0, photo: "" };
+const emptyForm = { nom: "", posteFr: "", posteEn: "", mandat: "", ordre: 0, photo: "", linkedin: "", email: "" };
 
 export default function DashboardBoard() {
   const { t } = useTranslation();
@@ -65,6 +65,8 @@ export default function DashboardBoard() {
         <input placeholder="Position (EN)" value={form.posteEn} onChange={(e) => setForm({ ...form, posteEn: e.target.value })} className="rounded-lg border border-white/15 bg-transparent px-3 py-2 text-sm" />
         <input required placeholder="Mandat (ex. 2025 - 2026)" value={form.mandat} onChange={(e) => setForm({ ...form, mandat: e.target.value })} className="rounded-lg border border-white/15 bg-transparent px-3 py-2 text-sm" />
         <input type="number" placeholder="Ordre" value={form.ordre} onChange={(e) => setForm({ ...form, ordre: Number(e.target.value) })} className="rounded-lg border border-white/15 bg-transparent px-3 py-2 text-sm" />
+        <input placeholder="LinkedIn (URL, optionnel)" value={form.linkedin} onChange={(e) => setForm({ ...form, linkedin: e.target.value })} className="rounded-lg border border-white/15 bg-transparent px-3 py-2 text-sm" />
+        <input placeholder="Email (optionnel)" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="rounded-lg border border-white/15 bg-transparent px-3 py-2 text-sm" />
         {error && <p className="text-xs text-red-400 sm:col-span-2">{error}</p>}
         <button
           type="submit"

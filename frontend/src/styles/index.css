@@ -157,3 +157,28 @@ body {
   background-size: 22px 22px;
   pointer-events: none;
 }
+
+/* GalleryStrip — barre de défilement horizontale toujours visible (les
+   scrollbars natives sont fines/auto-masquées selon l'OS/le navigateur). */
+.gallery-strip {
+  scrollbar-width: auto;
+  scrollbar-color: #22d3ee rgba(101, 122, 144, 0.15);
+}
+
+.gallery-strip::-webkit-scrollbar {
+  height: 10px;
+}
+
+.gallery-strip::-webkit-scrollbar-track {
+  background: rgba(101, 122, 144, 0.15);
+  border-radius: 999px;
+}
+
+.gallery-strip::-webkit-scrollbar-thumb {
+  background-color: #22d3ee;
+  border-radius: 999px;
+}
+
+.gallery-strip::-webkit-scrollbar-thumb:hover {
+  background-color: #06b6d4;
+}

@@ -5,6 +5,8 @@ const galleryItemSchema = new mongoose.Schema(
     image: { type: String, required: true },
     legendeFr: { type: String, default: "" },
     legendeEn: { type: String, default: "" },
+    descriptionFr: { type: String, default: "" },
+    descriptionEn: { type: String, default: "" },
     cellule: { type: mongoose.Schema.Types.ObjectId, ref: "Cell" },
     event: { type: mongoose.Schema.Types.ObjectId, ref: "Event" },
     date: { type: Date, default: Date.now },

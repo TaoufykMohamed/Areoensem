@@ -14,7 +14,13 @@ export default function DashboardGallery() {
     () => galleryApi.list(isAdmin ? {} : { cellule: user.cellule }),
     []
   );
-  const [form, setForm] = useState({ image: "", legendeFr: "", legendeEn: "" });
+  const [form, setForm] = useState({
+    image: "",
+    legendeFr: "",
+    legendeEn: "",
+    descriptionFr: "",
+    descriptionEn: "",
+  });
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
 
@@ -44,7 +50,7 @@ export default function DashboardGallery() {
     }
     try {
       await galleryApi.create({ ...form, cellule: isAdmin ? undefined : user.cellule });
-      setForm({ image: "", legendeFr: "", legendeEn: "" });
+      setForm({ image: "", legendeFr: "", legendeEn: "", descriptionFr: "", descriptionEn: "" });
       refetch();
     } catch (err) {
       setError(err.message);
@@ -79,14 +85,28 @@ export default function DashboardGallery() {
           onChange={(e) => setForm({ ...form, legendeEn: e.target.value })}
           className="rounded-lg border border-white/15 bg-transparent px-3 py-2 text-sm"
         />
+        <textarea
+          placeholder="Description (FR)"
+          value={form.descriptionFr}
+          onChange={(e) => setForm({ ...form, descriptionFr: e.target.value })}
+          rows={3}
+          className="rounded-lg border border-white/15 bg-transparent px-3 py-2 text-sm sm:col-span-3"
+        />
+        <textarea
+          placeholder="Description (EN)"
+          value={form.descriptionEn}
+          onChange={(e) => setForm({ ...form, descriptionEn: e.target.value })}
+          rows={3}
+          className="rounded-lg border border-white/15 bg-transparent px-3 py-2 text-sm sm:col-span-3"
+        />
+        {error && <p className="text-xs text-red-400 sm:col-span-3">{error}</p>}
         <button
           type="submit"
           disabled={uploading}
-          className="rounded-full bg-brand-cyan px-5 py-2 text-sm font-semibold text-[#04101f] disabled:opacity-50"
+          className="rounded-full bg-brand-cyan px-5 py-2 text-sm font-semibold text-[#04101f] disabled:opacity-50 sm:col-span-3"
         >
           {t("common.create")}
         </button>
-        {error && <p className="text-xs text-red-400 sm:col-span-3">{error}</p>}
       </form>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">

@@ -19,7 +19,14 @@
       "Bash(node check_board.js)",
       "Bash(curl -s http://localhost:5000/api/v1/board)",
       "Bash(curl -s -X DELETE http://localhost:5000/api/v1/board/6a807f74de72ba16c77cadcb -H 'Cookie: aeroensem_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YTc3M2Y1ZWE1YmI1OGQ4ZjI2ZTE5MjgiLCJyb2xlIjoiYWRtaW4iLCJjZWxsdWxlIjpudWxsLCJpYXQiOjE3ODY4MDYwNzcsImV4cCI6MTc4NjgwOTY3N30.PCBSOOuGMxNa1C4N4_gBRc-eQl__ob-PjiSv5lkGUyk')",
-      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\(j.data.map\\(m=>m.nom\\)\\);}\\)\")"
+      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\(j.data.map\\(m=>m.nom\\)\\);}\\)\")",
+      "Bash(node --check src/models/GalleryItem.js)",
+      "Bash(node --check src/validators/galleryValidators.js)",
+      "Bash(curl -s -X POST http://localhost:5000/api/v1/gallery -H 'Cookie: aeroensem_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YTc3M2Y1ZWE1YmI1OGQ4ZjI2ZTE5MjgiLCJyb2xlIjoiYWRtaW4iLCJjZWxsdWxlIjpudWxsLCJpYXQiOjE3ODY4MDY5NDIsImV4cCI6MTc4NjgxMDU0Mn0.0_jtpuPSbwQHpDFCO2LE6FIIk3aobkgXltkJkTCrui8' -H 'Content-Type: application/json' -d '{\"image\":\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=\",\"legendeFr\":\"__TEST_TITLE__\",\"legendeEn\":\"__TEST_TITLE_EN__\",\"descriptionFr\":\"__TEST_DESCRIPTION_FR_TEXT_LONGUE_POUR_VERIFIER_LE_RENDU__\",\"descriptionEn\":\"__TEST_DESCRIPTION_EN__\"}')",
+      "Bash(node check_gallerystrip.js)",
+      "Bash(node check_indicator.js)",
+      "Bash(curl -s -X DELETE http://localhost:5000/api/v1/gallery/6a8082da0f2a5729bd25a47f -H 'Cookie: aeroensem_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YTc3M2Y1ZWE1YmI1OGQ4ZjI2ZTE5MjgiLCJyb2xlIjoiYWRtaW4iLCJjZWxsdWxlIjpudWxsLCJpYXQiOjE3ODY4MDY5NDIsImV4cCI6MTc4NjgxMDU0Mn0.0_jtpuPSbwQHpDFCO2LE6FIIk3aobkgXltkJkTCrui8')",
+      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('remaining:', j.data.length, j.data.map\\(g=>g.legendeFr\\)\\);}\\)\")"
     ]
   }
 }

@@ -39,7 +39,13 @@
       "Bash(curl -s -X PATCH http://localhost:5000/api/v1/board/6a808090a874f1474894e8c4 -H 'Cookie: aeroensem_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YTc3M2Y1ZWE1YmI1OGQ4ZjI2ZTE5MjgiLCJyb2xlIjoiYWRtaW4iLCJjZWxsdWxlIjpudWxsLCJpYXQiOjE3ODY4MTQ2MjksImV4cCI6MTc4NjgxODIyOX0.xTCP8FFFfZ3t5JbhBF91qYGFlQ043vUK4Mb19Nn3Bes' -H 'Content-Type: application/json' -d '{\"linkedin\":\"https://linkedin.com/in/test\",\"email\":\"test@example.com\"}')",
       "Bash(node check_board_v2.js)",
       "Bash(curl -s -X PATCH http://localhost:5000/api/v1/board/6a808090a874f1474894e8c4 -H 'Cookie: aeroensem_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YTc3M2Y1ZWE1YmI1OGQ4ZjI2ZTE5MjgiLCJyb2xlIjoiYWRtaW4iLCJjZWxsdWxlIjpudWxsLCJpYXQiOjE3ODY4MTQ2MjksImV4cCI6MTc4NjgxODIyOX0.xTCP8FFFfZ3t5JbhBF91qYGFlQ043vUK4Mb19Nn3Bes' -H 'Content-Type: application/json' -d '{\"linkedin\":\"\",\"email\":\"\"}')",
-      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('linkedin:',JSON.stringify\\(j.data.linkedin\\),'email:',JSON.stringify\\(j.data.email\\)\\);}\\)\")"
+      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('linkedin:',JSON.stringify\\(j.data.linkedin\\),'email:',JSON.stringify\\(j.data.email\\)\\);}\\)\")",
+      "Bash(node check_accordion.js)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:5173/ --max-time 5)",
+      "Bash(curl -s http://localhost:5000/api/v1/health --max-time 5)",
+      "Bash(sed -i 's/networkidle/domcontentloaded/g' check_accordion.js)",
+      "Bash(sed -i 's/await page.waitForTimeout\\(400\\);/await page.waitForSelector\\(\".hidden.gap-2.md\\\\\\\\\\\\\\\\:flex > div\", { timeout: 10000 }\\);/' check_accordion.js)",
+      "Bash(sed -i '0,/await mpage.waitForTimeout\\(400\\);/{s/await mpage.waitForTimeout\\(400\\);/await mpage.waitForSelector\\(\".grid.grid-cols-2\", { timeout: 10000 }\\);/}' check_accordion.js)"
     ]
   }
 }

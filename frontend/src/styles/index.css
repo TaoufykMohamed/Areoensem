@@ -92,11 +92,17 @@ body {
   }
 }
 
-/* LogoLoop — bandeau de logos partenaires en défilement infini.
-   Le tableau est dupliqué (voir LogoLoop.jsx) ; translater la piste de
-   -50% ramène exactement au début de la copie identique suivante, d'où
-   le défilement sans coupure visible. */
+/* LogoLoop — bandeau de logos partenaires en défilement infini, de droite
+   à gauche (la piste part de translate3d(0) et va vers -50%, donc chaque
+   logo entre par la droite et sort par la gauche).
+   Le tableau est dupliqué (voir LogoLoop.jsx) ; -50% ramène exactement au
+   début de la copie identique suivante, d'où le raccord sans coupure
+   visible, quelle que soit la largeur réelle de chaque logo. */
 .logo-loop {
+  --logo-loop-height: 70px;
+  --logo-loop-gap: 3rem;
+  --logo-loop-duration: 11s;
+
   overflow: hidden;
   -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
   mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
@@ -104,8 +110,9 @@ body {
 
 .logo-loop__track {
   display: flex;
+  align-items: center;
   width: max-content;
-  animation: logo-loop-scroll 32s linear infinite;
+  animation: logo-loop-scroll var(--logo-loop-duration) linear infinite;
 }
 
 .logo-loop:hover .logo-loop__track {
@@ -114,7 +121,8 @@ body {
 
 .logo-loop__item {
   flex-shrink: 0;
-  margin-right: 1.5rem;
+  height: var(--logo-loop-height);
+  margin-right: var(--logo-loop-gap);
 }
 
 @keyframes logo-loop-scroll {
@@ -123,6 +131,13 @@ body {
   }
   to {
     transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (max-width: 640px) {
+  .logo-loop {
+    --logo-loop-height: 48px;
+    --logo-loop-gap: 2rem;
   }
 }
 

@@ -5,6 +5,7 @@ import { useFetch } from "../hooks/useFetch.js";
 import { cellsApi } from "../api/cells.js";
 import { eventsApi } from "../api/events.js";
 import { partnersApi } from "../api/partners.js";
+import { galleryApi } from "../api/gallery.js";
 import { contentApi, statsApi } from "../api/content.js";
 import Reveal from "../components/ui/Reveal.jsx";
 import Counter from "../components/ui/Counter.jsx";
@@ -13,6 +14,7 @@ import CellCard from "../components/cards/CellCard.jsx";
 import Spinner from "../components/ui/Spinner.jsx";
 import HeroPlane from "../components/ui/HeroPlane.jsx";
 import LogoLoop from "../components/ui/LogoLoop.jsx";
+import LayoutGrid from "../components/ui/LayoutGrid.jsx";
 
 export default function Home() {
   const { t } = useTranslation();
@@ -21,6 +23,7 @@ export default function Home() {
   const { data: cells, loading: cellsLoading } = useFetch(() => cellsApi.list(), []);
   const { data: events } = useFetch(() => eventsApi.list({ statut: "a_venir" }), []);
   const { data: partners } = useFetch(() => partnersApi.list(), []);
+  const { data: gallery } = useFetch(() => galleryApi.list(), []);
   const { data: stats } = useFetch(() => statsApi.list(), []);
   const { data: content } = useFetch(() => contentApi.list(), []);
 
@@ -191,6 +194,23 @@ export default function Home() {
           </Link>
         </section>
       </Reveal>
+
+      {/* GALERIE */}
+      {gallery && gallery.length > 0 && (
+        <Reveal>
+          <section className="mx-auto max-w-7xl px-6 pb-24">
+            <div className="mb-4 font-mono text-[11px] uppercase tracking-instrument text-brand-cyan">
+              — {t("dashboard.gallery")}
+            </div>
+            <h2 className="mb-10 font-serif text-4xl text-anthracite dark:text-white">
+              {t("home.galleryTitle")}
+            </h2>
+            <LayoutGrid
+              items={gallery.slice(0, 8).map((g) => ({ id: g._id, image: g.image, caption: loc(g, "legende") }))}
+            />
+          </section>
+        </Reveal>
+      )}
     </div>
   );
 }

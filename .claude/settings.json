@@ -26,7 +26,13 @@
       "Bash(node check_gallerystrip.js)",
       "Bash(node check_indicator.js)",
       "Bash(curl -s -X DELETE http://localhost:5000/api/v1/gallery/6a8082da0f2a5729bd25a47f -H 'Cookie: aeroensem_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YTc3M2Y1ZWE1YmI1OGQ4ZjI2ZTE5MjgiLCJyb2xlIjoiYWRtaW4iLCJjZWxsdWxlIjpudWxsLCJpYXQiOjE3ODY4MDY5NDIsImV4cCI6MTc4NjgxMDU0Mn0.0_jtpuPSbwQHpDFCO2LE6FIIk3aobkgXltkJkTCrui8')",
-      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('remaining:', j.data.length, j.data.map\\(g=>g.legendeFr\\)\\);}\\)\")"
+      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('remaining:', j.data.length, j.data.map\\(g=>g.legendeFr\\)\\);}\\)\")",
+      "Bash(node check_layoutgrid2.js)",
+      "Bash(curl -s -X DELETE http://localhost:5000/api/v1/gallery/__CMDSUB_OUTPUT__ -H 'Cookie: aeroensem_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YTc3M2Y1ZWE1YmI1OGQ4ZjI2ZTE5MjgiLCJyb2xlIjoiYWRtaW4iLCJjZWxsdWxlIjpudWxsLCJpYXQiOjE3ODY4MDg1NjcsImV4cCI6MTc4NjgxMjE2N30.XEnYcZt9CurftOru1TkByZ3POu7L2ThmJc7b6zDlk1o')",
+      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('remaining:', j.data.length\\);}\\)\")",
+      "Bash(taskkill //F //T //PID 29812)",
+      "Bash(taskkill //F //T //PID 16420)",
+      "Bash(rm -f \"C:/Users/taouf/AppData/Local/Temp/claude/c--Users-taouf-OneDrive-Desktop-aeroensem-website/1d50dfb9-eb97-4ed4-9c69-ad9f2ea1bb1f/scratchpad/test_grid_item.json\")"
     ]
   }
 }

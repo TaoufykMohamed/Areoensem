@@ -14,7 +14,7 @@ import CellCard from "../components/cards/CellCard.jsx";
 import Spinner from "../components/ui/Spinner.jsx";
 import HeroPlane from "../components/ui/HeroPlane.jsx";
 import LogoLoop from "../components/ui/LogoLoop.jsx";
-import GalleryStrip from "../components/ui/GalleryStrip.jsx";
+import LayoutGrid from "../components/ui/LayoutGrid.jsx";
 
 export default function Home() {
   const { t } = useTranslation();
@@ -205,7 +205,7 @@ export default function Home() {
             <h2 className="mb-10 font-serif text-4xl text-anthracite dark:text-white">
               {t("home.galleryTitle")}
             </h2>
-            <GalleryStrip
+            <LayoutGrid
               items={gallery.map((g) => ({
                 id: g._id,
                 image: g.image,

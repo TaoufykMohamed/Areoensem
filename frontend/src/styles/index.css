@@ -158,27 +158,29 @@ body {
   pointer-events: none;
 }
 
-/* GalleryStrip — barre de défilement horizontale toujours visible (les
-   scrollbars natives sont fines/auto-masquées selon l'OS/le navigateur). */
-.gallery-strip {
+/* LayoutGrid — barre de défilement verticale toujours visible (les
+   scrollbars natives sont fines/auto-masquées selon l'OS/le navigateur) ;
+   un indicateur de progression personnalisé complète ceci dans le
+   composant lui-même, pour rester fiable quel que soit le navigateur. */
+.gallery-grid-scroll {
   scrollbar-width: auto;
   scrollbar-color: #22d3ee rgba(101, 122, 144, 0.15);
 }
 
-.gallery-strip::-webkit-scrollbar {
-  height: 10px;
+.gallery-grid-scroll::-webkit-scrollbar {
+  width: 10px;
 }
 
-.gallery-strip::-webkit-scrollbar-track {
+.gallery-grid-scroll::-webkit-scrollbar-track {
   background: rgba(101, 122, 144, 0.15);
   border-radius: 999px;
 }
 
-.gallery-strip::-webkit-scrollbar-thumb {
+.gallery-grid-scroll::-webkit-scrollbar-thumb {
   background-color: #22d3ee;
   border-radius: 999px;
 }
 
-.gallery-strip::-webkit-scrollbar-thumb:hover {
+.gallery-grid-scroll::-webkit-scrollbar-thumb:hover {
   background-color: #06b6d4;
 }

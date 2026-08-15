@@ -32,7 +32,9 @@
       "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('remaining:', j.data.length\\);}\\)\")",
       "Bash(taskkill //F //T //PID 29812)",
       "Bash(taskkill //F //T //PID 16420)",
-      "Bash(rm -f \"C:/Users/taouf/AppData/Local/Temp/claude/c--Users-taouf-OneDrive-Desktop-aeroensem-website/1d50dfb9-eb97-4ed4-9c69-ad9f2ea1bb1f/scratchpad/test_grid_item.json\")"
+      "Bash(rm -f \"C:/Users/taouf/AppData/Local/Temp/claude/c--Users-taouf-OneDrive-Desktop-aeroensem-website/1d50dfb9-eb97-4ed4-9c69-ad9f2ea1bb1f/scratchpad/test_grid_item.json\")",
+      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('count:',j.data.length\\); j.data.forEach\\(m=>console.log\\(m.nom, m.posteFr, m.mandat, !!m.photo\\)\\);}\\)\")",
+      "Bash(node check_board_team.js)"
     ]
   }
 }

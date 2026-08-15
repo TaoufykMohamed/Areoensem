@@ -12,6 +12,7 @@ import Countdown from "../components/ui/Countdown.jsx";
 import CellCard from "../components/cards/CellCard.jsx";
 import Spinner from "../components/ui/Spinner.jsx";
 import HeroPlane from "../components/ui/HeroPlane.jsx";
+import LogoLoop from "../components/ui/LogoLoop.jsx";
 
 export default function Home() {
   const { t } = useTranslation();
@@ -173,22 +174,7 @@ export default function Home() {
             <div className="mb-8 text-center font-mono text-[11px] uppercase tracking-instrument text-[#657a90] dark:text-white/40">
               {t("home.partnersTitle")}
             </div>
-            <div className="flex flex-wrap items-center justify-center gap-6 px-6">
-              {partners.map((p) => (
-                <div
-                  key={p._id}
-                  className="flex h-24 w-44 items-center justify-center rounded-xl border border-black/10 bg-white px-6 py-4 shadow-sm dark:border-white/10 dark:bg-white/5"
-                >
-                  {p.logo ? (
-                    <img src={p.logo} alt={p.nom} className="max-h-12 max-w-full object-contain" />
-                  ) : (
-                    <span className="text-center text-sm font-extrabold text-[#657a90] dark:text-white/50">
-                      {p.nom}
-                    </span>
-                  )}
-                </div>
-              ))}
-            </div>
+            <LogoLoop partners={partners} />
           </section>
         </Reveal>
       )}

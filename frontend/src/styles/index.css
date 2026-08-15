@@ -91,3 +91,43 @@ body {
     opacity: 0;
   }
 }
+
+/* LogoLoop — bandeau de logos partenaires en défilement infini.
+   Le tableau est dupliqué (voir LogoLoop.jsx) ; translater la piste de
+   -50% ramène exactement au début de la copie identique suivante, d'où
+   le défilement sans coupure visible. */
+.logo-loop {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.logo-loop__track {
+  display: flex;
+  width: max-content;
+  animation: logo-loop-scroll 32s linear infinite;
+}
+
+.logo-loop:hover .logo-loop__track {
+  animation-play-state: paused;
+}
+
+.logo-loop__item {
+  flex-shrink: 0;
+  margin-right: 1.5rem;
+}
+
+@keyframes logo-loop-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-loop__track {
+    animation: none;
+  }
+}

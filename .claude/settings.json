@@ -13,7 +13,13 @@
       "Bash(npm install *)",
       "Bash(npx playwright *)",
       "Bash(node -e ' *)",
-      "Bash(node check_layoutgrid.js)"
+      "Bash(node check_layoutgrid.js)",
+      "Bash(node --check src/routes/board.routes.js)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" -X POST http://localhost:5000/api/v1/board/upload)",
+      "Bash(node check_board.js)",
+      "Bash(curl -s http://localhost:5000/api/v1/board)",
+      "Bash(curl -s -X DELETE http://localhost:5000/api/v1/board/6a807f74de72ba16c77cadcb -H 'Cookie: aeroensem_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YTc3M2Y1ZWE1YmI1OGQ4ZjI2ZTE5MjgiLCJyb2xlIjoiYWRtaW4iLCJjZWxsdWxlIjpudWxsLCJpYXQiOjE3ODY4MDYwNzcsImV4cCI6MTc4NjgwOTY3N30.PCBSOOuGMxNa1C4N4_gBRc-eQl__ob-PjiSv5lkGUyk')",
+      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\(j.data.map\\(m=>m.nom\\)\\);}\\)\")"
     ]
   }
 }

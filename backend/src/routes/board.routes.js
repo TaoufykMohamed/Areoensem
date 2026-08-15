@@ -4,6 +4,8 @@ import { listAll, getOne, createOne, updateOne, deleteOne } from "../utils/crudF
 import { requireAuth } from "../middleware/auth.js";
 import { requireRole } from "../middleware/roles.js";
 import { validate } from "../middleware/validate.js";
+import { uploadSingleImage } from "../middleware/upload.js";
+import { uploadImage } from "../controllers/upload.controller.js";
 import { createBoardMemberSchema, updateBoardMemberSchema } from "../validators/boardMemberValidators.js";
 
 const router = Router();
@@ -13,6 +15,7 @@ router.get("/", listAll(BoardMember, { sort }));
 router.get("/:id", getOne(BoardMember));
 
 router.use(requireAuth, requireRole("admin"));
+router.post("/upload", uploadSingleImage("photo"), uploadImage);
 router.post("/", validate(createBoardMemberSchema), createOne(BoardMember));
 router.patch("/:id", validate(updateBoardMemberSchema), updateOne(BoardMember));
 router.delete("/:id", deleteOne(BoardMember));

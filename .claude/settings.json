@@ -45,7 +45,14 @@
       "Bash(curl -s http://localhost:5000/api/v1/health --max-time 5)",
       "Bash(sed -i 's/networkidle/domcontentloaded/g' check_accordion.js)",
       "Bash(sed -i 's/await page.waitForTimeout\\(400\\);/await page.waitForSelector\\(\".hidden.gap-2.md\\\\\\\\\\\\\\\\:flex > div\", { timeout: 10000 }\\);/' check_accordion.js)",
-      "Bash(sed -i '0,/await mpage.waitForTimeout\\(400\\);/{s/await mpage.waitForTimeout\\(400\\);/await mpage.waitForSelector\\(\".grid.grid-cols-2\", { timeout: 10000 }\\);/}' check_accordion.js)"
+      "Bash(sed -i '0,/await mpage.waitForTimeout\\(400\\);/{s/await mpage.waitForTimeout\\(400\\);/await mpage.waitForSelector\\(\".grid.grid-cols-2\", { timeout: 10000 }\\);/}' check_accordion.js)",
+      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);const m=j.data.find\\(x=>x.nom==='DOUAE'\\);console.log\\(JSON.stringify\\(m,null,2\\).slice\\(0,500\\)\\);}\\)\")",
+      "Bash(node check_board_edit.js)",
+      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);const m=j.data.find\\(x=>x.nom==='DOUAE'\\);console.log\\('posteFr:', JSON.stringify\\(m.posteFr\\)\\);}\\)\")",
+      "Bash(curl -s -X PATCH http://localhost:5000/api/v1/board/6a8081a2a874f1474894e949 -H 'Cookie: aeroensem_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YTc3M2Y1ZWE1YmI1OGQ4ZjI2ZTE5MjgiLCJyb2xlIjoiYWRtaW4iLCJjZWxsdWxlIjpudWxsLCJpYXQiOjE3ODY4MTkyNzQsImV4cCI6MTc4NjgyMjg3NH0.9zIXjoqZW7IsgE9pHWQwF4sf0u03FW5htVH-OltzKTM' -H 'Content-Type: application/json' -d '{\"posteFr\":\"RESPO MEDIA \"}')",
+      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('posteFr:', JSON.stringify\\(j.data.posteFr\\)\\);}\\)\")",
+      "Bash(node check_board_edit2.js)",
+      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('reverted posteFr:', JSON.stringify\\(j.data.posteFr\\)\\);}\\)\")"
     ]
   }
 }

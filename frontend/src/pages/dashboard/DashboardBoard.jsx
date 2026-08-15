@@ -12,8 +12,28 @@ export default function DashboardBoard() {
   const { t: loc } = useLocale();
   const { data: members, loading, refetch } = useFetch(() => boardApi.list(), []);
   const [form, setForm] = useState(emptyForm);
+  const [editingId, setEditingId] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+
+  const startEdit = (member) => {
+    setEditingId(member._id);
+    setForm({
+      nom: member.nom,
+      posteFr: member.posteFr,
+      posteEn: member.posteEn || "",
+      mandat: member.mandat,
+      ordre: member.ordre,
+      photo: member.photo || "",
+      linkedin: member.linkedin || "",
+      email: member.email || "",
+    });
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setForm(emptyForm);
+  };
 
   const handlePhoto = async (file) => {
     if (!file) {
@@ -32,12 +52,16 @@ export default function DashboardBoard() {
     }
   };
 
-  const submit = async (e) => {
+  const save = async (e) => {
     e.preventDefault();
     setError("");
     try {
-      await boardApi.create(form);
-      setForm(emptyForm);
+      if (editingId) {
+        await boardApi.update(editingId, form);
+      } else {
+        await boardApi.create(form);
+      }
+      cancelEdit();
       refetch();
     } catch (err) {
       setError(err.message);
@@ -56,9 +80,15 @@ export default function DashboardBoard() {
     <div>
       <h1 className="mb-6 font-serif text-2xl">{t("dashboard.board")}</h1>
 
-      <form onSubmit={submit} className="mb-8 grid gap-3 rounded-xl border border-white/10 p-5 sm:grid-cols-2">
+      <form onSubmit={save} className="mb-8 grid gap-3 rounded-xl border border-white/10 p-5 sm:grid-cols-2">
         <div className="sm:col-span-2">
-          <FileUpload onFileSelect={handlePhoto} disabled={uploading} hint="PNG ou JPG, 1 Mo max" />
+          <FileUpload
+            key={editingId || "new"}
+            onFileSelect={handlePhoto}
+            existingUrl={form.photo}
+            disabled={uploading}
+            hint="PNG ou JPG, 1 Mo max"
+          />
         </div>
         <input required placeholder={t("common.name")} value={form.nom} onChange={(e) => setForm({ ...form, nom: e.target.value })} className="rounded-lg border border-white/15 bg-transparent px-3 py-2 text-sm" />
         <input required placeholder="Poste (FR)" value={form.posteFr} onChange={(e) => setForm({ ...form, posteFr: e.target.value })} className="rounded-lg border border-white/15 bg-transparent px-3 py-2 text-sm" />
@@ -68,13 +98,20 @@ export default function DashboardBoard() {
         <input placeholder="LinkedIn (URL, optionnel)" value={form.linkedin} onChange={(e) => setForm({ ...form, linkedin: e.target.value })} className="rounded-lg border border-white/15 bg-transparent px-3 py-2 text-sm" />
         <input placeholder="Email (optionnel)" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="rounded-lg border border-white/15 bg-transparent px-3 py-2 text-sm" />
         {error && <p className="text-xs text-red-400 sm:col-span-2">{error}</p>}
-        <button
-          type="submit"
-          disabled={uploading}
-          className="rounded-full bg-brand-cyan px-5 py-2 text-sm font-semibold text-[#04101f] disabled:opacity-50 sm:col-span-2"
-        >
-          {t("common.create")}
-        </button>
+        <div className="flex gap-2 sm:col-span-2">
+          <button
+            type="submit"
+            disabled={uploading}
+            className="rounded-full bg-brand-cyan px-5 py-2 text-sm font-semibold text-[#04101f] disabled:opacity-50"
+          >
+            {editingId ? t("common.save") : t("common.create")}
+          </button>
+          {editingId && (
+            <button type="button" onClick={cancelEdit} className="rounded-full border border-white/15 px-5 py-2 text-sm">
+              {t("common.cancel")}
+            </button>
+          )}
+        </div>
       </form>
 
       <table className="w-full text-left text-sm">
@@ -99,7 +136,12 @@ export default function DashboardBoard() {
               <td className="py-3">{m.nom}</td>
               <td className="py-3 text-white/60">{loc(m, "poste")}</td>
               <td className="py-3">
-                <button onClick={() => remove(m._id)} className="text-red-400 hover:underline">{t("common.delete")}</button>
+                <button onClick={() => startEdit(m)} className="mr-3 text-brand-cyan hover:underline">
+                  {t("common.edit")}
+                </button>
+                <button onClick={() => remove(m._id)} className="text-red-400 hover:underline">
+                  {t("common.delete")}
+                </button>
               </td>
             </tr>
           ))}

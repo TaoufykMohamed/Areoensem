@@ -8,10 +8,17 @@ import { motion, AnimatePresence } from "framer-motion";
  * plus haut dans ce projet). N'appelle aucune API elle-même : elle reporte
  * juste le fichier choisi via `onFileSelect`, l'appelant gère l'upload.
  */
-export default function FileUpload({ onFileSelect, accept = "image/*", hint = "PNG ou JPG", disabled = false }) {
+export default function FileUpload({
+  onFileSelect,
+  accept = "image/*",
+  hint = "PNG ou JPG",
+  disabled = false,
+  existingUrl = "",
+}) {
   const inputRef = useRef(null);
   const [dragActive, setDragActive] = useState(false);
   const [preview, setPreview] = useState(null); // { name, size, url }
+  const [removed, setRemoved] = useState(false);
 
   useEffect(() => {
     return () => {
@@ -23,6 +30,7 @@ export default function FileUpload({ onFileSelect, accept = "image/*", hint = "P
     (files) => {
       const file = files?.[0];
       if (!file) return;
+      setRemoved(false);
       setPreview((prev) => {
         if (prev?.url) URL.revokeObjectURL(prev.url);
         return { name: file.name, size: file.size, url: URL.createObjectURL(file) };
@@ -36,8 +44,13 @@ export default function FileUpload({ onFileSelect, accept = "image/*", hint = "P
     e.stopPropagation();
     if (preview?.url) URL.revokeObjectURL(preview.url);
     setPreview(null);
+    setRemoved(true);
     onFileSelect(null);
   };
+
+  // Priorité au fichier fraîchement choisi ; sinon la photo déjà en base
+  // (édition d'un élément existant), tant qu'elle n'a pas été retirée.
+  const displayUrl = preview?.url || (!removed && existingUrl) || "";
 
   return (
     <div
@@ -68,7 +81,7 @@ export default function FileUpload({ onFileSelect, accept = "image/*", hint = "P
       />
 
       <AnimatePresence mode="wait">
-        {preview ? (
+        {displayUrl ? (
           <motion.div
             key="preview"
             initial={{ opacity: 0, y: 6 }}
@@ -77,13 +90,13 @@ export default function FileUpload({ onFileSelect, accept = "image/*", hint = "P
             className="relative z-10 flex items-center gap-4"
           >
             <img
-              src={preview.url}
+              src={displayUrl}
               alt=""
               className="h-16 w-16 rounded-lg border border-white/15 bg-white object-contain p-1"
             />
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm text-white/90">{preview.name}</p>
-              <p className="text-xs text-white/40">{(preview.size / 1024).toFixed(0)} Ko</p>
+              <p className="truncate text-sm text-white/90">{preview ? preview.name : "Photo actuelle"}</p>
+              {preview && <p className="text-xs text-white/40">{(preview.size / 1024).toFixed(0)} Ko</p>}
             </div>
             <button
               type="button"

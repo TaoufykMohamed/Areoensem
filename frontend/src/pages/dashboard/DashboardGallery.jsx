@@ -4,6 +4,7 @@ import { useFetch } from "../../hooks/useFetch.js";
 import { useLocale } from "../../hooks/useLocale.js";
 import { useAuth } from "../../hooks/useAuth.js";
 import { galleryApi } from "../../api/gallery.js";
+import FileUpload from "../../components/ui/FileUpload.jsx";
 
 export default function DashboardGallery() {
   const { t } = useTranslation();
@@ -14,11 +15,33 @@ export default function DashboardGallery() {
     []
   );
   const [form, setForm] = useState({ image: "", legendeFr: "", legendeEn: "" });
+  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+
+  const handleFile = async (file) => {
+    if (!file) {
+      setForm((f) => ({ ...f, image: "" }));
+      return;
+    }
+    setError("");
+    setUploading(true);
+    try {
+      const { url } = await galleryApi.uploadImage(file);
+      setForm((f) => ({ ...f, image: url }));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const submit = async (e) => {
     e.preventDefault();
     setError("");
+    if (!form.image) {
+      setError("Importez une image.");
+      return;
+    }
     try {
       await galleryApi.create({ ...form, cellule: isAdmin ? undefined : user.cellule });
       setForm({ image: "", legendeFr: "", legendeEn: "" });
@@ -41,13 +64,9 @@ export default function DashboardGallery() {
       <h1 className="mb-6 font-serif text-2xl">{t("dashboard.gallery")}</h1>
 
       <form onSubmit={submit} className="mb-8 grid gap-3 rounded-xl border border-white/10 p-5 sm:grid-cols-3">
-        <input
-          required
-          placeholder="URL de l'image"
-          value={form.image}
-          onChange={(e) => setForm({ ...form, image: e.target.value })}
-          className="rounded-lg border border-white/15 bg-transparent px-3 py-2 text-sm sm:col-span-3"
-        />
+        <div className="sm:col-span-3">
+          <FileUpload onFileSelect={handleFile} disabled={uploading} hint="PNG ou JPG, 1 Mo max" />
+        </div>
         <input
           placeholder="Légende (FR)"
           value={form.legendeFr}
@@ -60,7 +79,11 @@ export default function DashboardGallery() {
           onChange={(e) => setForm({ ...form, legendeEn: e.target.value })}
           className="rounded-lg border border-white/15 bg-transparent px-3 py-2 text-sm"
         />
-        <button type="submit" className="rounded-full bg-brand-cyan px-5 py-2 text-sm font-semibold text-[#04101f]">
+        <button
+          type="submit"
+          disabled={uploading}
+          className="rounded-full bg-brand-cyan px-5 py-2 text-sm font-semibold text-[#04101f] disabled:opacity-50"
+        >
           {t("common.create")}
         </button>
         {error && <p className="text-xs text-red-400 sm:col-span-3">{error}</p>}

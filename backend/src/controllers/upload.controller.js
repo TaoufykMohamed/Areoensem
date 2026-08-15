@@ -1,10 +1,10 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 
-// Les logos sont stockés directement en base (champ Partner.logo) sous forme
-// de data URI base64 — pas de service tiers, le club n'a que quelques
-// sponsors et leurs logos restent petits (cf. limite dans middleware/upload.js).
-export const uploadLogo = asyncHandler(async (req, res, next) => {
+// Convertit le fichier reçu (via middleware/upload.js) en data URI base64 et
+// le renvoie tel quel — c'est ce que les ressources (Partner.logo,
+// GalleryItem.image, ...) stockent directement en base, sans service tiers.
+export const uploadImage = asyncHandler(async (req, res, next) => {
   if (!req.file) {
     return next(ApiError.badRequest("Aucun fichier reçu."));
   }

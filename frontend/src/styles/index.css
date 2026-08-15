@@ -147,3 +147,13 @@ body {
     animation: none;
   }
 }
+
+/* FileUpload — grille discrète en fond de la zone de dépôt. */
+.file-upload__grid {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 22px 22px;
+  pointer-events: none;
+}

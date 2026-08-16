@@ -47,8 +47,21 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="mx-auto mt-12 max-w-7xl border-t border-white/10 pt-6 text-xs text-white/40">
-        © {new Date().getFullYear()} {t("footer.rights")}
+      <div className="mx-auto mt-12 flex max-w-7xl flex-col gap-2 border-t border-white/10 pt-6 text-xs text-white/40 sm:flex-row sm:items-center sm:justify-between">
+        <span>
+          © {new Date().getFullYear()} {t("footer.rights")}
+        </span>
+        <span>
+          Created with 💙 by{" "}
+          <a
+            href="https://www.linkedin.com/in/mohamed-taoufyk-93b538370/"
+            target="_blank"
+            rel="noreferrer"
+            className="text-white/60 transition-colors hover:text-brand-cyan"
+          >
+            Mohamed Taoufyk
+          </a>
+        </span>
       </div>
     </footer>
   );

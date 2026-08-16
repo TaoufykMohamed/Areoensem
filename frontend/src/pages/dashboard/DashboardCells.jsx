@@ -6,7 +6,24 @@ import { useAuth } from "../../hooks/useAuth.js";
 import { cellsApi } from "../../api/cells.js";
 import FileUpload from "../../components/ui/FileUpload.jsx";
 
-const emptyForm = { nomFr: "", nomEn: "", descriptionCourteFr: "", descriptionCourteEn: "", ordre: 0, image: "" };
+const emptyMembre = { nom: "", roleFr: "", roleEn: "" };
+const emptyProjet = { titreFr: "", titreEn: "", descriptionFr: "", descriptionEn: "", annee: "", statut: "en_cours" };
+
+const emptyForm = {
+  nomFr: "",
+  nomEn: "",
+  descriptionCourteFr: "",
+  descriptionCourteEn: "",
+  descriptionLongueFr: "",
+  descriptionLongueEn: "",
+  ordre: 0,
+  image: "",
+  technologies: [],
+  membres: [],
+  projets: [],
+};
+
+const inputClass = "rounded-lg border border-white/15 bg-transparent px-3 py-2 text-sm";
 
 export default function DashboardCells() {
   const { t } = useTranslation();
@@ -16,6 +33,7 @@ export default function DashboardCells() {
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [techInput, setTechInput] = useState("");
   const [error, setError] = useState("");
 
   // un chef ne voit/n'édite que sa propre cellule
@@ -28,14 +46,20 @@ export default function DashboardCells() {
       nomEn: cell.nomEn,
       descriptionCourteFr: cell.descriptionCourteFr,
       descriptionCourteEn: cell.descriptionCourteEn,
+      descriptionLongueFr: cell.descriptionLongueFr || "",
+      descriptionLongueEn: cell.descriptionLongueEn || "",
       ordre: cell.ordre,
       image: cell.image || "",
+      technologies: cell.technologies || [],
+      membres: cell.membres || [],
+      projets: (cell.projets || []).map((p) => ({ ...p, annee: p.annee ?? "" })),
     });
   };
 
   const cancelEdit = () => {
     setEditingId(null);
     setForm(emptyForm);
+    setTechInput("");
   };
 
   const handleImage = async (file) => {
@@ -55,14 +79,45 @@ export default function DashboardCells() {
     }
   };
 
+  const addTech = () => {
+    const value = techInput.trim();
+    if (!value) return;
+    setForm((f) => ({ ...f, technologies: [...f.technologies, value] }));
+    setTechInput("");
+  };
+
+  const removeTech = (i) => {
+    setForm((f) => ({ ...f, technologies: f.technologies.filter((_, idx) => idx !== i) }));
+  };
+
+  const addMembre = () => setForm((f) => ({ ...f, membres: [...f.membres, { ...emptyMembre }] }));
+  const updateMembre = (i, field, value) =>
+    setForm((f) => ({
+      ...f,
+      membres: f.membres.map((m, idx) => (idx === i ? { ...m, [field]: value } : m)),
+    }));
+  const removeMembre = (i) => setForm((f) => ({ ...f, membres: f.membres.filter((_, idx) => idx !== i) }));
+
+  const addProjet = () => setForm((f) => ({ ...f, projets: [...f.projets, { ...emptyProjet }] }));
+  const updateProjet = (i, field, value) =>
+    setForm((f) => ({
+      ...f,
+      projets: f.projets.map((p, idx) => (idx === i ? { ...p, [field]: value } : p)),
+    }));
+  const removeProjet = (i) => setForm((f) => ({ ...f, projets: f.projets.filter((_, idx) => idx !== i) }));
+
   const save = async (e) => {
     e.preventDefault();
     setError("");
     try {
+      const payload = {
+        ...form,
+        projets: form.projets.map((p) => ({ ...p, annee: p.annee === "" ? undefined : Number(p.annee) })),
+      };
       if (editingId) {
-        await cellsApi.update(editingId, form);
+        await cellsApi.update(editingId, payload);
       } else {
-        await cellsApi.create(form);
+        await cellsApi.create(payload);
       }
       cancelEdit();
       refetch();
@@ -98,14 +153,14 @@ export default function DashboardCells() {
           placeholder="Nom (FR)"
           value={form.nomFr}
           onChange={(e) => setForm({ ...form, nomFr: e.target.value })}
-          className="rounded-lg border border-white/15 bg-transparent px-3 py-2 text-sm"
+          className={inputClass}
           disabled={!isAdmin}
         />
         <input
           placeholder="Name (EN)"
           value={form.nomEn}
           onChange={(e) => setForm({ ...form, nomEn: e.target.value })}
-          className="rounded-lg border border-white/15 bg-transparent px-3 py-2 text-sm"
+          className={inputClass}
           disabled={!isAdmin}
         />
         <textarea
@@ -113,13 +168,27 @@ export default function DashboardCells() {
           placeholder="Description courte (FR)"
           value={form.descriptionCourteFr}
           onChange={(e) => setForm({ ...form, descriptionCourteFr: e.target.value })}
-          className="rounded-lg border border-white/15 bg-transparent px-3 py-2 text-sm sm:col-span-2"
+          className={`${inputClass} sm:col-span-2`}
         />
         <textarea
           placeholder="Short description (EN)"
           value={form.descriptionCourteEn}
           onChange={(e) => setForm({ ...form, descriptionCourteEn: e.target.value })}
-          className="rounded-lg border border-white/15 bg-transparent px-3 py-2 text-sm sm:col-span-2"
+          className={`${inputClass} sm:col-span-2`}
+        />
+        <textarea
+          placeholder="Description longue (FR) — texte affiché en haut de la page de la cellule"
+          value={form.descriptionLongueFr}
+          onChange={(e) => setForm({ ...form, descriptionLongueFr: e.target.value })}
+          rows={3}
+          className={`${inputClass} sm:col-span-2`}
+        />
+        <textarea
+          placeholder="Long description (EN)"
+          value={form.descriptionLongueEn}
+          onChange={(e) => setForm({ ...form, descriptionLongueEn: e.target.value })}
+          rows={3}
+          className={`${inputClass} sm:col-span-2`}
         />
         {isAdmin && (
           <input
@@ -127,9 +196,153 @@ export default function DashboardCells() {
             placeholder="Ordre"
             value={form.ordre}
             onChange={(e) => setForm({ ...form, ordre: Number(e.target.value) })}
-            className="rounded-lg border border-white/15 bg-transparent px-3 py-2 text-sm"
+            className={inputClass}
           />
         )}
+
+        {/* Technologies */}
+        <div className="sm:col-span-2">
+          <label className="mb-2 block text-xs uppercase tracking-instrument text-white/40">Technologies</label>
+          {form.technologies.length > 0 && (
+            <div className="mb-2 flex flex-wrap gap-2">
+              {form.technologies.map((tech, i) => (
+                <span
+                  key={`${tech}-${i}`}
+                  className="flex items-center gap-2 rounded-full border border-white/15 px-3 py-1 text-xs text-white/80"
+                >
+                  {tech}
+                  <button
+                    type="button"
+                    onClick={() => removeTech(i)}
+                    aria-label={`Retirer ${tech}`}
+                    className="text-white/40 hover:text-red-400"
+                  >
+                    ×
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
+          <div className="flex gap-2">
+            <input
+              placeholder="Ajouter une technologie (ex. SolidWorks)"
+              value={techInput}
+              onChange={(e) => setTechInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  addTech();
+                }
+              }}
+              className={`${inputClass} flex-1`}
+            />
+            <button type="button" onClick={addTech} className="rounded-lg border border-white/15 px-4 text-sm">
+              Ajouter
+            </button>
+          </div>
+        </div>
+
+        {/* Membres (chef·fe·s de cellule inclus, via le rôle) */}
+        <div className="sm:col-span-2">
+          <label className="mb-2 block text-xs uppercase tracking-instrument text-white/40">
+            Membres — pour 1 ou 2 chef·fe·s de cellule, ajoutez-les ici avec le rôle « Chef de cellule »
+          </label>
+          {form.membres.map((m, i) => (
+            <div key={i} className="mb-2 grid grid-cols-1 gap-2 rounded-lg border border-white/10 p-3 sm:grid-cols-3">
+              <input
+                placeholder="Nom"
+                value={m.nom}
+                onChange={(e) => updateMembre(i, "nom", e.target.value)}
+                className={inputClass}
+              />
+              <input
+                placeholder="Rôle (FR) — ex. Chef de cellule"
+                value={m.roleFr}
+                onChange={(e) => updateMembre(i, "roleFr", e.target.value)}
+                className={inputClass}
+              />
+              <div className="flex gap-2">
+                <input
+                  placeholder="Role (EN)"
+                  value={m.roleEn}
+                  onChange={(e) => updateMembre(i, "roleEn", e.target.value)}
+                  className={`${inputClass} flex-1`}
+                />
+                <button
+                  type="button"
+                  onClick={() => removeMembre(i)}
+                  aria-label="Retirer ce membre"
+                  className="text-red-400 hover:underline"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+          ))}
+          <button type="button" onClick={addMembre} className="rounded-lg border border-white/15 px-4 py-2 text-sm">
+            + Ajouter un membre
+          </button>
+        </div>
+
+        {/* Projets */}
+        <div className="sm:col-span-2">
+          <label className="mb-2 block text-xs uppercase tracking-instrument text-white/40">Projets</label>
+          {form.projets.map((p, i) => (
+            <div key={i} className="mb-2 grid grid-cols-1 gap-2 rounded-lg border border-white/10 p-3 sm:grid-cols-2">
+              <input
+                placeholder="Titre (FR)"
+                value={p.titreFr}
+                onChange={(e) => updateProjet(i, "titreFr", e.target.value)}
+                className={inputClass}
+              />
+              <input
+                placeholder="Title (EN)"
+                value={p.titreEn}
+                onChange={(e) => updateProjet(i, "titreEn", e.target.value)}
+                className={inputClass}
+              />
+              <textarea
+                placeholder="Description (FR)"
+                value={p.descriptionFr}
+                onChange={(e) => updateProjet(i, "descriptionFr", e.target.value)}
+                className={`${inputClass} sm:col-span-2`}
+              />
+              <textarea
+                placeholder="Description (EN)"
+                value={p.descriptionEn}
+                onChange={(e) => updateProjet(i, "descriptionEn", e.target.value)}
+                className={`${inputClass} sm:col-span-2`}
+              />
+              <input
+                type="number"
+                placeholder="Année"
+                value={p.annee}
+                onChange={(e) => updateProjet(i, "annee", e.target.value)}
+                className={inputClass}
+              />
+              <select
+                value={p.statut}
+                onChange={(e) => updateProjet(i, "statut", e.target.value)}
+                className={inputClass}
+              >
+                <option value="a_venir">À venir</option>
+                <option value="en_cours">En cours</option>
+                <option value="termine">Terminé</option>
+              </select>
+              <button
+                type="button"
+                onClick={() => removeProjet(i)}
+                className="text-left text-sm text-red-400 hover:underline sm:col-span-2"
+              >
+                Retirer ce projet
+              </button>
+            </div>
+          ))}
+          <button type="button" onClick={addProjet} className="rounded-lg border border-white/15 px-4 py-2 text-sm">
+            + Ajouter un projet
+          </button>
+        </div>
+
         {error && <p className="text-xs text-red-400 sm:col-span-2">{error}</p>}
         <div className="flex gap-2 sm:col-span-2">
           <button

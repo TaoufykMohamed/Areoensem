@@ -12,7 +12,7 @@ export default function CellPill({ cell }) {
   return (
     <Link
       to={`/cellules/${cell.slug}`}
-      className="whitespace-nowrap rounded-full border border-black/10 bg-black/[0.02] px-8 py-4 font-serif text-lg text-anthracite transition-colors hover:border-brand-cyan hover:text-brand-cyan dark:border-white/15 dark:bg-white/5 dark:text-white"
+      className="whitespace-nowrap rounded-full border border-brand-cyan/25 bg-brand-cyan/5 px-8 py-4 font-serif text-lg text-anthracite shadow-[0_0_14px_rgba(34,211,238,0.12)] transition-all hover:border-brand-cyan hover:shadow-[0_0_22px_rgba(34,211,238,0.3)] dark:border-brand-cyan/50 dark:bg-brand-cyan/10 dark:text-white dark:shadow-[0_0_22px_rgba(34,211,238,0.35)] dark:hover:shadow-[0_0_34px_rgba(34,211,238,0.55)]"
     >
       {loc(cell, "nom")}
     </Link>

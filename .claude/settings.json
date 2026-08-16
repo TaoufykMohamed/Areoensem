@@ -52,7 +52,9 @@
       "Bash(curl -s -X PATCH http://localhost:5000/api/v1/board/6a8081a2a874f1474894e949 -H 'Cookie: aeroensem_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YTc3M2Y1ZWE1YmI1OGQ4ZjI2ZTE5MjgiLCJyb2xlIjoiYWRtaW4iLCJjZWxsdWxlIjpudWxsLCJpYXQiOjE3ODY4MTkyNzQsImV4cCI6MTc4NjgyMjg3NH0.9zIXjoqZW7IsgE9pHWQwF4sf0u03FW5htVH-OltzKTM' -H 'Content-Type: application/json' -d '{\"posteFr\":\"RESPO MEDIA \"}')",
       "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('posteFr:', JSON.stringify\\(j.data.posteFr\\)\\);}\\)\")",
       "Bash(node check_board_edit2.js)",
-      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('reverted posteFr:', JSON.stringify\\(j.data.posteFr\\)\\);}\\)\")"
+      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('reverted posteFr:', JSON.stringify\\(j.data.posteFr\\)\\);}\\)\")",
+      "Bash(node check_pyramid.js)",
+      "Bash(sed -i \"s/page.locator\\(\\\\\"text=Nos cellules\\\\\"\\)/page.getByRole\\('heading', { name: 'Nos cellules' }\\)/g; s/mpage.locator\\(\\\\\"text=Nos cellules\\\\\"\\)/mpage.getByRole\\('heading', { name: 'Nos cellules' }\\)/g\" check_pyramid.js)"
     ]
   }
 }

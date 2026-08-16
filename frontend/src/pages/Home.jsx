@@ -10,7 +10,7 @@ import { contentApi, statsApi } from "../api/content.js";
 import Reveal from "../components/ui/Reveal.jsx";
 import Counter from "../components/ui/Counter.jsx";
 import Countdown from "../components/ui/Countdown.jsx";
-import CellCard from "../components/cards/CellCard.jsx";
+import CellPill from "../components/cards/CellPill.jsx";
 import Spinner from "../components/ui/Spinner.jsx";
 import HeroPlane from "../components/ui/HeroPlane.jsx";
 import LogoLoop from "../components/ui/LogoLoop.jsx";
@@ -134,15 +134,29 @@ export default function Home() {
           {cellsLoading ? (
             <Spinner />
           ) : (
-            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-              {cells?.slice(0, 6).map((cell) => (
-                <CellCard key={cell._id} cell={cell} />
-              ))}
+            <div className="flex flex-col items-center gap-5">
+              <div className="flex flex-wrap justify-center gap-5">
+                {cells?.slice(0, 3).map((cell) => (
+                  <CellPill key={cell._id} cell={cell} />
+                ))}
+              </div>
+              <div className="flex flex-wrap justify-center gap-5">
+                {cells?.slice(3, 5).map((cell) => (
+                  <CellPill key={cell._id} cell={cell} />
+                ))}
+              </div>
+              <div className="flex flex-wrap justify-center gap-5">
+                {cells?.slice(5, 6).map((cell) => (
+                  <CellPill key={cell._id} cell={cell} />
+                ))}
+              </div>
             </div>
           )}
-          <Link to="/cellules" className="mt-8 inline-block text-sm font-semibold text-brand-cyan hover:text-brand-amber">
-            {t("common.seeAll")} →
-          </Link>
+          <div className="mt-8 text-center">
+            <Link to="/cellules" className="text-sm font-semibold text-brand-cyan hover:text-brand-amber">
+              {t("common.seeAll")} →
+            </Link>
+          </div>
         </section>
       </Reveal>
 

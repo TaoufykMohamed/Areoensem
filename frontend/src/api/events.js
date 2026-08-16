@@ -8,4 +8,9 @@ export const eventsApi = {
   remove: (id) => axiosClient.delete(`/events/${id}`),
   register: (id, data) => axiosClient.post(`/events/${id}/register`, data),
   listRegistrations: (id) => axiosClient.get(`/events/${id}/registrations`),
+  uploadImage: (file) => {
+    const formData = new FormData();
+    formData.append("affiche", file);
+    return axiosClient.post("/events/upload", formData);
+  },
 };

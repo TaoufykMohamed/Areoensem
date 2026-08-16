@@ -3,11 +3,17 @@ import { useTranslation } from "react-i18next";
 import { useLocale } from "../../hooks/useLocale.js";
 
 const STATUT_STYLES = {
-  a_venir: "bg-brand-cyan/15 text-brand-cyan",
-  en_cours: "bg-brand-amber/15 text-brand-amber",
-  passe: "bg-black/10 text-[#657a90] dark:bg-white/10 dark:text-white/50",
+  a_venir: "bg-brand-cyan text-[#04101f]",
+  en_cours: "bg-brand-amber text-[#04101f]",
+  passe: "bg-white/20 text-white",
 };
 
+/**
+ * Carte événement avec image de fond (Event.affiche, alimentée par le
+ * dashboard) et effet "hover reveal" — même mécanisme que CellHoverGrid :
+ * le parent (Events.jsx) porte la classe `group`, ces cartes s'assombrissent
+ * entre elles au survol de l'une d'elles.
+ */
 export default function EventCard({ event }) {
   const { t, i18n } = useTranslation();
   const { t: loc } = useLocale();
@@ -21,21 +27,28 @@ export default function EventCard({ event }) {
   return (
     <Link
       to={`/evenements/${event.slug}`}
-      className="group flex flex-col justify-between rounded-2xl border border-black/10 bg-black/[0.02] p-6 transition-colors hover:border-brand-cyan/40 dark:border-white/10 dark:bg-white/[0.03]"
+      className="relative block h-80 overflow-hidden rounded-xl bg-cover bg-center shadow-lg outline-none transition-all duration-500 ease-in-out group-hover:scale-[0.97] group-hover:opacity-60 group-hover:blur-[2px] hover:!scale-105 hover:!opacity-100 hover:!blur-none focus-visible:!scale-105 focus-visible:!opacity-100 focus-visible:!blur-none focus-visible:!ring-2 focus-visible:!ring-brand-cyan"
+      style={event.affiche ? { backgroundImage: `url(${event.affiche})` } : undefined}
     >
-      <div>
-        <div className="mb-3 flex items-center gap-3">
-          <span className={`rounded-full px-3 py-1 font-mono text-[10px] uppercase tracking-instrument ${STATUT_STYLES[event.statut]}`}>
-            {t(`events.${event.statut === "a_venir" ? "upcoming" : event.statut === "en_cours" ? "ongoing" : "past"}`)}
-          </span>
-          <span className="font-mono text-[11px] text-[#657a90] dark:text-white/40">{date}</span>
-        </div>
-        <h3 className="font-serif text-xl text-anthracite group-hover:text-brand-cyan dark:text-white">
-          {loc(event, "titre")}
-        </h3>
-        <p className="mt-2 line-clamp-2 text-sm text-[#657a90] dark:text-white/60">{loc(event, "description")}</p>
+      {!event.affiche && <div className="absolute inset-0 bg-gradient-to-br from-[#0b2545] to-[#04101f]" />}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/10" />
+
+      <div className="absolute inset-x-0 top-0 flex items-center gap-3 p-4">
+        <span
+          className={`rounded-full px-3 py-1 font-mono text-[10px] uppercase tracking-instrument ${STATUT_STYLES[event.statut]}`}
+        >
+          {t(`events.${event.statut === "a_venir" ? "upcoming" : event.statut === "en_cours" ? "ongoing" : "past"}`)}
+        </span>
+        <span className="font-mono text-[11px] text-white/70">{date}</span>
       </div>
-      <div className="mt-6 text-xs text-[#657a90]/70 dark:text-white/40">{loc(event, "lieu")}</div>
+
+      <div className="absolute inset-x-0 bottom-0 p-6 text-white">
+        <h3 className="font-serif text-xl font-semibold">{loc(event, "titre")}</h3>
+        <p className="mt-2 line-clamp-2 text-sm text-white/70">{loc(event, "description")}</p>
+        <div className="mt-3 font-mono text-[11px] uppercase tracking-instrument text-white/50">
+          {loc(event, "lieu")}
+        </div>
+      </div>
     </Link>
   );
 }

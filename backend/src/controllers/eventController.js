@@ -30,9 +30,6 @@ export const createEvent = asyncHandler(async (req, res) => {
 });
 
 export const updateEvent = asyncHandler(async (req, res, next) => {
-  const existing = req.resource; // posé par requireCellOwnership
-  if (!existing) return next(ApiError.notFound());
-
   if (req.body.cellule) {
     assertCanWriteForCellule(req.user, req.body.cellule);
   }
@@ -42,6 +39,7 @@ export const updateEvent = asyncHandler(async (req, res, next) => {
     new: true,
     runValidators: true,
   }).populate("cellule", "nomFr nomEn slug");
+  if (!event) return next(ApiError.notFound());
   res.json({ success: true, data: event, message: null });
 });
 

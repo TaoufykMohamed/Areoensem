@@ -11,6 +11,8 @@ import {
 import { requireAuth } from "../middleware/auth.js";
 import { requireRole, requireCellOwnership } from "../middleware/roles.js";
 import { validate } from "../middleware/validate.js";
+import { uploadSingleImage } from "../middleware/upload.js";
+import { uploadImage } from "../controllers/upload.controller.js";
 import { createEventSchema, updateEventSchema, registerEventSchema } from "../validators/eventValidators.js";
 import { publicFormLimiter } from "../middleware/rateLimiter.js";
 import { Event } from "../models/index.js";
@@ -22,6 +24,13 @@ const ownEvent = requireCellOwnership({ model: Event, cellField: "cellule" });
 router.get("/", listEvents);
 router.get("/:slug", getEventBySlug);
 
+router.post(
+  "/upload",
+  requireAuth,
+  requireRole("admin", "chef_cellule"),
+  uploadSingleImage("affiche"),
+  uploadImage
+);
 router.post(
   "/",
   requireAuth,

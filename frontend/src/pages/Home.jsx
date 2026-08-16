@@ -65,8 +65,8 @@ export default function Home() {
             {t("home.tagline")} — DEPUIS 2014
           </div>
 
-          <h1 className="max-w-2xl font-serif text-6xl leading-[0.95] text-white md:text-8xl">
-            Club Aéro<span className="font-sans font-extrabold text-brand-cyan">ENSEM</span>
+          <h1 className="max-w-2xl font-serif text-6xl leading-[0.95] md:text-8xl">
+            Club Aéro<span className="text-brand-cyan">ENSEM</span>
           </h1>
 
           <p className="mt-8 max-w-xl text-2xl text-white/90">{slogan}</p>

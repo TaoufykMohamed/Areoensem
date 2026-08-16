@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useFetch } from "../hooks/useFetch.js";
 import { cellsApi } from "../api/cells.js";
 import PageHero from "../components/layout/PageHero.jsx";
-import CellCard from "../components/cards/CellCard.jsx";
+import CellHoverGrid from "../components/cards/CellHoverGrid.jsx";
 import Spinner from "../components/ui/Spinner.jsx";
 
 export default function Cells() {
@@ -13,15 +13,7 @@ export default function Cells() {
     <div>
       <PageHero eyebrow={t("cells.title")} title={t("cells.title")} subtitle={t("cells.subtitle")} />
       <section className="mx-auto max-w-7xl px-6 py-16">
-        {loading ? (
-          <Spinner />
-        ) : (
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {cells?.map((cell) => (
-              <CellCard key={cell._id} cell={cell} />
-            ))}
-          </div>
-        )}
+        {loading ? <Spinner /> : <CellHoverGrid cells={cells || []} />}
       </section>
     </div>
   );

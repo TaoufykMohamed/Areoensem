@@ -6,4 +6,9 @@ export const cellsApi = {
   create: (data) => axiosClient.post("/cells", data),
   update: (id, data) => axiosClient.patch(`/cells/${id}`, data),
   remove: (id) => axiosClient.delete(`/cells/${id}`),
+  uploadImage: (file) => {
+    const formData = new FormData();
+    formData.append("image", file);
+    return axiosClient.post("/cells/upload", formData);
+  },
 };

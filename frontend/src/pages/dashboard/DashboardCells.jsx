@@ -4,8 +4,9 @@ import { useFetch } from "../../hooks/useFetch.js";
 import { useLocale } from "../../hooks/useLocale.js";
 import { useAuth } from "../../hooks/useAuth.js";
 import { cellsApi } from "../../api/cells.js";
+import FileUpload from "../../components/ui/FileUpload.jsx";
 
-const emptyForm = { nomFr: "", nomEn: "", descriptionCourteFr: "", descriptionCourteEn: "", ordre: 0 };
+const emptyForm = { nomFr: "", nomEn: "", descriptionCourteFr: "", descriptionCourteEn: "", ordre: 0, image: "" };
 
 export default function DashboardCells() {
   const { t } = useTranslation();
@@ -14,6 +15,7 @@ export default function DashboardCells() {
   const { data: cells, loading, refetch } = useFetch(() => cellsApi.list(), []);
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
+  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
 
   // un chef ne voit/n'édite que sa propre cellule
@@ -27,7 +29,30 @@ export default function DashboardCells() {
       descriptionCourteFr: cell.descriptionCourteFr,
       descriptionCourteEn: cell.descriptionCourteEn,
       ordre: cell.ordre,
+      image: cell.image || "",
     });
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setForm(emptyForm);
+  };
+
+  const handleImage = async (file) => {
+    if (!file) {
+      setForm((f) => ({ ...f, image: "" }));
+      return;
+    }
+    setError("");
+    setUploading(true);
+    try {
+      const { url } = await cellsApi.uploadImage(file);
+      setForm((f) => ({ ...f, image: url }));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setUploading(false);
+    }
   };
 
   const save = async (e) => {
@@ -39,8 +64,7 @@ export default function DashboardCells() {
       } else {
         await cellsApi.create(form);
       }
-      setEditingId(null);
-      setForm(emptyForm);
+      cancelEdit();
       refetch();
     } catch (err) {
       setError(err.message);
@@ -60,6 +84,15 @@ export default function DashboardCells() {
       <h1 className="mb-6 font-serif text-2xl">{t("dashboard.cells")}</h1>
 
       <form onSubmit={save} className="mb-8 grid gap-3 rounded-xl border border-white/10 p-5 sm:grid-cols-2">
+        <div className="sm:col-span-2">
+          <FileUpload
+            key={editingId || "new"}
+            onFileSelect={handleImage}
+            existingUrl={form.image}
+            disabled={uploading}
+            hint="PNG ou JPG, 1 Mo max"
+          />
+        </div>
         <input
           required
           placeholder="Nom (FR)"
@@ -99,18 +132,15 @@ export default function DashboardCells() {
         )}
         {error && <p className="text-xs text-red-400 sm:col-span-2">{error}</p>}
         <div className="flex gap-2 sm:col-span-2">
-          <button type="submit" className="rounded-full bg-brand-cyan px-5 py-2 text-sm font-semibold text-[#04101f]">
+          <button
+            type="submit"
+            disabled={uploading}
+            className="rounded-full bg-brand-cyan px-5 py-2 text-sm font-semibold text-[#04101f] disabled:opacity-50"
+          >
             {editingId ? t("common.save") : t("common.create")}
           </button>
           {editingId && (
-            <button
-              type="button"
-              onClick={() => {
-                setEditingId(null);
-                setForm(emptyForm);
-              }}
-              className="rounded-full border border-white/15 px-5 py-2 text-sm"
-            >
+            <button type="button" onClick={cancelEdit} className="rounded-full border border-white/15 px-5 py-2 text-sm">
               {t("common.cancel")}
             </button>
           )}

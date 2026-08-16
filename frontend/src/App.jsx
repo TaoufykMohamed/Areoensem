@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import PublicLayout from "./layouts/PublicLayout.jsx";
 import DashboardLayout from "./layouts/DashboardLayout.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import SplashCursor from "./components/ui/SplashCursor.jsx";
 
 import Home from "./pages/Home.jsx";
 import Cells from "./pages/Cells.jsx";
@@ -32,42 +33,45 @@ import DashboardMessages from "./pages/dashboard/DashboardMessages.jsx";
 
 export default function App() {
   return (
-    <Routes>
-      <Route element={<PublicLayout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/cellules" element={<Cells />} />
-        <Route path="/cellules/:slug" element={<CellDetail />} />
-        <Route path="/evenements" element={<Events />} />
-        <Route path="/evenements/:slug" element={<EventDetail />} />
-        <Route path="/bureau" element={<Board />} />
-        <Route path="/store" element={<Store />} />
-        <Route path="/partenaires" element={<Partners />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/rejoindre" element={<Join />} />
-        <Route path="/connexion" element={<Login />} />
-        <Route path="*" element={<NotFound />} />
-      </Route>
+    <>
+      <SplashCursor />
+      <Routes>
+        <Route element={<PublicLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/cellules" element={<Cells />} />
+          <Route path="/cellules/:slug" element={<CellDetail />} />
+          <Route path="/evenements" element={<Events />} />
+          <Route path="/evenements/:slug" element={<EventDetail />} />
+          <Route path="/bureau" element={<Board />} />
+          <Route path="/store" element={<Store />} />
+          <Route path="/partenaires" element={<Partners />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/rejoindre" element={<Join />} />
+          <Route path="/connexion" element={<Login />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
 
-      <Route element={<ProtectedRoute />}>
-        <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route index element={<Overview />} />
-          <Route path="cellules" element={<DashboardCells />} />
-          <Route path="evenements" element={<DashboardEvents />} />
-          <Route path="inscriptions" element={<DashboardRegistrations />} />
-          <Route path="galerie" element={<DashboardGallery />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route index element={<Overview />} />
+            <Route path="cellules" element={<DashboardCells />} />
+            <Route path="evenements" element={<DashboardEvents />} />
+            <Route path="inscriptions" element={<DashboardRegistrations />} />
+            <Route path="galerie" element={<DashboardGallery />} />
 
-          <Route element={<ProtectedRoute roles={["admin"]} />}>
-            <Route path="candidatures" element={<DashboardApplications />} />
-            <Route path="utilisateurs" element={<DashboardUsers />} />
-            <Route path="bureau" element={<DashboardBoard />} />
-            <Route path="partenaires" element={<DashboardPartners />} />
-            <Route path="boutique" element={<DashboardStore />} />
-            <Route path="commandes" element={<DashboardOrders />} />
-            <Route path="contenu" element={<DashboardContent />} />
-            <Route path="messages" element={<DashboardMessages />} />
+            <Route element={<ProtectedRoute roles={["admin"]} />}>
+              <Route path="candidatures" element={<DashboardApplications />} />
+              <Route path="utilisateurs" element={<DashboardUsers />} />
+              <Route path="bureau" element={<DashboardBoard />} />
+              <Route path="partenaires" element={<DashboardPartners />} />
+              <Route path="boutique" element={<DashboardStore />} />
+              <Route path="commandes" element={<DashboardOrders />} />
+              <Route path="contenu" element={<DashboardContent />} />
+              <Route path="messages" element={<DashboardMessages />} />
+            </Route>
           </Route>
         </Route>
-      </Route>
-    </Routes>
+      </Routes>
+    </>
   );
 }

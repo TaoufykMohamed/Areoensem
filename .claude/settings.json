@@ -54,7 +54,8 @@
       "Bash(node check_board_edit2.js)",
       "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\('reverted posteFr:', JSON.stringify\\(j.data.posteFr\\)\\);}\\)\")",
       "Bash(node check_pyramid.js)",
-      "Bash(sed -i \"s/page.locator\\(\\\\\"text=Nos cellules\\\\\"\\)/page.getByRole\\('heading', { name: 'Nos cellules' }\\)/g; s/mpage.locator\\(\\\\\"text=Nos cellules\\\\\"\\)/mpage.getByRole\\('heading', { name: 'Nos cellules' }\\)/g\" check_pyramid.js)"
+      "Bash(sed -i \"s/page.locator\\(\\\\\"text=Nos cellules\\\\\"\\)/page.getByRole\\('heading', { name: 'Nos cellules' }\\)/g; s/mpage.locator\\(\\\\\"text=Nos cellules\\\\\"\\)/mpage.getByRole\\('heading', { name: 'Nos cellules' }\\)/g\" check_pyramid.js)",
+      "Bash(node check_splashcursor.js)"
     ]
   }
 }

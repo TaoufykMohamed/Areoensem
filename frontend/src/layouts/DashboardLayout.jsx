@@ -1,6 +1,8 @@
 import { NavLink, Outlet, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../hooks/useAuth.js";
+import { useFetch } from "../hooks/useFetch.js";
+import { dashboardApi } from "../api/dashboard.js";
 
 const COMMON_LINKS = [
   { to: "/dashboard", key: "overview", end: true },
@@ -22,7 +24,7 @@ const ADMIN_LINKS = [
 ];
 
 function linkClass({ isActive }) {
-  return `rounded-lg px-4 py-2 text-sm transition-colors ${
+  return `flex items-center justify-between rounded-lg px-4 py-2 text-sm transition-colors ${
     isActive ? "bg-brand-cyan/15 text-brand-cyan" : "text-white/60 hover:bg-white/5 hover:text-white"
   }`;
 }
@@ -31,6 +33,8 @@ export default function DashboardLayout() {
   const { t } = useTranslation();
   const { user, isAdmin, logout } = useAuth();
   const links = isAdmin ? [...COMMON_LINKS, ...ADMIN_LINKS] : COMMON_LINKS;
+  const { data: stats } = useFetch(() => (isAdmin ? dashboardApi.stats() : Promise.resolve(null)), [isAdmin]);
+  const unreadMessages = stats?.messagesNonLus ?? 0;
 
   return (
     <div className="flex min-h-screen bg-[#04101f] text-white">
@@ -41,7 +45,12 @@ export default function DashboardLayout() {
 
         {links.map((l) => (
           <NavLink key={l.to} to={l.to} end={l.end} className={linkClass}>
-            {t(`dashboard.${l.key}`)}
+            <span>{t(`dashboard.${l.key}`)}</span>
+            {l.key === "messages" && unreadMessages > 0 && (
+              <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-brand-amber px-1.5 text-[11px] font-semibold text-[#04101f]">
+                {unreadMessages}
+              </span>
+            )}
           </NavLink>
         ))}
 

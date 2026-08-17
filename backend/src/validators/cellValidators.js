@@ -18,6 +18,16 @@ const projetSchema = z.object({
   annee: z.number().int().optional(),
 });
 
+const reseauxSociauxSchema = z
+  .object({
+    facebook: z.string().optional().default(""),
+    linkedin: z.string().optional().default(""),
+    instagram: z.string().optional().default(""),
+    tiktok: z.string().optional().default(""),
+  })
+  .optional()
+  .default({});
+
 export const createCellSchema = z.object({
   nomFr: z.string().min(1),
   nomEn: z.string().optional().default(""),
@@ -32,6 +42,7 @@ export const createCellSchema = z.object({
   membres: z.array(membreSchema).optional().default([]),
   technologies: z.array(z.string()).optional().default([]),
   projets: z.array(projetSchema).optional().default([]),
+  reseauxSociaux: reseauxSociauxSchema,
   ordre: z.number().int().optional().default(0),
   actif: z.boolean().optional().default(true),
 });

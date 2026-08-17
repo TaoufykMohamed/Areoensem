@@ -31,6 +31,7 @@ const emptyForm = {
   technologies: [],
   membres: [],
   projets: [],
+  reseauxSociaux: { facebook: "", linkedin: "", instagram: "", tiktok: "" },
 };
 
 const inputClass = "rounded-lg border border-white/15 bg-transparent px-3 py-2 text-sm";
@@ -68,6 +69,12 @@ export default function DashboardCells() {
       technologies: cell.technologies || [],
       membres: cell.membres || [],
       projets: (cell.projets || []).map((p) => ({ ...p, annee: p.annee ?? "" })),
+      reseauxSociaux: {
+        facebook: cell.reseauxSociaux?.facebook || "",
+        linkedin: cell.reseauxSociaux?.linkedin || "",
+        instagram: cell.reseauxSociaux?.instagram || "",
+        tiktok: cell.reseauxSociaux?.tiktok || "",
+      },
     });
   };
 
@@ -369,6 +376,49 @@ export default function DashboardCells() {
             <button type="button" onClick={addTech} className="rounded-lg border border-white/15 px-4 text-sm">
               Ajouter
             </button>
+          </div>
+        </div>
+
+        {/* Réseaux sociaux — icônes affichées dans la modale si l'URL est renseignée */}
+        <div className="sm:col-span-2">
+          <label className="mb-2 block text-xs uppercase tracking-instrument text-white/40">Réseaux sociaux</label>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <input
+              type="url"
+              placeholder="URL Facebook"
+              value={form.reseauxSociaux.facebook}
+              onChange={(e) =>
+                setForm({ ...form, reseauxSociaux: { ...form.reseauxSociaux, facebook: e.target.value } })
+              }
+              className={inputClass}
+            />
+            <input
+              type="url"
+              placeholder="URL LinkedIn"
+              value={form.reseauxSociaux.linkedin}
+              onChange={(e) =>
+                setForm({ ...form, reseauxSociaux: { ...form.reseauxSociaux, linkedin: e.target.value } })
+              }
+              className={inputClass}
+            />
+            <input
+              type="url"
+              placeholder="URL Instagram"
+              value={form.reseauxSociaux.instagram}
+              onChange={(e) =>
+                setForm({ ...form, reseauxSociaux: { ...form.reseauxSociaux, instagram: e.target.value } })
+              }
+              className={inputClass}
+            />
+            <input
+              type="url"
+              placeholder="URL TikTok"
+              value={form.reseauxSociaux.tiktok}
+              onChange={(e) =>
+                setForm({ ...form, reseauxSociaux: { ...form.reseauxSociaux, tiktok: e.target.value } })
+              }
+              className={inputClass}
+            />
           </div>
         </div>
 

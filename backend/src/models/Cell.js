@@ -29,6 +29,16 @@ const projetSchema = new mongoose.Schema(
   { _id: true }
 );
 
+const reseauxSociauxSchema = new mongoose.Schema(
+  {
+    facebook: { type: String, default: "" },
+    linkedin: { type: String, default: "" },
+    instagram: { type: String, default: "" },
+    tiktok: { type: String, default: "" },
+  },
+  { _id: false }
+);
+
 const cellSchema = new mongoose.Schema(
   {
     nomFr: { type: String, required: true, trim: true },
@@ -45,6 +55,7 @@ const cellSchema = new mongoose.Schema(
     membres: [membreSchema],
     technologies: [{ type: String, trim: true }],
     projets: [projetSchema],
+    reseauxSociaux: { type: reseauxSociauxSchema, default: () => ({}) },
     ordre: { type: Number, default: 0 },
     actif: { type: Boolean, default: true },
   },

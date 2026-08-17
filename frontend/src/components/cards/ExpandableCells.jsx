@@ -32,6 +32,66 @@ function getResponsable(cell) {
   return membre ? { nom: membre.nom, email: null } : null;
 }
 
+function FacebookIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M22 12a10 10 0 1 0-11.5 9.95v-7.04H7.9V12h2.6V9.8c0-2.56 1.53-3.98 3.87-3.98 1.12 0 2.3.2 2.3.2v2.53h-1.3c-1.28 0-1.68.8-1.68 1.62V12h2.86l-.46 2.91h-2.4v7.04A10 10 0 0 0 22 12Z" />
+    </svg>
+  );
+}
+
+function LinkedinIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3zM9 9h3.8v1.7h.1c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.77 2.65 4.77 6.1V21h-4v-5.4c0-1.3-.02-2.96-1.8-2.96-1.81 0-2.09 1.42-2.09 2.87V21H9z" />
+    </svg>
+  );
+}
+
+function InstagramIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function TiktokIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M16.5 3c.3 2.1 1.7 3.7 3.9 4v3c-1.4 0-2.7-.4-3.9-1.2v6.6c0 3.6-2.9 6.6-6.6 6.6S3.3 19 3.3 15.4 6.2 8.8 9.9 8.8c.4 0 .8 0 1.2.1v3.2c-.4-.1-.8-.2-1.2-.2-1.9 0-3.4 1.5-3.4 3.4s1.5 3.4 3.4 3.4 3.4-1.5 3.4-3.4V3h3.2Z" />
+    </svg>
+  );
+}
+
+const SOCIAL_ICONS = { facebook: FacebookIcon, linkedin: LinkedinIcon, instagram: InstagramIcon, tiktok: TiktokIcon };
+
+function SocialLinks({ reseauxSociaux }) {
+  const entries = Object.entries(reseauxSociaux || {}).filter(([, url]) => url);
+  if (entries.length === 0) return null;
+  return (
+    <div className="mt-4 flex gap-2">
+      {entries.map(([key, url]) => {
+        const Icon = SOCIAL_ICONS[key];
+        return (
+          <a
+            key={key}
+            href={url}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={key}
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 text-white/70 hover:border-brand-cyan hover:text-brand-cyan"
+          >
+            <Icon />
+          </a>
+        );
+      })}
+    </div>
+  );
+}
+
 function Section({ title, children }) {
   return (
     <div className="mt-8 first:mt-0">
@@ -194,6 +254,7 @@ export default function ExpandableCells({ cells }) {
                     {t("cells.category")}
                   </span>
                   <h2 className="mt-3 font-serif text-3xl md:text-4xl">{loc(selected, "nom")}</h2>
+                  <SocialLinks reseauxSociaux={selected.reseauxSociaux} />
 
                   <Section title={t("cells.descriptionObjectives")}>
                     <p className="whitespace-pre-line text-[15px] leading-relaxed text-white/70">

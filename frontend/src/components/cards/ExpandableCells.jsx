@@ -222,6 +222,10 @@ export default function ExpandableCells({ cells }) {
                                 rel="noreferrer"
                                 className="mt-3 inline-flex items-center gap-2 rounded-full border border-brand-cyan/40 px-4 py-1.5 text-xs font-semibold text-brand-cyan hover:bg-brand-cyan/10"
                               >
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                  <path d="M12 3v12m0 0l-4-4m4 4l4-4" strokeLinecap="round" strokeLinejoin="round" />
+                                  <path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
                                 {t("cells.downloadDossier")}
                               </a>
                             )}

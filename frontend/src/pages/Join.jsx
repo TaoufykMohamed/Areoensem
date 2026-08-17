@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useFetch } from "../hooks/useFetch.js";
 import { useLocale } from "../hooks/useLocale.js";
@@ -19,7 +20,8 @@ export default function Join() {
   const { t } = useTranslation();
   const { t: loc } = useLocale();
   const { data: cells } = useFetch(() => cellsApi.list(), []);
-  const [form, setForm] = useState(initialForm);
+  const [searchParams] = useSearchParams();
+  const [form, setForm] = useState({ ...initialForm, celluleSouhaitee: searchParams.get("cellule") || "" });
   const [status, setStatus] = useState("idle");
   const [errorMsg, setErrorMsg] = useState("");
 

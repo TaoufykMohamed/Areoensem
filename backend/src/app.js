@@ -36,10 +36,13 @@ app.use(
 );
 
 app.use(cookieParser());
-// Limite relevée (défaut Express : 100kb) : les logos de partenaires voyagent
-// en base64 dans le JSON de création/mise à jour (voir Partner.logo).
-app.use(express.json({ limit: "5mb" }));
-app.use(express.urlencoded({ extended: true, limit: "5mb" }));
+// Limite relevée (défaut Express : 100kb) : les logos/photos voyagent en
+// base64 dans le JSON de création/mise à jour. Portée à 15mb pour les
+// cellules, qui peuvent embarquer plusieurs dossiers de projet en PDF
+// (2 Mo bruts chacun, ~2.7 Mo une fois encodés en base64) — la limite
+// naturelle reste de toute façon les 16 Mo par document MongoDB.
+app.use(express.json({ limit: "15mb" }));
+app.use(express.urlencoded({ extended: true, limit: "15mb" }));
 
 if (!isProd) {
   app.use(morgan("dev"));

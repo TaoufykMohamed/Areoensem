@@ -13,6 +13,7 @@ const projetSchema = z.object({
   descriptionFr: z.string().optional().default(""),
   descriptionEn: z.string().optional().default(""),
   image: z.string().optional().default(""),
+  documentUrl: z.string().optional().default(""),
   statut: z.enum(["a_venir", "en_cours", "termine"]).optional().default("en_cours"),
   annee: z.number().int().optional(),
 });
@@ -24,6 +25,8 @@ export const createCellSchema = z.object({
   descriptionCourteEn: z.string().optional().default(""),
   descriptionLongueFr: z.string().optional().default(""),
   descriptionLongueEn: z.string().optional().default(""),
+  objectifsFr: z.array(z.string()).optional().default([]),
+  objectifsEn: z.array(z.string()).optional().default([]),
   icone: z.string().optional().default(""),
   image: z.string().optional().default(""),
   membres: z.array(membreSchema).optional().default([]),

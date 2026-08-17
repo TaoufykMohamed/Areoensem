@@ -32,3 +32,36 @@ export function uploadSingleImage(fieldName) {
     });
   };
 }
+
+// Dossiers de projet (PDF) : plus volumineux qu'un logo, limite séparée —
+// mais reste modeste : ces documents s'accumulent en base64 dans le même
+// document Cell (un par projet), et MongoDB plafonne un document à 16 Mo.
+const MAX_DOCUMENT_SIZE = 2 * 1024 * 1024; // 2 Mo
+
+function documentFileFilter(req, file, cb) {
+  if (file.mimetype !== "application/pdf") {
+    return cb(ApiError.badRequest("Le fichier doit être un PDF."));
+  }
+  cb(null, true);
+}
+
+const documentUpload = multer({
+  storage,
+  fileFilter: documentFileFilter,
+  limits: { fileSize: MAX_DOCUMENT_SIZE },
+});
+
+export function uploadSingleDocument(fieldName) {
+  const middleware = documentUpload.single(fieldName);
+  return (req, res, next) => {
+    middleware(req, res, (err) => {
+      if (err instanceof multer.MulterError) {
+        const message =
+          err.code === "LIMIT_FILE_SIZE" ? "Fichier trop volumineux (5 Mo max)." : err.message;
+        return next(ApiError.badRequest(message));
+      }
+      if (err) return next(err);
+      next();
+    });
+  };
+}

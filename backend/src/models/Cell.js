@@ -18,6 +18,7 @@ const projetSchema = new mongoose.Schema(
     descriptionFr: { type: String, default: "" },
     descriptionEn: { type: String, default: "" },
     image: { type: String, default: "" },
+    documentUrl: { type: String, default: "" },
     statut: {
       type: String,
       enum: ["a_venir", "en_cours", "termine"],
@@ -37,6 +38,8 @@ const cellSchema = new mongoose.Schema(
     descriptionCourteEn: { type: String, default: "" },
     descriptionLongueFr: { type: String, default: "" },
     descriptionLongueEn: { type: String, default: "" },
+    objectifsFr: [{ type: String, trim: true }],
+    objectifsEn: [{ type: String, trim: true }],
     icone: { type: String, default: "" },
     image: { type: String, default: "" },
     membres: [membreSchema],

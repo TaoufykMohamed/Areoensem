@@ -33,7 +33,7 @@ export default function FileUpload({
       setRemoved(false);
       setPreview((prev) => {
         if (prev?.url) URL.revokeObjectURL(prev.url);
-        return { name: file.name, size: file.size, url: URL.createObjectURL(file) };
+        return { name: file.name, size: file.size, type: file.type, url: URL.createObjectURL(file) };
       });
       onFileSelect(file);
     },
@@ -51,6 +51,9 @@ export default function FileUpload({
   // Priorité au fichier fraîchement choisi ; sinon la photo déjà en base
   // (édition d'un élément existant), tant qu'elle n'a pas été retirée.
   const displayUrl = preview?.url || (!removed && existingUrl) || "";
+  // Un PDF (ou tout non-image) n'a pas de miniature affichable dans un <img> :
+  // on sniffe le type via le fichier choisi, ou le préfixe du data URI existant.
+  const isImage = preview ? preview.type?.startsWith("image/") : displayUrl.startsWith("data:image");
 
   return (
     <div
@@ -89,13 +92,24 @@ export default function FileUpload({
             exit={{ opacity: 0, y: -6 }}
             className="relative z-10 flex items-center gap-4"
           >
-            <img
-              src={displayUrl}
-              alt=""
-              className="h-16 w-16 rounded-lg border border-white/15 bg-white object-contain p-1"
-            />
+            {isImage ? (
+              <img
+                src={displayUrl}
+                alt=""
+                className="h-16 w-16 rounded-lg border border-white/15 bg-white object-contain p-1"
+              />
+            ) : (
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg border border-white/15 bg-white/5">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-white/50">
+                  <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M14 2v6h6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+            )}
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm text-white/90">{preview ? preview.name : "Photo actuelle"}</p>
+              <p className="truncate text-sm text-white/90">
+                {preview ? preview.name : isImage ? "Photo actuelle" : "Document actuel"}
+              </p>
               {preview && <p className="text-xs text-white/40">{(preview.size / 1024).toFixed(0)} Ko</p>}
             </div>
             <button

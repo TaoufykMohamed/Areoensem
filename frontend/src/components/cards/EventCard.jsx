@@ -10,8 +10,9 @@ const STATUT_STYLES = {
 
 /**
  * Carte événement avec image de fond (Event.affiche, alimentée par le
- * dashboard) et effet "hover reveal" — même mécanisme que CellHoverGrid :
- * le parent (Events.jsx) porte la classe `group`, ces cartes s'assombrissent
+ * dashboard) et effet "hover reveal" — même mécanisme que la grille de
+ * cellules (ExpandableCells) : le parent (Events.jsx) porte la classe
+ * `group`, ces cartes s'assombrissent
  * entre elles au survol de l'une d'elles.
  */
 export default function EventCard({ event }) {

@@ -7,7 +7,15 @@ import { cellsApi } from "../../api/cells.js";
 import FileUpload from "../../components/ui/FileUpload.jsx";
 
 const emptyMembre = { nom: "", roleFr: "", roleEn: "" };
-const emptyProjet = { titreFr: "", titreEn: "", descriptionFr: "", descriptionEn: "", annee: "", statut: "en_cours" };
+const emptyProjet = {
+  titreFr: "",
+  titreEn: "",
+  descriptionFr: "",
+  descriptionEn: "",
+  documentUrl: "",
+  annee: "",
+  statut: "en_cours",
+};
 
 const emptyForm = {
   nomFr: "",
@@ -16,6 +24,8 @@ const emptyForm = {
   descriptionCourteEn: "",
   descriptionLongueFr: "",
   descriptionLongueEn: "",
+  objectifsFr: [],
+  objectifsEn: [],
   ordre: 0,
   image: "",
   technologies: [],
@@ -33,7 +43,10 @@ export default function DashboardCells() {
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [uploadingDocIndex, setUploadingDocIndex] = useState(null);
   const [techInput, setTechInput] = useState("");
+  const [objFrInput, setObjFrInput] = useState("");
+  const [objEnInput, setObjEnInput] = useState("");
   const [error, setError] = useState("");
 
   // un chef ne voit/n'édite que sa propre cellule
@@ -48,6 +61,8 @@ export default function DashboardCells() {
       descriptionCourteEn: cell.descriptionCourteEn,
       descriptionLongueFr: cell.descriptionLongueFr || "",
       descriptionLongueEn: cell.descriptionLongueEn || "",
+      objectifsFr: cell.objectifsFr || [],
+      objectifsEn: cell.objectifsEn || [],
       ordre: cell.ordre,
       image: cell.image || "",
       technologies: cell.technologies || [],
@@ -60,6 +75,8 @@ export default function DashboardCells() {
     setEditingId(null);
     setForm(emptyForm);
     setTechInput("");
+    setObjFrInput("");
+    setObjEnInput("");
   };
 
   const handleImage = async (file) => {
@@ -90,6 +107,20 @@ export default function DashboardCells() {
     setForm((f) => ({ ...f, technologies: f.technologies.filter((_, idx) => idx !== i) }));
   };
 
+  const addObjectif = (lang) => {
+    const key = lang === "fr" ? "objectifsFr" : "objectifsEn";
+    const value = (lang === "fr" ? objFrInput : objEnInput).trim();
+    if (!value) return;
+    setForm((f) => ({ ...f, [key]: [...f[key], value] }));
+    if (lang === "fr") setObjFrInput("");
+    else setObjEnInput("");
+  };
+
+  const removeObjectif = (lang, i) => {
+    const key = lang === "fr" ? "objectifsFr" : "objectifsEn";
+    setForm((f) => ({ ...f, [key]: f[key].filter((_, idx) => idx !== i) }));
+  };
+
   const addMembre = () => setForm((f) => ({ ...f, membres: [...f.membres, { ...emptyMembre }] }));
   const updateMembre = (i, field, value) =>
     setForm((f) => ({
@@ -105,6 +136,23 @@ export default function DashboardCells() {
       projets: f.projets.map((p, idx) => (idx === i ? { ...p, [field]: value } : p)),
     }));
   const removeProjet = (i) => setForm((f) => ({ ...f, projets: f.projets.filter((_, idx) => idx !== i) }));
+
+  const handleProjetDocument = async (i, file) => {
+    if (!file) {
+      updateProjet(i, "documentUrl", "");
+      return;
+    }
+    setError("");
+    setUploadingDocIndex(i);
+    try {
+      const { url } = await cellsApi.uploadDocument(file);
+      updateProjet(i, "documentUrl", url);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setUploadingDocIndex(null);
+    }
+  };
 
   const save = async (e) => {
     e.preventDefault();
@@ -199,6 +247,88 @@ export default function DashboardCells() {
             className={inputClass}
           />
         )}
+
+        {/* Objectifs (FR/EN) — puces affichées dans "Description & Objectifs" */}
+        <div>
+          <label className="mb-2 block text-xs uppercase tracking-instrument text-white/40">Objectifs (FR)</label>
+          {form.objectifsFr.length > 0 && (
+            <ul className="mb-2 space-y-1">
+              {form.objectifsFr.map((obj, i) => (
+                <li
+                  key={`${obj}-${i}`}
+                  className="flex items-center justify-between gap-2 rounded-lg border border-white/10 px-3 py-1 text-xs text-white/80"
+                >
+                  <span>{obj}</span>
+                  <button
+                    type="button"
+                    onClick={() => removeObjectif("fr", i)}
+                    aria-label={`Retirer ${obj}`}
+                    className="text-white/40 hover:text-red-400"
+                  >
+                    ×
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className="flex gap-2">
+            <input
+              placeholder="Ajouter un objectif"
+              value={objFrInput}
+              onChange={(e) => setObjFrInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  addObjectif("fr");
+                }
+              }}
+              className={`${inputClass} flex-1`}
+            />
+            <button type="button" onClick={() => addObjectif("fr")} className="rounded-lg border border-white/15 px-4 text-sm">
+              Ajouter
+            </button>
+          </div>
+        </div>
+        <div>
+          <label className="mb-2 block text-xs uppercase tracking-instrument text-white/40">Objectifs (EN)</label>
+          {form.objectifsEn.length > 0 && (
+            <ul className="mb-2 space-y-1">
+              {form.objectifsEn.map((obj, i) => (
+                <li
+                  key={`${obj}-${i}`}
+                  className="flex items-center justify-between gap-2 rounded-lg border border-white/10 px-3 py-1 text-xs text-white/80"
+                >
+                  <span>{obj}</span>
+                  <button
+                    type="button"
+                    onClick={() => removeObjectif("en", i)}
+                    aria-label={`Retirer ${obj}`}
+                    className="text-white/40 hover:text-red-400"
+                  >
+                    ×
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className="flex gap-2">
+            <input
+              placeholder="Add an objective"
+              value={objEnInput}
+              onChange={(e) => setObjEnInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  addObjectif("en");
+                }
+              }}
+              className={`${inputClass} flex-1`}
+            />
+            <button type="button" onClick={() => addObjectif("en")} className="rounded-lg border border-white/15 px-4 text-sm">
+              Ajouter
+            </button>
+          </div>
+        </div>
 
         {/* Technologies */}
         <div className="sm:col-span-2">
@@ -329,6 +459,19 @@ export default function DashboardCells() {
                 <option value="en_cours">En cours</option>
                 <option value="termine">Terminé</option>
               </select>
+              <div className="sm:col-span-2">
+                <label className="mb-2 block text-xs uppercase tracking-instrument text-white/40">
+                  Dossier de projet (PDF)
+                </label>
+                <FileUpload
+                  key={`${editingId || "new"}-projet-${i}`}
+                  onFileSelect={(file) => handleProjetDocument(i, file)}
+                  existingUrl={p.documentUrl}
+                  disabled={uploadingDocIndex === i}
+                  accept="application/pdf"
+                  hint="PDF, 2 Mo max"
+                />
+              </div>
               <button
                 type="button"
                 onClick={() => removeProjet(i)}

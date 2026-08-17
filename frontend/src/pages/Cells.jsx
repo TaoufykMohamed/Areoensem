@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useFetch } from "../hooks/useFetch.js";
 import { cellsApi } from "../api/cells.js";
 import PageHero from "../components/layout/PageHero.jsx";
-import CellHoverGrid from "../components/cards/CellHoverGrid.jsx";
+import ExpandableCells from "../components/cards/ExpandableCells.jsx";
 import Spinner from "../components/ui/Spinner.jsx";
 
 export default function Cells() {
@@ -13,7 +13,7 @@ export default function Cells() {
     <div>
       <PageHero eyebrow={t("cells.title")} title={t("cells.title")} subtitle={t("cells.subtitle")} />
       <section className="mx-auto max-w-7xl px-6 py-16">
-        {loading ? <Spinner /> : <CellHoverGrid cells={cells || []} />}
+        {loading ? <Spinner /> : <ExpandableCells cells={cells || []} />}
       </section>
     </div>
   );

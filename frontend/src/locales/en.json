@@ -140,6 +140,14 @@
     "reason3Title": "No experience needed",
     "reason3Text": "Curiosity and follow-through are enough to get started."
   },
+  "feedback": {
+    "trigger": "Feedback",
+    "title": "Send us your feedback",
+    "placeholder": "How can we improve this page?",
+    "submit": "Send",
+    "sending": "Sending…",
+    "success": "Thank you for your feedback!"
+  },
   "login": {
     "title": "Log in",
     "subtitle": "For board members and cell leads only.",

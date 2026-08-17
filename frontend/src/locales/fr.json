@@ -140,6 +140,14 @@
     "reason3Title": "Aucun prérequis",
     "reason3Text": "La curiosité et la constance suffisent pour commencer."
   },
+  "feedback": {
+    "trigger": "Feedback",
+    "title": "Envoyez-nous votre avis",
+    "placeholder": "Comment pouvons-nous améliorer cette page ?",
+    "submit": "Envoyer",
+    "sending": "Envoi…",
+    "success": "Merci pour votre retour !"
+  },
   "login": {
     "title": "Connexion",
     "subtitle": "Réservé aux membres du bureau et chefs de cellule.",

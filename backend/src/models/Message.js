@@ -2,10 +2,14 @@ import mongoose from "mongoose";
 
 const messageSchema = new mongoose.Schema(
   {
-    nom: { type: String, required: true, trim: true },
-    email: { type: String, required: true, lowercase: true, trim: true },
+    // nom/email optionnels au niveau schéma : le formulaire de contact les
+    // exige (voir messageValidators.js), mais le widget de feedback rapide
+    // (anonyme, un simple textarea) ne les demande pas.
+    nom: { type: String, trim: true, default: "" },
+    email: { type: String, lowercase: true, trim: true, default: "" },
     sujet: { type: String, required: true },
     contenu: { type: String, required: true },
+    type: { type: String, enum: ["contact", "feedback"], default: "contact" },
     lu: { type: Boolean, default: false },
   },
   { timestamps: { createdAt: true, updatedAt: false } }

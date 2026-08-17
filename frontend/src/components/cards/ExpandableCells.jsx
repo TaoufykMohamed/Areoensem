@@ -68,6 +68,7 @@ export default function ExpandableCells({ cells }) {
   const { t: loc } = useLocale();
   const [selectedId, setSelectedId] = useState(null);
   const selected = cells.find((c) => c._id === selectedId);
+  const responsable = selected ? getResponsable(selected) : null;
 
   useEffect(() => {
     if (!selectedId) return;
@@ -123,11 +124,20 @@ export default function ExpandableCells({ cells }) {
               <div className="grid gap-8 p-6 md:grid-cols-[340px_1fr] md:p-10">
                 {/* Colonne gauche */}
                 <div>
-                  <div className="overflow-hidden rounded-xl">
+                  <div className="relative overflow-hidden rounded-xl">
                     {selected.image ? (
-                      <img src={selected.image} alt="" className="aspect-[4/3] w-full object-cover" />
+                      <img src={selected.image} alt="" className="aspect-[3/4] w-full object-cover" />
                     ) : (
-                      <div className="aspect-[4/3] w-full bg-gradient-to-br from-[#0b2545] to-[#04101f]" />
+                      <div className="aspect-[3/4] w-full bg-gradient-to-br from-[#0b2545] to-[#04101f]" />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
+                    {responsable && (
+                      <div className="absolute bottom-0 left-0 p-5 text-white">
+                        <p className="text-xs font-light uppercase tracking-widest opacity-80">
+                          {t("cells.leadRole")}
+                        </p>
+                        <p className="mt-1 text-xl font-semibold">{responsable.nom}</p>
+                      </div>
                     )}
                   </div>
 
@@ -171,17 +181,6 @@ export default function ExpandableCells({ cells }) {
                     {t("cells.category")}
                   </span>
                   <h2 className="mt-3 font-serif text-3xl md:text-4xl">{loc(selected, "nom")}</h2>
-                  {(() => {
-                    const responsable = getResponsable(selected);
-                    return (
-                      responsable && (
-                        <p className="mt-2 text-sm text-white/60">
-                          <span className="font-medium text-white/85">{responsable.nom}</span> —{" "}
-                          {t("cells.leadRole")}
-                        </p>
-                      )
-                    );
-                  })()}
 
                   <Section title={t("cells.descriptionObjectives")}>
                     <p className="whitespace-pre-line text-[15px] leading-relaxed text-white/70">
@@ -256,24 +255,21 @@ export default function ExpandableCells({ cells }) {
                       >
                         {t("cells.joinCell")}
                       </Link>
-                      {(() => {
-                        const responsable = getResponsable(selected);
-                        return responsable?.email ? (
-                          <a
-                            href={`mailto:${responsable.email}`}
-                            className="rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white hover:border-brand-amber hover:text-brand-amber"
-                          >
-                            {t("cells.contactLead")}
-                          </a>
-                        ) : (
-                          <Link
-                            to="/contact"
-                            className="rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white hover:border-brand-amber hover:text-brand-amber"
-                          >
-                            {t("cells.contactLead")}
-                          </Link>
-                        );
-                      })()}
+                      {responsable?.email ? (
+                        <a
+                          href={`mailto:${responsable.email}`}
+                          className="rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white hover:border-brand-amber hover:text-brand-amber"
+                        >
+                          {t("cells.contactLead")}
+                        </a>
+                      ) : (
+                        <Link
+                          to="/contact"
+                          className="rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white hover:border-brand-amber hover:text-brand-amber"
+                        >
+                          {t("cells.contactLead")}
+                        </Link>
+                      )}
                     </div>
                     <p className="mt-4 text-right font-mono text-[10px] uppercase tracking-instrument text-white/30">
                       {t("cells.season")} · {season}

@@ -57,6 +57,16 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#04101f]/50 via-[#071a2e]/25 to-[#04101f]/70" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#04101f]/90 via-[#04101f]/55 to-transparent" />
 
+        {/* Fondu vers la couleur de fond de la page (var(--bg), claire ou
+            sombre selon le thème) pour éviter la coupure nette avec la
+            section suivante — pointer-events-none pour ne jamais bloquer
+            les boutons/liens du Hero. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-32 md:h-48"
+          style={{ background: "linear-gradient(to top, var(--bg), transparent)" }}
+        />
+
         <HeroPlane />
 
         <div className="relative mx-auto w-full max-w-7xl px-6">

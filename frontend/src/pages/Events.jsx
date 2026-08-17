@@ -1,18 +1,15 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useFetch } from "../hooks/useFetch.js";
-import { useLocale } from "../hooks/useLocale.js";
 import { eventsApi } from "../api/events.js";
-import { Link } from "react-router-dom";
 import PageHero from "../components/layout/PageHero.jsx";
-import EventCard from "../components/cards/EventCard.jsx";
+import ExpandableEvents from "../components/cards/ExpandableEvents.jsx";
 import Spinner from "../components/ui/Spinner.jsx";
 
 const TABS = ["a_venir", "en_cours", "passe"];
 
 export default function Events() {
-  const { t, i18n } = useTranslation();
-  const { t: loc } = useLocale();
+  const { t } = useTranslation();
   const [tab, setTab] = useState("a_venir");
   const { data: events, loading } = useFetch(() => eventsApi.list({ statut: tab }), [tab]);
 
@@ -41,27 +38,8 @@ export default function Events() {
           <Spinner />
         ) : !events?.length ? (
           <p className="text-[#657a90] dark:text-white/50">{t("common.empty")}</p>
-        ) : tab === "passe" ? (
-          <ol className="relative ml-3 space-y-8 border-l border-black/10 pl-8 dark:border-white/10">
-            {events.map((event) => (
-              <li key={event._id} className="relative">
-                <span className="absolute -left-[38px] top-1.5 h-3 w-3 rounded-full bg-brand-cyan" />
-                <Link to={`/evenements/${event.slug}`} className="group">
-                  <div className="font-mono text-xs text-[#657a90] dark:text-white/40">
-                    {new Date(event.dateDebut).toLocaleDateString(i18n.language === "en" ? "en-GB" : "fr-FR")}
-                  </div>
-                  <div className="font-serif text-xl group-hover:text-brand-cyan">{loc(event, "titre")}</div>
-                  <p className="mt-1 text-sm text-[#657a90] dark:text-white/50">{loc(event, "lieu")}</p>
-                </Link>
-              </li>
-            ))}
-          </ol>
         ) : (
-          <div className="group grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {events.map((event) => (
-              <EventCard key={event._id} event={event} />
-            ))}
-          </div>
+          <ExpandableEvents events={events} variant={tab === "passe" ? "timeline" : "grid"} />
         )}
       </section>
     </div>

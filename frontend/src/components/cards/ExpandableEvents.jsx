@@ -50,12 +50,18 @@ function StatutBadge({ statut, t }) {
   );
 }
 
-function EventGridCard({ event, onOpen, t, loc, lang }) {
+function EventGridCard({ event, onOpen, t, loc, lang, duplicate = false }) {
   return (
     <motion.div
-      layoutId={`event-card-${event._id}`}
+      // La copie dupliquée (voir le marquee dans ExpandableEvents) ne
+      // partage pas le layoutId : deux éléments montés simultanément avec
+      // le même layoutId perturberaient la transition partagée vers la
+      // modale. Seule la copie "source" morphe visuellement ; l'autre ouvre
+      // la même modale sans le fondu enchaîné, ce qui reste correct.
+      layoutId={duplicate ? undefined : `event-card-${event._id}`}
+      aria-hidden={duplicate ? "true" : undefined}
       role="listitem"
-      tabIndex={0}
+      tabIndex={duplicate ? -1 : 0}
       aria-label={loc(event, "titre")}
       onClick={() => onOpen(event._id)}
       onKeyDown={(e) => {
@@ -64,7 +70,7 @@ function EventGridCard({ event, onOpen, t, loc, lang }) {
           onOpen(event._id);
         }
       }}
-      className="relative block h-80 cursor-pointer overflow-hidden rounded-xl bg-cover bg-center shadow-lg outline-none transition-all duration-500 ease-in-out group-hover:scale-[0.97] group-hover:opacity-60 group-hover:blur-[2px] hover:!scale-105 hover:!opacity-100 hover:!blur-none focus-visible:!scale-105 focus-visible:!opacity-100 focus-visible:!blur-none focus-visible:!ring-2 focus-visible:!ring-brand-cyan"
+      className="relative block h-80 w-[340px] shrink-0 cursor-pointer overflow-hidden rounded-xl bg-cover bg-center shadow-lg outline-none transition-all duration-500 ease-in-out group-hover:scale-[0.97] group-hover:opacity-60 group-hover:blur-[2px] hover:!scale-105 hover:!opacity-100 hover:!blur-none focus-visible:!scale-105 focus-visible:!opacity-100 focus-visible:!blur-none focus-visible:!ring-2 focus-visible:!ring-brand-cyan sm:w-[380px]"
       style={event.affiche ? { backgroundImage: `url(${event.affiche})` } : undefined}
     >
       {!event.affiche && <div className="absolute inset-0 bg-gradient-to-br from-[#0b2545] to-[#04101f]" />}
@@ -383,10 +389,27 @@ export default function ExpandableEvents({ events, variant = "grid" }) {
           ))}
         </ol>
       ) : (
-        <div role="list" className="group grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {events.map((event) => (
-            <EventGridCard key={event._id} event={event} onOpen={setSelectedId} t={t} loc={loc} lang={lang} />
-          ))}
+        // Marquee à défilement horizontal infini (mêmes cartes, même style
+        // — seul le conteneur change). Le tableau est dupliqué et la piste
+        // dimensionnée en w-max : translateX(-50%) ramène alors exactement
+        // à la position de départ, sans blanc ni coupure visible.
+        <div className="w-full overflow-hidden">
+          <div
+            role="list"
+            className="group flex w-max flex-nowrap gap-6 animate-[marquee_40s_linear_infinite] hover:[animation-play-state:paused] md:gap-8"
+          >
+            {[...events, ...events].map((event, i) => (
+              <EventGridCard
+                key={`${event._id}-${i}`}
+                event={event}
+                duplicate={i >= events.length}
+                onOpen={setSelectedId}
+                t={t}
+                loc={loc}
+                lang={lang}
+              />
+            ))}
+          </div>
         </div>
       )}
 

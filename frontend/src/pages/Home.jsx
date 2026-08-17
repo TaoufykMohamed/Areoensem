@@ -117,14 +117,15 @@ export default function Home() {
       {/* CHIFFRES */}
       {stats && stats.length > 0 && (
         <Reveal>
-          <section className="border-y border-black/10 dark:border-white/10">
-            <div className="mx-auto grid max-w-7xl grid-cols-2 md:grid-cols-4">
+          <section className="py-20">
+            <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-10 gap-y-12 px-6 text-center md:grid-cols-4 md:gap-x-14 md:text-left">
               {stats.map((s) => (
-                <div key={s.cle} className="border-l border-black/10 p-10 first:border-l-0 dark:border-white/10">
+                <div key={s.cle}>
                   <div className="font-serif text-6xl font-bold text-brand-cyan">
                     <Counter to={s.valeur} />
                   </div>
-                  <div className="mt-2 font-mono text-[11px] uppercase tracking-instrument text-[#657a90] dark:text-white/50">
+                  <div className="mx-auto mt-4 h-0.5 w-10 rounded-full bg-brand-cyan/40 md:mx-0" />
+                  <div className="mt-4 font-mono text-[11px] uppercase tracking-instrument text-[#657a90] dark:text-white/50">
                     {loc(s, "label")}
                   </div>
                 </div>

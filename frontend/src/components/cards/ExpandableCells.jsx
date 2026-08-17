@@ -3,6 +3,17 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLocale } from "../../hooks/useLocale.js";
+import { useFetch } from "../../hooks/useFetch.js";
+import { boardApi } from "../../api/board.js";
+
+// Aucun lien structurel entre le chef d'une cellule (User.cellule) et le
+// bureau (BoardMember, collection distincte) : le seul point commun est le
+// nom. Rapprochement best-effort, insensible à la casse/aux espaces.
+function findBoardMatch(responsable, boardMembers) {
+  if (!responsable || !boardMembers) return null;
+  const target = responsable.nom.trim().toLowerCase();
+  return boardMembers.find((m) => m.nom.trim().toLowerCase() === target) || null;
+}
 
 // Saison académique courante (aucun champ backend dédié) : année scolaire
 // marocaine, réputée démarrer en septembre.
@@ -69,6 +80,8 @@ export default function ExpandableCells({ cells }) {
   const [selectedId, setSelectedId] = useState(null);
   const selected = cells.find((c) => c._id === selectedId);
   const responsable = selected ? getResponsable(selected) : null;
+  const { data: boardMembers } = useFetch(() => boardApi.list(), []);
+  const boardMatch = findBoardMatch(responsable, boardMembers);
 
   useEffect(() => {
     if (!selectedId) return;
@@ -259,21 +272,12 @@ export default function ExpandableCells({ cells }) {
                       >
                         {t("cells.joinCell")}
                       </Link>
-                      {responsable?.email ? (
-                        <a
-                          href={`mailto:${responsable.email}`}
-                          className="rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white hover:border-brand-amber hover:text-brand-amber"
-                        >
-                          {t("cells.contactLead")}
-                        </a>
-                      ) : (
-                        <Link
-                          to="/contact"
-                          className="rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white hover:border-brand-amber hover:text-brand-amber"
-                        >
-                          {t("cells.contactLead")}
-                        </Link>
-                      )}
+                      <Link
+                        to={boardMatch ? `/bureau?membre=${boardMatch._id}` : responsable ? "/bureau" : "/contact"}
+                        className="rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white hover:border-brand-amber hover:text-brand-amber"
+                      >
+                        {t("cells.contactLead")}
+                      </Link>
                     </div>
                     <p className="mt-4 text-right font-mono text-[10px] uppercase tracking-instrument text-white/30">
                       {t("cells.season")} · {season}

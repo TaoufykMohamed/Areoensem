@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useFetch } from "../hooks/useFetch.js";
 import { useLocale } from "../hooks/useLocale.js";
@@ -82,6 +83,18 @@ export default function Board() {
   const { t: loc } = useLocale();
   const { data: members, loading } = useFetch(() => boardApi.list(), []);
   const [hoveredId, setHoveredId] = useState(null);
+  const [searchParams] = useSearchParams();
+  const targetId = searchParams.get("membre");
+  const cardRefs = useRef({});
+
+  // Lien profond depuis "Contacter le chef" (page Cellules) : on ouvre la
+  // carte du membre visé (accordéon desktop) et on scrolle jusqu'à elle
+  // (grille mobile) pour que son LinkedIn/email soit visible sans chercher.
+  useEffect(() => {
+    if (!targetId || !members?.some((m) => m._id === targetId)) return;
+    setHoveredId(targetId);
+    cardRefs.current[targetId]?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [targetId, members]);
 
   return (
     <div>
@@ -99,9 +112,14 @@ export default function Board() {
                 return (
                   <div
                     key={m._id}
+                    ref={(el) => {
+                      cardRefs.current[m._id] = el;
+                    }}
                     onMouseEnter={() => setHoveredId(m._id)}
                     style={{ flexGrow: isHovered ? 4 : 1, flexBasis: 0 }}
-                    className="group relative min-w-0 cursor-pointer overflow-hidden rounded-2xl bg-[#0b2545] transition-[flex-grow] duration-300 ease-in-out"
+                    className={`group relative min-w-0 cursor-pointer overflow-hidden rounded-2xl bg-[#0b2545] transition-[flex-grow] duration-300 ease-in-out ${
+                      m._id === targetId ? "ring-2 ring-brand-cyan" : ""
+                    }`}
                   >
                     <MemberPhoto member={m} dim={hoveredId !== null && !isHovered} />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#04101f] via-[#04101f]/35 to-transparent" />
@@ -116,7 +134,14 @@ export default function Board() {
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:hidden">
               {members?.map((m) => (
                 <Reveal key={m._id}>
-                  <div className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-[#0b2545]">
+                  <div
+                    ref={(el) => {
+                      cardRefs.current[m._id] = el;
+                    }}
+                    className={`relative aspect-[3/4] overflow-hidden rounded-2xl bg-[#0b2545] ${
+                      m._id === targetId ? "ring-2 ring-brand-cyan" : ""
+                    }`}
+                  >
                     <MemberPhoto member={m} dim={false} />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#04101f] via-[#04101f]/35 to-transparent" />
                     <MemberOverlay member={m} loc={loc} />

@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLocale } from "../../hooks/useLocale.js";
 import { eventsApi } from "../../api/events.js";
+import FeedbackWidget from "../ui/FeedbackWidget.jsx";
 
 const STATUT_STYLES = {
   a_venir: "bg-brand-cyan text-[#04101f]",
@@ -348,6 +349,10 @@ export function EventModal({ event, onClose }) {
                   {event.statut === "passe" ? t("events.eventEnded") : t("events.registrationsClosed")}
                 </p>
               )}
+            </div>
+
+            <div className="mt-4 flex justify-end">
+              <FeedbackWidget eventId={event._id} variant="inline" />
             </div>
           </div>
         </div>

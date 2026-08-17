@@ -10,6 +10,9 @@ const messageSchema = new mongoose.Schema(
     sujet: { type: String, required: true },
     contenu: { type: String, required: true },
     type: { type: String, enum: ["contact", "feedback"], default: "contact" },
+    // Renseigné quand le feedback est envoyé depuis la modale d'un
+    // événement précis (voir FeedbackWidget dans ExpandableEvents.jsx).
+    event: { type: mongoose.Schema.Types.ObjectId, ref: "Event", default: null },
     lu: { type: Boolean, default: false },
   },
   { timestamps: { createdAt: true, updatedAt: false } }

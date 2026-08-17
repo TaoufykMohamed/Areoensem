@@ -5,7 +5,6 @@ import { eventsApi } from "../api/events.js";
 import PageHero from "../components/layout/PageHero.jsx";
 import ExpandableEvents from "../components/cards/ExpandableEvents.jsx";
 import Spinner from "../components/ui/Spinner.jsx";
-import FeedbackWidget from "../components/ui/FeedbackWidget.jsx";
 
 const TABS = ["a_venir", "en_cours", "passe"];
 
@@ -43,8 +42,6 @@ export default function Events() {
           <ExpandableEvents events={events} variant={tab === "passe" ? "timeline" : "grid"} />
         )}
       </section>
-
-      <FeedbackWidget />
     </div>
   );
 }

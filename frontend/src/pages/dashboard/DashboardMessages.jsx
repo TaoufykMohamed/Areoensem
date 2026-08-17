@@ -1,9 +1,11 @@
 import { useTranslation } from "react-i18next";
 import { useFetch } from "../../hooks/useFetch.js";
+import { useLocale } from "../../hooks/useLocale.js";
 import { messagesApi } from "../../api/messages.js";
 
 export default function DashboardMessages() {
   const { t } = useTranslation();
+  const { t: loc } = useLocale();
   const { data: messages, loading, refetch } = useFetch(() => messagesApi.list(), []);
 
   const markRead = async (id) => {
@@ -26,7 +28,7 @@ export default function DashboardMessages() {
                   <span className="font-semibold">{m.sujet}</span>
                   {m.type === "feedback" && (
                     <span className="rounded-full bg-brand-cyan/15 px-2 py-0.5 text-[10px] uppercase tracking-instrument text-brand-cyan">
-                      Feedback
+                      Feedback{m.event ? ` — ${loc(m.event, "titre")}` : ""}
                     </span>
                   )}
                 </div>

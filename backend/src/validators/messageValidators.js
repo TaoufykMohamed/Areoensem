@@ -12,6 +12,7 @@ export const createMessageSchema = z
     sujet: z.string().optional().default("Feedback"),
     contenu: z.string().min(1),
     type: z.enum(["contact", "feedback"]).optional().default("contact"),
+    event: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     if (data.type !== "contact") return;

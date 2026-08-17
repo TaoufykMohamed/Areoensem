@@ -144,6 +144,7 @@
     "trigger": "Feedback",
     "title": "Envoyez-nous votre avis",
     "placeholder": "Comment pouvons-nous améliorer cette page ?",
+    "placeholderEvent": "Un avis sur cet événement ?",
     "submit": "Envoyer",
     "sending": "Envoi…",
     "success": "Merci pour votre retour !"

@@ -8,7 +8,7 @@ export const createMessage = asyncHandler(async (req, res) => {
 });
 
 export const listMessages = asyncHandler(async (req, res) => {
-  const messages = await Message.find().sort({ createdAt: -1 });
+  const messages = await Message.find().sort({ createdAt: -1 }).populate("event", "titreFr titreEn slug");
   res.json({ success: true, data: messages, message: null });
 });
 

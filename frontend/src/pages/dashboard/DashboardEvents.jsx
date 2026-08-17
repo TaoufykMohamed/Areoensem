@@ -21,6 +21,7 @@ function emptyForm(user) {
     cellule: user.role === "chef_cellule" ? user.cellule : "",
     inscriptionsOuvertes: false,
     capacite: "",
+    invites: [],
   };
 }
 
@@ -34,6 +35,7 @@ export default function DashboardEvents() {
   const [editingId, setEditingId] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+  const [inviteInput, setInviteInput] = useState("");
 
   const visible = isAdmin ? events : events?.filter((e) => (e.cellule?._id ?? e.cellule) === user.cellule);
 
@@ -52,12 +54,25 @@ export default function DashboardEvents() {
       cellule: event.cellule?._id ?? event.cellule,
       inscriptionsOuvertes: event.inscriptionsOuvertes,
       capacite: event.capacite ?? "",
+      invites: event.invites || [],
     });
   };
 
   const cancelEdit = () => {
     setEditingId(null);
     setForm(emptyForm(user));
+    setInviteInput("");
+  };
+
+  const addInvite = () => {
+    const value = inviteInput.trim();
+    if (!value) return;
+    setForm((f) => ({ ...f, invites: [...f.invites, value] }));
+    setInviteInput("");
+  };
+
+  const removeInvite = (i) => {
+    setForm((f) => ({ ...f, invites: f.invites.filter((_, idx) => idx !== i) }));
   };
 
   const handleImage = async (file) => {
@@ -136,6 +151,49 @@ export default function DashboardEvents() {
           <input type="checkbox" checked={form.inscriptionsOuvertes} onChange={(e) => setForm({ ...form, inscriptionsOuvertes: e.target.checked })} />
           {t("events.registrationsOpen")}
         </label>
+
+        {/* Invités / intervenants */}
+        <div className="sm:col-span-2">
+          <label className="mb-2 block text-xs uppercase tracking-instrument text-white/40">Invités</label>
+          {form.invites.length > 0 && (
+            <div className="mb-2 flex flex-wrap gap-2">
+              {form.invites.map((name, i) => (
+                <span
+                  key={`${name}-${i}`}
+                  className="flex items-center gap-2 rounded-full border border-white/15 px-3 py-1 text-xs text-white/80"
+                >
+                  {name}
+                  <button
+                    type="button"
+                    onClick={() => removeInvite(i)}
+                    aria-label={`Retirer ${name}`}
+                    className="text-white/40 hover:text-red-400"
+                  >
+                    ×
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
+          <div className="flex gap-2">
+            <input
+              placeholder="Ajouter un invité (nom)"
+              value={inviteInput}
+              onChange={(e) => setInviteInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  addInvite();
+                }
+              }}
+              className="flex-1 rounded-lg border border-white/15 bg-transparent px-3 py-2 text-sm"
+            />
+            <button type="button" onClick={addInvite} className="rounded-lg border border-white/15 px-4 text-sm">
+              Ajouter
+            </button>
+          </div>
+        </div>
+
         {error && <p className="text-xs text-red-400 sm:col-span-2">{error}</p>}
         <div className="flex gap-2 sm:col-span-2">
           <button

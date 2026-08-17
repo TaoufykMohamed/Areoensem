@@ -19,6 +19,9 @@ const eventSchema = new mongoose.Schema(
     galerie: [{ type: String }],
     compteRenduFr: { type: String, default: "" },
     compteRenduEn: { type: String, default: "" },
+    // Noms d'invités/intervenants — pas de Fr/En, un nom de personne ne se
+    // traduit pas.
+    invites: [{ type: String, trim: true }],
     nombreParticipants: { type: Number, default: 0 },
   },
   {

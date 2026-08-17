@@ -97,13 +97,13 @@
       "motivation": "Motivation (optionnel)"
     },
     "quickInfo": "Infos rapides",
+    "guests": "Invités",
     "venue": "Lieu",
     "unlimited": "Illimité",
     "organizedBy": "Organisée par",
     "description": "Description",
     "report": "Compte-rendu",
     "gallery": "Galerie",
-    "viewFullPage": "Voir la page de l'événement",
     "eventEnded": "Cet événement est terminé.",
     "ctaText": "Réservez votre place et rejoignez-nous pour cet événement."
   },

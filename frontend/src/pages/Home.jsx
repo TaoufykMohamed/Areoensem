@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { AnimatePresence } from "framer-motion";
 import { useLocale } from "../hooks/useLocale.js";
 import { useFetch } from "../hooks/useFetch.js";
 import { cellsApi } from "../api/cells.js";
@@ -15,10 +17,12 @@ import Spinner from "../components/ui/Spinner.jsx";
 import HeroPlane from "../components/ui/HeroPlane.jsx";
 import LogoLoop from "../components/ui/LogoLoop.jsx";
 import LayoutGrid from "../components/ui/LayoutGrid.jsx";
+import { EventModal } from "../components/cards/ExpandableEvents.jsx";
 
 export default function Home() {
   const { t } = useTranslation();
   const { t: loc } = useLocale();
+  const [showEventModal, setShowEventModal] = useState(false);
 
   const { data: cells, loading: cellsLoading } = useFetch(() => cellsApi.list(), []);
   const { data: events } = useFetch(() => eventsApi.list({ statut: "a_venir" }), []);
@@ -184,16 +188,22 @@ export default function Home() {
               <div className="mt-10 flex justify-center">
                 <Countdown target={nextEvent.dateDebut} />
               </div>
-              <Link
-                to={`/evenements/${nextEvent.slug}`}
+              <button
+                onClick={() => setShowEventModal(true)}
                 className="mt-10 inline-block rounded-full bg-brand-cyan px-8 py-4 font-semibold text-[#04101f] hover:bg-white"
               >
-                {t("common.readMore")}
-              </Link>
+                {t("events.registerCta")}
+              </button>
             </div>
           </section>
         </Reveal>
       )}
+
+      <AnimatePresence>
+        {showEventModal && nextEvent && (
+          <EventModal event={nextEvent} onClose={() => setShowEventModal(false)} />
+        )}
+      </AnimatePresence>
 
       {/* PARTENAIRES */}
       {partners && partners.length > 0 && (

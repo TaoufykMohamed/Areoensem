@@ -97,13 +97,13 @@
       "motivation": "Motivation (optional)"
     },
     "quickInfo": "Quick info",
+    "guests": "Guests",
     "venue": "Venue",
     "unlimited": "Unlimited",
     "organizedBy": "Organized by",
     "description": "Description",
     "report": "Report",
     "gallery": "Gallery",
-    "viewFullPage": "View event page",
     "eventEnded": "This event has ended.",
     "ctaText": "Reserve your spot and join us for this event."
   },

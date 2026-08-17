@@ -16,6 +16,7 @@ export const createEventSchema = z.object({
   galerie: z.array(z.string()).optional().default([]),
   compteRenduFr: z.string().optional().default(""),
   compteRenduEn: z.string().optional().default(""),
+  invites: z.array(z.string()).optional().default([]),
 });
 
 export const updateEventSchema = createEventSchema.partial();

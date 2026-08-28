@@ -2,7 +2,6 @@ import { Routes, Route } from "react-router-dom";
 import PublicLayout from "./layouts/PublicLayout.jsx";
 import DashboardLayout from "./layouts/DashboardLayout.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
-import SplashCursor from "./components/ui/SplashCursor.jsx";
 
 import Home from "./pages/Home.jsx";
 import Cells from "./pages/Cells.jsx";
@@ -33,20 +32,7 @@ import DashboardMessages from "./pages/dashboard/DashboardMessages.jsx";
 
 export default function App() {
   return (
-    <>
-      <SplashCursor
-        DENSITY_DISSIPATION={3.5}
-        VELOCITY_DISSIPATION={2}
-        PRESSURE={0.1}
-        CURL={3}
-        SPLAT_RADIUS={0.2}
-        SPLAT_FORCE={6000}
-        COLOR_UPDATE_SPEED={10}
-        SHADING={true}
-        RAINBOW_MODE={false}
-        COLOR="#ffffff"
-      />
-      <Routes>
+    <Routes>
         <Route element={<PublicLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/cellules" element={<Cells />} />
@@ -82,7 +68,6 @@ export default function App() {
             </Route>
           </Route>
         </Route>
-      </Routes>
-    </>
+    </Routes>
   );
 }

@@ -18,23 +18,27 @@ export default function Partners() {
         {loading ? (
           <Spinner />
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          // Même traitement visuel que la grille de cellules (ExpandableCells) :
+          // cartes h-80 arrondies, image de fond plein cadre, dégradé bas +
+          // texte, hover-dim des cartes voisines via `group`.
+          <div role="list" className="group grid w-full grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
             {partners?.map((p) => (
               <Reveal key={p._id}>
                 <a
                   href={p.siteWeb || undefined}
                   target={p.siteWeb ? "_blank" : undefined}
                   rel="noreferrer"
-                  className="flex flex-col items-center gap-3 rounded-2xl border border-black/10 p-8 text-center transition-colors hover:border-brand-cyan/40 dark:border-white/10"
+                  role="listitem"
+                  aria-label={`${p.nom}, ${TYPE_LABEL[p.type]}`}
+                  className="relative block h-80 overflow-hidden rounded-xl bg-cover bg-center shadow-lg outline-none transition-all duration-500 ease-in-out group-hover:scale-[0.97] group-hover:opacity-60 group-hover:blur-[2px] hover:!scale-105 hover:!opacity-100 hover:!blur-none focus-visible:!scale-105 focus-visible:!opacity-100 focus-visible:!blur-none focus-visible:!ring-2 focus-visible:!ring-brand-cyan"
+                  style={p.logo ? { backgroundImage: `url(${p.logo})` } : undefined}
                 >
-                  {p.logo ? (
-                    <img src={p.logo} alt={p.nom} className="h-12 object-contain" />
-                  ) : (
-                    <span className="text-2xl font-extrabold text-[#657a90] dark:text-white/60">{p.nom}</span>
-                  )}
-                  <span className="font-mono text-[10px] uppercase tracking-instrument text-brand-cyan">
-                    {TYPE_LABEL[p.type]}
-                  </span>
+                  {!p.logo && <div className="absolute inset-0 bg-gradient-to-br from-[#0b2545] to-[#04101f]" />}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                  <div className="absolute bottom-0 left-0 p-6 text-white">
+                    <p className="text-sm font-light uppercase tracking-widest opacity-80">{p.nom}</p>
+                    <h3 className="mt-1 text-2xl font-semibold uppercase">{TYPE_LABEL[p.type]}</h3>
+                  </div>
                 </a>
               </Reveal>
             ))}

@@ -36,6 +36,7 @@ export default function Overview() {
             <StatTile label={t("dashboard.applications")} value={stats.candidaturesEnAttente} />
             <StatTile label={t("dashboard.messages")} value={stats.messagesNonLus} />
             <StatTile label={t("dashboard.orders")} value={stats.commandesEnAttente} />
+            <StatTile label={t("dashboard.registrations")} value={stats.inscriptionsEnAttente} />
             <StatTile label={t("dashboard.users")} value={stats.utilisateurs} />
           </>
         ) : (

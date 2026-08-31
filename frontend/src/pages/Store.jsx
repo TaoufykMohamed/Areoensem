@@ -109,7 +109,6 @@ function OrderForm({ product, t }) {
         className={orderInputClass}
       />
       <input
-        required
         placeholder={t("store.address")}
         value={form.adresse}
         onChange={(e) => setForm({ ...form, adresse: e.target.value })}

@@ -3,17 +3,27 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 
 export const getDashboardStats = asyncHandler(async (req, res) => {
   if (req.user.role === "admin") {
-    const [cellules, aVenir, enCours, passes, candidaturesEnAttente, messagesNonLus, commandesEnAttente, utilisateurs] =
-      await Promise.all([
-        Cell.countDocuments(),
-        Event.countDocuments(Event.statutFilter("a_venir")),
-        Event.countDocuments(Event.statutFilter("en_cours")),
-        Event.countDocuments(Event.statutFilter("passe")),
-        Application.countDocuments({ statut: "en_attente" }),
-        Message.countDocuments({ lu: false }),
-        Order.countDocuments({ statut: "en_attente" }),
-        User.countDocuments(),
-      ]);
+    const [
+      cellules,
+      aVenir,
+      enCours,
+      passes,
+      candidaturesEnAttente,
+      messagesNonLus,
+      commandesEnAttente,
+      inscriptionsEnAttente,
+      utilisateurs,
+    ] = await Promise.all([
+      Cell.countDocuments(),
+      Event.countDocuments(Event.statutFilter("a_venir")),
+      Event.countDocuments(Event.statutFilter("en_cours")),
+      Event.countDocuments(Event.statutFilter("passe")),
+      Application.countDocuments({ statut: "en_attente" }),
+      Message.countDocuments({ lu: false }),
+      Order.countDocuments({ statut: "en_attente" }),
+      Registration.countDocuments({ statut: "en_attente" }),
+      User.countDocuments(),
+    ]);
 
     return res.json({
       success: true,
@@ -23,6 +33,7 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
         candidaturesEnAttente,
         messagesNonLus,
         commandesEnAttente,
+        inscriptionsEnAttente,
         utilisateurs,
       },
       message: null,

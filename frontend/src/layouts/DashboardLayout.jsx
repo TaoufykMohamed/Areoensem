@@ -23,6 +23,17 @@ const ADMIN_LINKS = [
   { to: "/dashboard/messages", key: "messages" },
 ];
 
+// Correspondance lien de menu -> champ de compteur dans /dashboard/stats.
+// Absent de la réponse (cas chef_cellule, dont les stats n'exposent pas ces
+// champs) => stats?.[...] vaut undefined => pas de badge, sans condition
+// isAdmin à dupliquer ici.
+const BADGE_FIELDS = {
+  messages: "messagesNonLus",
+  applications: "candidaturesEnAttente",
+  orders: "commandesEnAttente",
+  registrations: "inscriptionsEnAttente",
+};
+
 function linkClass({ isActive }) {
   return `flex items-center justify-between rounded-lg px-4 py-2 text-sm transition-colors ${
     isActive ? "bg-brand-cyan/15 text-brand-cyan" : "text-white/60 hover:bg-white/5 hover:text-white"
@@ -34,7 +45,6 @@ export default function DashboardLayout() {
   const { user, isAdmin, logout } = useAuth();
   const links = isAdmin ? [...COMMON_LINKS, ...ADMIN_LINKS] : COMMON_LINKS;
   const { data: stats } = useFetch(() => (isAdmin ? dashboardApi.stats() : Promise.resolve(null)), [isAdmin]);
-  const unreadMessages = stats?.messagesNonLus ?? 0;
 
   return (
     <div className="flex min-h-screen bg-[#04101f] text-white">
@@ -43,16 +53,19 @@ export default function DashboardLayout() {
           <img src="/assets/logo-club-aero.png" alt="Club AéroENSEM" className="h-8 w-auto" />
         </Link>
 
-        {links.map((l) => (
-          <NavLink key={l.to} to={l.to} end={l.end} className={linkClass}>
-            <span>{t(`dashboard.${l.key}`)}</span>
-            {l.key === "messages" && unreadMessages > 0 && (
-              <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-brand-amber px-1.5 text-[11px] font-semibold text-[#04101f]">
-                {unreadMessages}
-              </span>
-            )}
-          </NavLink>
-        ))}
+        {links.map((l) => {
+          const count = stats?.[BADGE_FIELDS[l.key]] ?? 0;
+          return (
+            <NavLink key={l.to} to={l.to} end={l.end} className={linkClass}>
+              <span>{t(`dashboard.${l.key}`)}</span>
+              {count > 0 && (
+                <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-brand-amber px-1.5 text-[11px] font-semibold text-[#04101f]">
+                  {count}
+                </span>
+              )}
+            </NavLink>
+          );
+        })}
 
         <div className="mt-auto border-t border-white/10 pt-4">
           <div className="px-2 text-xs text-white/40">{t("dashboard.welcome")}</div>

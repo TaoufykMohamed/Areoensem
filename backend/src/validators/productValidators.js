@@ -21,7 +21,7 @@ export const createOrderSchema = z.object({
   prenom: z.string().min(1),
   email: z.string().email(),
   telephone: z.string().min(1),
-  adresse: z.string().min(1),
+  adresse: z.string().optional().default(""),
   taille: z.string().optional().default(""),
   quantite: z.number().int().min(1).optional().default(1),
 });

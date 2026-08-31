@@ -37,8 +37,10 @@ export default function Partners() {
                 >
                   <div className="relative min-h-0 flex-1 bg-white">
                     {p.logo ? (
+                      // bg-contain (pas cover) : le logo entier reste visible,
+                      // jamais recadré/zoomé, quel que soit son ratio d'origine.
                       <div
-                        className="absolute inset-0 bg-cover bg-center"
+                        className="absolute inset-8 bg-contain bg-center bg-no-repeat"
                         style={{ backgroundImage: `url(${p.logo})` }}
                       />
                     ) : (

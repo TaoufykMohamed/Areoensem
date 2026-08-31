@@ -112,11 +112,14 @@
   },
   "store": {
     "title": "Store",
+    "category": "Produit",
     "orderCta": "Commander",
     "orderSuccess": "Commande enregistrée, nous vous recontactons rapidement.",
     "size": "Taille",
     "quantity": "Quantité",
-    "price": "Prix"
+    "price": "Prix",
+    "firstName": "Prénom",
+    "address": "Adresse"
   },
   "partners": {
     "title": "Partenaires",

@@ -33,7 +33,11 @@ export default function DashboardOrders() {
         <tbody>
           {orders?.map((o) => (
             <tr key={o._id} className="border-t border-white/10">
-              <td className="py-3">{o.nom}<div className="text-xs text-white/40">{o.email}</div></td>
+              <td className="py-3">
+                {o.prenom} {o.nom}
+                <div className="text-xs text-white/40">{o.email} · {o.telephone}</div>
+                {o.adresse && <div className="text-xs text-white/40">{o.adresse}</div>}
+              </td>
               <td className="py-3 text-white/60">{o.produit ? loc(o.produit, "nom") : "—"}</td>
               <td className="py-3 text-white/60">{o.quantite}</td>
               <td className="py-3">

@@ -7,6 +7,9 @@ const productSchema = new mongoose.Schema(
     descriptionFr: { type: String, default: "" },
     descriptionEn: { type: String, default: "" },
     images: [{ type: String }],
+    // Aperçu vidéo (autoplay/loop/muted côté front) affiché à la place des
+    // images sur la page Store — voir MAX_VIDEO_SIZE dans upload.js.
+    video: { type: String, default: "" },
     prix: { type: Number, required: true, min: 0 },
     tailles: [{ type: String }],
     stock: { type: Number, default: 0, min: 0 },

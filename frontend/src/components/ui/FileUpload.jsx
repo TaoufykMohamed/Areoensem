@@ -51,9 +51,11 @@ export default function FileUpload({
   // Priorité au fichier fraîchement choisi ; sinon la photo déjà en base
   // (édition d'un élément existant), tant qu'elle n'a pas été retirée.
   const displayUrl = preview?.url || (!removed && existingUrl) || "";
-  // Un PDF (ou tout non-image) n'a pas de miniature affichable dans un <img> :
-  // on sniffe le type via le fichier choisi, ou le préfixe du data URI existant.
+  // Un PDF (ou tout non-image/non-vidéo) n'a pas de miniature affichable
+  // dans un <img> : on sniffe le type via le fichier choisi, ou le préfixe
+  // du data URI existant.
   const isImage = preview ? preview.type?.startsWith("image/") : displayUrl.startsWith("data:image");
+  const isVideo = preview ? preview.type?.startsWith("video/") : displayUrl.startsWith("data:video");
 
   return (
     <div
@@ -98,6 +100,15 @@ export default function FileUpload({
                 alt=""
                 className="h-16 w-16 rounded-lg border border-white/15 bg-white object-contain p-1"
               />
+            ) : isVideo ? (
+              <video
+                src={displayUrl}
+                muted
+                loop
+                autoPlay
+                playsInline
+                className="h-16 w-16 rounded-lg border border-white/15 bg-black object-cover"
+              />
             ) : (
               <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg border border-white/15 bg-white/5">
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-white/50">
@@ -108,7 +119,7 @@ export default function FileUpload({
             )}
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm text-white/90">
-                {preview ? preview.name : isImage ? "Photo actuelle" : "Document actuel"}
+                {preview ? preview.name : isImage ? "Photo actuelle" : isVideo ? "Vidéo actuelle" : "Document actuel"}
               </p>
               {preview && <p className="text-xs text-white/40">{(preview.size / 1024).toFixed(0)} Ko</p>}
             </div>

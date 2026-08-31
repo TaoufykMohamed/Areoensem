@@ -112,11 +112,14 @@
   },
   "store": {
     "title": "Store",
+    "category": "Product",
     "orderCta": "Order",
     "orderSuccess": "Order placed, we'll be in touch shortly.",
     "size": "Size",
     "quantity": "Quantity",
-    "price": "Price"
+    "price": "Price",
+    "firstName": "First name",
+    "address": "Address"
   },
   "partners": {
     "title": "Partners",

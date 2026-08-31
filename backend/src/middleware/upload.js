@@ -65,3 +65,37 @@ export function uploadSingleDocument(fieldName) {
     });
   };
 }
+
+// Aperçus vidéo produit (Store) : un seul par produit (pas de tableau comme
+// les dossiers de projet des cellules), donc plus de marge sous les 16 Mo
+// par document MongoDB — mais on reste loin de la limite pour laisser de
+// la place aux autres champs et à l'inflation ~33 % du base64.
+const MAX_VIDEO_SIZE = 8 * 1024 * 1024; // 8 Mo
+
+function videoFileFilter(req, file, cb) {
+  if (!file.mimetype.startsWith("video/")) {
+    return cb(ApiError.badRequest("Le fichier doit être une vidéo."));
+  }
+  cb(null, true);
+}
+
+const videoUpload = multer({
+  storage,
+  fileFilter: videoFileFilter,
+  limits: { fileSize: MAX_VIDEO_SIZE },
+});
+
+export function uploadSingleVideo(fieldName) {
+  const middleware = videoUpload.single(fieldName);
+  return (req, res, next) => {
+    middleware(req, res, (err) => {
+      if (err instanceof multer.MulterError) {
+        const message =
+          err.code === "LIMIT_FILE_SIZE" ? "Fichier trop volumineux (8 Mo max)." : err.message;
+        return next(ApiError.badRequest(message));
+      }
+      if (err) return next(err);
+      next();
+    });
+  };
+}

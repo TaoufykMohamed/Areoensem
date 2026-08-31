@@ -6,6 +6,7 @@ export const createProductSchema = z.object({
   descriptionFr: z.string().optional().default(""),
   descriptionEn: z.string().optional().default(""),
   images: z.array(z.string()).optional().default([]),
+  video: z.string().optional().default(""),
   prix: z.number().min(0),
   tailles: z.array(z.string()).optional().default([]),
   stock: z.number().int().min(0).optional().default(0),
@@ -17,8 +18,10 @@ export const updateProductSchema = createProductSchema.partial();
 export const createOrderSchema = z.object({
   produit: z.string().min(1),
   nom: z.string().min(1),
+  prenom: z.string().min(1),
   email: z.string().email(),
   telephone: z.string().min(1),
+  adresse: z.string().min(1),
   taille: z.string().optional().default(""),
   quantite: z.number().int().min(1).optional().default(1),
 });

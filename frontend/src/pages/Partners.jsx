@@ -25,27 +25,29 @@ export default function Partners() {
             {partners?.map((p) => (
               <Reveal key={p._id}>
                 {/* Carte purement informative : plus de lien, le clic ne fait
-                    rien. Fond blanc derrière le logo (souvent transparent)
-                    pour qu'il ressorte clairement plutôt que de se fondre
-                    dans le noir ; dégradé du bas allégé pour laisser le
-                    logo bien visible tout en gardant le texte lisible. */}
+                    rien. Le texte n'est plus superposé au logo (il s'y
+                    mêlait et devenait illisible) : image et légende sont
+                    deux zones séparées dans la carte — fond blanc derrière
+                    le logo (souvent transparent) dans sa zone, légende sur
+                    fond uni dans la sienne. */}
                 <div
                   role="listitem"
                   aria-label={`${p.nom}, ${TYPE_LABEL[p.type]}`}
-                  className="relative block h-80 overflow-hidden rounded-xl bg-white shadow-lg transition-all duration-500 ease-in-out group-hover:scale-[0.97] group-hover:opacity-60 group-hover:blur-[2px] hover:!scale-105 hover:!opacity-100 hover:!blur-none"
+                  className="flex h-80 flex-col overflow-hidden rounded-xl shadow-lg transition-all duration-500 ease-in-out group-hover:scale-[0.97] group-hover:opacity-60 group-hover:blur-[2px] hover:!scale-105 hover:!opacity-100 hover:!blur-none"
                 >
-                  {p.logo ? (
-                    <div
-                      className="absolute inset-0 bg-cover bg-center"
-                      style={{ backgroundImage: `url(${p.logo})` }}
-                    />
-                  ) : (
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#0b2545] to-[#04101f]" />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-                  <div className="absolute bottom-0 left-0 p-6 text-white">
+                  <div className="relative min-h-0 flex-1 bg-white">
+                    {p.logo ? (
+                      <div
+                        className="absolute inset-0 bg-cover bg-center"
+                        style={{ backgroundImage: `url(${p.logo})` }}
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#0b2545] to-[#04101f]" />
+                    )}
+                  </div>
+                  <div className="bg-[#04101f] px-6 py-4 text-white">
                     <p className="text-sm font-light uppercase tracking-widest opacity-80">{p.nom}</p>
-                    <h3 className="mt-1 text-2xl font-semibold uppercase">{TYPE_LABEL[p.type]}</h3>
+                    <h3 className="mt-1 text-xl font-semibold uppercase">{TYPE_LABEL[p.type]}</h3>
                   </div>
                 </div>
               </Reveal>

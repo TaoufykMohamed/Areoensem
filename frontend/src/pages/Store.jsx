@@ -14,9 +14,11 @@ const orderInputClass =
 /**
  * Carte produit — même traitement visuel que les cellules (ExpandableCells) :
  * hover-dim des cartes voisines via `group`, coins arrondis, ombre, morph
- * partagé (layoutId) vers la modale au clic. Seule différence de contenu :
- * un <video> en autoplay/loop/muted à la place du fond image, pour un
- * aperçu dynamique du produit (rendu 3D, démo...).
+ * partagé (layoutId) vers la modale au clic. La grille affiche la vignette
+ * statique (`poster`), pas la vidéo : la liste ne renvoie plus `video` (voir
+ * product.routes.js) pour éviter de télécharger la vidéo de chaque produit
+ * juste pour afficher la grille — elle ne se charge qu'à l'ouverture d'une
+ * fiche précise, voir ProductModal.
  */
 function ProductCard({ product, title, onOpen }) {
   return (
@@ -34,15 +36,8 @@ function ProductCard({ product, title, onOpen }) {
       }}
       className="relative block h-80 cursor-pointer overflow-hidden rounded-xl bg-cover bg-center shadow-lg outline-none transition-all duration-500 ease-in-out group-hover:scale-[0.97] group-hover:opacity-60 group-hover:blur-[2px] hover:!scale-105 hover:!opacity-100 hover:!blur-none focus-visible:!scale-105 focus-visible:!opacity-100 focus-visible:!blur-none focus-visible:!ring-2 focus-visible:!ring-brand-cyan"
     >
-      {product.video ? (
-        <video
-          src={product.video}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 h-full w-full object-cover"
-        />
+      {product.poster ? (
+        <img src={product.poster} alt="" className="absolute inset-0 h-full w-full object-cover" />
       ) : (
         <div className="absolute inset-0 bg-gradient-to-br from-[#0b2545] to-[#04101f]" />
       )}
@@ -153,14 +148,21 @@ function OrderForm({ product, t }) {
 /**
  * Modale produit — même charpente que la modale cellule/événement (fond
  * sombre fixe, layoutId, deux colonnes desktop / une colonne mobile via
- * md:grid-cols-[340px_1fr]). La vidéo continue de jouer identiquement à
- * gauche ; la colonne droite bascule entre infos et formulaire de commande
- * au clic sur "Commander", sans fermer la modale.
+ * md:grid-cols-[340px_1fr]). `product` (venu de la liste) n'a pas `video` :
+ * on va la chercher ici, à l'ouverture, via GET /products/:id — la vignette
+ * déjà en main s'affiche en attendant, pas d'écran vide. La colonne droite
+ * bascule entre infos et formulaire de commande au clic sur "Commander",
+ * sans fermer la modale.
  */
 function ProductModal({ product, title, onClose }) {
   const { t } = useTranslation();
   const { t: loc } = useLocale();
   const [ordering, setOrdering] = useState(false);
+  const { data: fullProduct } = useFetch(
+    () => productsApi.get(product._id),
+    [product._id],
+    `product-${product._id}`
+  );
 
   useEffect(() => {
     const onKeyDown = (e) => e.key === "Escape" && onClose();
@@ -196,17 +198,20 @@ function ProductModal({ product, title, onClose }) {
         </button>
 
         <div className="grid gap-8 p-6 md:grid-cols-[340px_1fr] md:p-10">
-          {/* Colonne gauche : vidéo en lecture continue */}
+          {/* Colonne gauche : vidéo en lecture continue une fois chargée,
+              vignette déjà disponible en attendant */}
           <div className="overflow-hidden rounded-xl">
-            {product.video ? (
+            {fullProduct?.video ? (
               <video
-                src={product.video}
+                src={fullProduct.video}
                 autoPlay
                 loop
                 muted
                 playsInline
                 className="aspect-[3/4] w-full object-cover"
               />
+            ) : product.poster ? (
+              <img src={product.poster} alt="" className="aspect-[3/4] w-full object-cover" />
             ) : (
               <div className="aspect-[3/4] w-full bg-gradient-to-br from-[#0b2545] to-[#04101f]" />
             )}
@@ -255,7 +260,7 @@ function ProductModal({ product, title, onClose }) {
 export default function Store() {
   const { t } = useTranslation();
   const { t: loc } = useLocale();
-  const { data: products, loading } = useFetch(() => productsApi.list(), []);
+  const { data: products, loading } = useFetch(() => productsApi.list(), [], "products");
   const [selectedId, setSelectedId] = useState(null);
 
   const available = products?.filter((p) => p.disponible) || [];

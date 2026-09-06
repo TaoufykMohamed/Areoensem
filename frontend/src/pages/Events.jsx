@@ -11,7 +11,7 @@ const TABS = ["a_venir", "en_cours", "passe"];
 export default function Events() {
   const { t } = useTranslation();
   const [tab, setTab] = useState("a_venir");
-  const { data: events, loading } = useFetch(() => eventsApi.list({ statut: tab }), [tab]);
+  const { data: events, loading } = useFetch(() => eventsApi.list({ statut: tab }), [tab], `events-${tab}`);
 
   return (
     <div>

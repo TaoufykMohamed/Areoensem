@@ -6,6 +6,7 @@ export const createProductSchema = z.object({
   descriptionFr: z.string().optional().default(""),
   descriptionEn: z.string().optional().default(""),
   images: z.array(z.string()).optional().default([]),
+  poster: z.string().optional().default(""),
   video: z.string().optional().default(""),
   prix: z.number().min(0),
   tailles: z.array(z.string()).optional().default([]),

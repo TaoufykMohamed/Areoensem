@@ -148,7 +148,7 @@ export default function ExpandableCells({ cells }) {
   const { t: loc } = useLocale();
   const [selectedId, setSelectedId] = useState(null);
   const selected = cells.find((c) => c._id === selectedId);
-  const { data: boardMembers } = useFetch(() => boardApi.list(), []);
+  const { data: boardMembers } = useFetch(() => boardApi.list(), [], "board");
   const responsable = selected ? getResponsable(selected) : null;
   const boardMatch = findBoardMatch(responsable, boardMembers);
 

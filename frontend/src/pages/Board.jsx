@@ -81,7 +81,7 @@ function MemberOverlay({ member, loc }) {
 export default function Board() {
   const { t } = useTranslation();
   const { t: loc } = useLocale();
-  const { data: members, loading } = useFetch(() => boardApi.list(), []);
+  const { data: members, loading } = useFetch(() => boardApi.list(), [], "board");
   const [hoveredId, setHoveredId] = useState(null);
   const [searchParams] = useSearchParams();
   const targetId = searchParams.get("membre");

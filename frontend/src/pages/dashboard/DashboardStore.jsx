@@ -10,6 +10,7 @@ const emptyForm = {
   nomEn: "",
   descriptionFr: "",
   descriptionEn: "",
+  poster: "",
   video: "",
   prix: "",
   stock: 0,
@@ -27,6 +28,23 @@ export default function DashboardStore() {
   const [uploading, setUploading] = useState(false);
   const [tailleInput, setTailleInput] = useState("");
   const [error, setError] = useState("");
+
+  const handlePoster = async (file) => {
+    if (!file) {
+      setForm((f) => ({ ...f, poster: "" }));
+      return;
+    }
+    setError("");
+    setUploading(true);
+    try {
+      const { url } = await productsApi.uploadPoster(file);
+      setForm((f) => ({ ...f, poster: url }));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleVideo = async (file) => {
     if (!file) {
@@ -93,9 +111,21 @@ export default function DashboardStore() {
       <h1 className="mb-6 font-serif text-2xl">{t("dashboard.store")}</h1>
 
       <form onSubmit={submit} className="mb-8 grid gap-3 rounded-xl border border-white/10 p-5 sm:grid-cols-2">
-        <div className="sm:col-span-2">
+        <div>
           <label className="mb-2 block text-xs uppercase tracking-instrument text-white/40">
-            Aperçu vidéo (autoplay/loop/muted sur la page Store)
+            Vignette (affichée dans la grille Store)
+          </label>
+          <FileUpload
+            onFileSelect={handlePoster}
+            existingUrl={form.poster}
+            disabled={uploading}
+            accept="image/*"
+            hint="PNG ou JPG, 1 Mo max"
+          />
+        </div>
+        <div>
+          <label className="mb-2 block text-xs uppercase tracking-instrument text-white/40">
+            Aperçu vidéo (lu en boucle dans la fiche produit)
           </label>
           <FileUpload
             onFileSelect={handleVideo}

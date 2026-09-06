@@ -7,8 +7,12 @@ const productSchema = new mongoose.Schema(
     descriptionFr: { type: String, default: "" },
     descriptionEn: { type: String, default: "" },
     images: [{ type: String }],
-    // Aperçu vidéo (autoplay/loop/muted côté front) affiché à la place des
-    // images sur la page Store — voir MAX_VIDEO_SIZE dans upload.js.
+    // Vignette statique affichée dans la grille Store (légère, chargée pour
+    // tous les produits). La vidéo, elle, n'est envoyée qu'à l'ouverture de
+    // la fiche produit (GET /products/:id) — voir listProducts, qui exclut
+    // `video` de la liste. Voir MAX_VIDEO_SIZE dans upload.js.
+    poster: { type: String, default: "" },
+    // Aperçu vidéo (autoplay/loop/muted) affiché dans la modale du produit.
     video: { type: String, default: "" },
     prix: { type: Number, required: true, min: 0 },
     tailles: [{ type: String }],

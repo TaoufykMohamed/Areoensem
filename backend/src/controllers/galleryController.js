@@ -3,9 +3,15 @@ import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 export const listGalleryItems = asyncHandler(async (req, res) => {
-  const { cellule, event } = req.query;
+  const { cellule, event, limit } = req.query;
   const filter = { ...(cellule ? { cellule } : {}), ...(event ? { event } : {}) };
-  const items = await GalleryItem.find(filter).sort({ date: -1 });
+  let query = GalleryItem.find(filter).sort({ date: -1 });
+  // Optionnel : la page d'accueil ne veut qu'un aperçu récent, le dashboard
+  // (gestion complète, doit tout voir pour pouvoir supprimer) n'en passe
+  // pas — comportement inchangé si absent.
+  const parsedLimit = Number(limit);
+  if (Number.isInteger(parsedLimit) && parsedLimit > 0) query = query.limit(parsedLimit);
+  const items = await query;
   res.json({ success: true, data: items, message: null });
 });
 

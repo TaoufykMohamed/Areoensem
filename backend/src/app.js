@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import express from "express";
 import helmet from "helmet";
 import cors from "cors";
+import compression from "compression";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 
@@ -26,7 +27,12 @@ export const app = express();
 
 app.use(helmet());
 
-// ATTENTION : Le CORS doit être activé en production car 
+// Les images/vidéos/PDF voyagent en base64 (texte) dans les réponses JSON :
+// très compressible, contrairement au binaire brut — gain important pour
+// un coût quasi nul (CPU négligeable face à la latence réseau qu'il évite).
+app.use(compression());
+
+// ATTENTION : Le CORS doit être activé en production car
 // le frontend (Vercel) et le backend (Render) n'ont pas la même URL.
 app.use(
   cors({

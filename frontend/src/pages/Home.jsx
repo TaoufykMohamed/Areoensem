@@ -24,12 +24,18 @@ export default function Home() {
   const { t: loc } = useLocale();
   const [showEventModal, setShowEventModal] = useState(false);
 
-  const { data: cells, loading: cellsLoading } = useFetch(() => cellsApi.list(), []);
-  const { data: events } = useFetch(() => eventsApi.list({ statut: "a_venir" }), []);
-  const { data: partners } = useFetch(() => partnersApi.list(), []);
-  const { data: gallery } = useFetch(() => galleryApi.list(), []);
-  const { data: stats } = useFetch(() => statsApi.list(), []);
-  const { data: content } = useFetch(() => contentApi.list(), []);
+  // Mêmes clés de cache que Cells.jsx/Events.jsx/Partners.jsx : partager le
+  // cache entre l'accueil et ces pages évite de retélécharger deux fois la
+  // même réponse (parfois plusieurs Mo) en une session.
+  const { data: cells, loading: cellsLoading } = useFetch(() => cellsApi.list(), [], "cells");
+  const { data: events } = useFetch(() => eventsApi.list({ statut: "a_venir" }), [], "events-a_venir");
+  const { data: partners } = useFetch(() => partnersApi.list(), [], "partners");
+  // La page d'accueil n'affiche qu'un aperçu récent, pas tout l'historique
+  // (voir LayoutGrid ci-dessous) — inutile de télécharger toutes les photos
+  // jamais uploadées à chaque visite.
+  const { data: gallery } = useFetch(() => galleryApi.list({ limit: 12 }), [], "gallery-home");
+  const { data: stats } = useFetch(() => statsApi.list(), [], "stats");
+  const { data: content } = useFetch(() => contentApi.list(), [], "content");
 
   const contentValue = (key, fallback = "") => {
     const item = content?.find((c) => c.cle === key);

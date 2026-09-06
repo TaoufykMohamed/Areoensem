@@ -9,7 +9,7 @@ const TYPE_LABEL = { sponsor: "Sponsor", partenaire: "Partenaire", ecole: "Écol
 
 export default function Partners() {
   const { t } = useTranslation();
-  const { data: partners, loading } = useFetch(() => partnersApi.list(), []);
+  const { data: partners, loading } = useFetch(() => partnersApi.list(), [], "partners");
 
   return (
     <div>

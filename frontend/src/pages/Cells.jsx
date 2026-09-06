@@ -7,7 +7,7 @@ import Spinner from "../components/ui/Spinner.jsx";
 
 export default function Cells() {
   const { t } = useTranslation();
-  const { data: cells, loading } = useFetch(() => cellsApi.list(), []);
+  const { data: cells, loading } = useFetch(() => cellsApi.list(), [], "cells");
 
   return (
     <div>

@@ -6,9 +6,10 @@ import { ApiError } from "./ApiError.js";
 // logique métier propre (Cell, Event, Application, ...) ont leur
 // contrôleur écrit à la main.
 
-export function listAll(Model, { sort = {}, populate } = {}) {
+export function listAll(Model, { sort = {}, populate, select } = {}) {
   return asyncHandler(async (req, res) => {
     let query = Model.find().sort(sort);
+    if (select) query = query.select(select);
     if (populate) query = query.populate(populate);
     const items = await query;
     res.json({ success: true, data: items, message: null });

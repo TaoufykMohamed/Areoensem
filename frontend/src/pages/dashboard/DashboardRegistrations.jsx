@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useOutletContext } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useFetch } from "../../hooks/useFetch.js";
 import { useLocale } from "../../hooks/useLocale.js";
@@ -12,6 +13,9 @@ export default function DashboardRegistrations() {
   const { data: events, loading } = useFetch(() => eventsApi.list({}), []);
   const [openId, setOpenId] = useState(null);
   const [registrations, setRegistrations] = useState({});
+  // Fourni par DashboardLayout (voir Outlet context) : absent si cette page
+  // est rendue hors de ce layout (peu probable, mais évite un crash).
+  const { refetchStats } = useOutletContext() ?? {};
 
   const visible = isAdmin ? events : events?.filter((e) => (e.cellule?._id ?? e.cellule) === user.cellule);
 
@@ -19,8 +23,13 @@ export default function DashboardRegistrations() {
     if (openId === id) return setOpenId(null);
     setOpenId(id);
     if (!registrations[id]) {
+      // Le backend marque les inscriptions de cet événement comme lues dès
+      // qu'on les consulte (voir listEventRegistrations) — on redemande les
+      // compteurs pour que le badge "Inscriptions" de la sidebar se mette
+      // à jour tout de suite, sans recharger la page.
       const list = await eventsApi.listRegistrations(id);
       setRegistrations((r) => ({ ...r, [id]: list }));
+      refetchStats?.();
     }
   };
 

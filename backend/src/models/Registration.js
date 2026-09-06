@@ -14,6 +14,10 @@ const registrationSchema = new mongoose.Schema(
       enum: ["en_attente", "confirme", "refuse"],
       default: "en_attente",
     },
+    // Distinct de `statut` (qui reflète une décision d'admission) : purement
+    // "vu par un admin" — sert uniquement au badge de notification du
+    // dashboard, voir listEventRegistrations.
+    lu: { type: Boolean, default: false },
   },
   { timestamps: { createdAt: true, updatedAt: false } }
 );

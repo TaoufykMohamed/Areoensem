@@ -11,7 +11,7 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
       candidaturesEnAttente,
       messagesNonLus,
       commandesEnAttente,
-      inscriptionsEnAttente,
+      inscriptionsNonLues,
       utilisateurs,
     ] = await Promise.all([
       Cell.countDocuments(),
@@ -21,7 +21,13 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
       Application.countDocuments({ statut: "en_attente" }),
       Message.countDocuments({ lu: false }),
       Order.countDocuments({ statut: "en_attente" }),
-      Registration.countDocuments({ statut: "en_attente" }),
+      // "Non lues" (pas "en attente") : ouvrir la liste des inscrit·e·s
+      // d'un événement (voir listEventRegistrations) les marque lues, sans
+      // que ça implique une décision d'admission — voir le champ `lu`.
+      // $ne (pas juste `false`) : les inscriptions créées avant l'ajout de
+      // ce champ n'ont pas `lu` du tout en base — un filtre `{lu: false}`
+      // littéral ne les compterait pas comme non lues.
+      Registration.countDocuments({ lu: { $ne: true } }),
       User.countDocuments(),
     ]);
 
@@ -33,7 +39,7 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
         candidaturesEnAttente,
         messagesNonLus,
         commandesEnAttente,
-        inscriptionsEnAttente,
+        inscriptionsNonLues,
         utilisateurs,
       },
       message: null,

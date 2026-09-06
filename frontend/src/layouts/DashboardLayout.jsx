@@ -31,7 +31,7 @@ const BADGE_FIELDS = {
   messages: "messagesNonLus",
   applications: "candidaturesEnAttente",
   orders: "commandesEnAttente",
-  registrations: "inscriptionsEnAttente",
+  registrations: "inscriptionsNonLues",
 };
 
 function linkClass({ isActive }) {
@@ -44,7 +44,10 @@ export default function DashboardLayout() {
   const { t } = useTranslation();
   const { user, isAdmin, logout } = useAuth();
   const links = isAdmin ? [...COMMON_LINKS, ...ADMIN_LINKS] : COMMON_LINKS;
-  const { data: stats } = useFetch(() => (isAdmin ? dashboardApi.stats() : Promise.resolve(null)), [isAdmin]);
+  const { data: stats, refetch: refetchStats } = useFetch(
+    () => (isAdmin ? dashboardApi.stats() : Promise.resolve(null)),
+    [isAdmin]
+  );
 
   return (
     <div className="flex min-h-screen bg-[#04101f] text-white">
@@ -80,7 +83,10 @@ export default function DashboardLayout() {
       </aside>
 
       <main className="flex-1 overflow-x-auto p-8">
-        <Outlet />
+        {/* Permet à une page enfant (ex. Inscriptions) de redemander les
+            compteurs après avoir marqué quelque chose comme lu, pour que le
+            badge de la sidebar se mette à jour sans recharger la page. */}
+        <Outlet context={{ refetchStats }} />
       </main>
     </div>
   );

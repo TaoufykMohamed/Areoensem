@@ -67,5 +67,13 @@ export const registerForEvent = asyncHandler(async (req, res, next) => {
 
 export const listEventRegistrations = asyncHandler(async (req, res) => {
   const registrations = await Registration.find({ event: req.params.id }).sort({ createdAt: -1 });
+  // Consulter la liste = les marquer vues, pour que le badge du dashboard
+  // se mette à jour dès que l'admin déplie cet événement (pas besoin d'un
+  // bouton "marquer comme lu" séparé, comme pour les cellules/événements
+  // c'est déjà l'ouverture qui compte comme lecture).
+  // $ne (pas `lu: false`) : les inscriptions antérieures à l'ajout de ce
+  // champ n'ont pas `lu` du tout en base, `{lu: false}` ne les matcherait
+  // pas et elles resteraient "non lues" pour toujours.
+  await Registration.updateMany({ event: req.params.id, lu: { $ne: true } }, { lu: true });
   res.json({ success: true, data: registrations, message: null });
 });

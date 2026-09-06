@@ -24,16 +24,22 @@ export default function Partners() {
           <div role="list" className="group grid w-full grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
             {partners?.map((p) => (
               <Reveal key={p._id}>
-                {/* Carte purement informative : plus de lien, le clic ne fait
-                    rien. Le texte n'est plus superposé au logo (il s'y
-                    mêlait et devenait illisible) : image et légende sont
-                    deux zones séparées dans la carte — fond blanc derrière
+                {/* Clic -> ouvre le site du partenaire (siteWeb, saisi au
+                    dashboard) dans un nouvel onglet ; pas de lien si aucune
+                    URL n'est renseignée. Le texte n'est pas superposé au
+                    logo (il s'y mêlait et devenait illisible) : image et
+                    légende sont deux zones séparées — fond blanc derrière
                     le logo (souvent transparent) dans sa zone, légende sur
                     fond uni dans la sienne. */}
-                <div
+                <a
+                  href={p.siteWeb || undefined}
+                  target={p.siteWeb ? "_blank" : undefined}
+                  rel="noreferrer"
                   role="listitem"
                   aria-label={`${p.nom}, ${TYPE_LABEL[p.type]}`}
-                  className="flex h-80 flex-col overflow-hidden rounded-xl shadow-lg transition-all duration-500 ease-in-out group-hover:scale-[0.97] group-hover:opacity-60 group-hover:blur-[2px] hover:!scale-105 hover:!opacity-100 hover:!blur-none"
+                  className={`flex h-80 flex-col overflow-hidden rounded-xl shadow-lg outline-none transition-all duration-500 ease-in-out group-hover:scale-[0.97] group-hover:opacity-60 group-hover:blur-[2px] hover:!scale-105 hover:!opacity-100 hover:!blur-none focus-visible:!scale-105 focus-visible:!opacity-100 focus-visible:!blur-none focus-visible:!ring-2 focus-visible:!ring-brand-cyan ${
+                    p.siteWeb ? "cursor-pointer" : "cursor-default"
+                  }`}
                 >
                   <div className="relative min-h-0 flex-1 bg-white">
                     {p.logo ? (
@@ -51,7 +57,7 @@ export default function Partners() {
                     <p className="text-sm font-light uppercase tracking-widest opacity-80">{p.nom}</p>
                     <h3 className="mt-1 text-xl font-semibold uppercase">{TYPE_LABEL[p.type]}</h3>
                   </div>
-                </div>
+                </a>
               </Reveal>
             ))}
           </div>

@@ -6,46 +6,28 @@ import { useLocale } from "../../hooks/useLocale.js";
 import { useFetch } from "../../hooks/useFetch.js";
 import { boardApi } from "../../api/board.js";
 
-// Aucun lien structurel entre une cellule et le bureau (BoardMember,
-// collection distincte) : le seul point commun est le texte. Le Bureau est
-// la source à jour pour "qui dirige quoi" (le lien User.cellule/membres de
-// la cellule peut être resté sur un ancien nom) — on rapproche donc un
-// poste de bureau ("Chef Projet", "Responsable Média", orthographes
-// variables selon quand il a été saisi) au nom de la cellule via les mots
-// significatifs qu'ils ont en commun, insensible aux accents/casse et
-// tolérant aux abréviations ("Evénement" ~ "Event").
-function normalizeText(str) {
-  return (str || "")
-    .toUpperCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^A-Z0-9 ]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+// Priorité : ce que l'admin saisit explicitement sur la cellule elle-même
+// prime toujours — un membre dont le rôle désigne un·e responsable ("Chef",
+// "Responsable", "Lead", quelle que soit la formulation choisie), puis à
+// défaut le compte utilisateur lié (User.cellule). Le Bureau (collection
+// séparée, sans lien structurel à la cellule) n'intervient plus dans CE
+// choix — seulement plus bas, pour proposer un lien de contact si la même
+// personne s'y retrouve.
+function isResponsableRole(m) {
+  const role = `${m.roleFr} ${m.roleEn}`.toLowerCase();
+  return role.includes("chef") || role.includes("responsable") || role.includes("lead");
 }
 
-const ROLE_WORDS = new Set(["CHEF", "CHEFFE", "RESPONSABLE", "RESPO", "CONSEILLERE", "CONSEILLER"]);
-
-function significantWordPrefixes(str) {
-  return normalizeText(str)
-    .split(" ")
-    .filter((w) => w.length >= 4 && !ROLE_WORDS.has(w))
-    .map((w) => w.slice(0, 4));
+function getResponsable(cell) {
+  const membre = cell.membres?.find(isResponsableRole);
+  if (membre) return { nom: membre.nom, email: null };
+  if (cell.chef?.nom) return { nom: cell.chef.nom, email: cell.chef.email };
+  return null;
 }
 
-function findCellChefInBoard(cell, boardMembers) {
-  if (!boardMembers?.length) return null;
-  const cellPrefixes = significantWordPrefixes(cell.nomFr);
-  if (cellPrefixes.length === 0) return null;
-  return (
-    boardMembers.find((m) => significantWordPrefixes(m.posteFr).some((p) => cellPrefixes.includes(p))) || null
-  );
-}
-
-// Rapprochement par nom exact — utilisé seulement en repli, pour donner
-// quand même un lien vers le Bureau si le poste n'a pas matché mais que le
-// nom, lui, coïncide.
-function findBoardMatchByName(responsable, boardMembers) {
+// Rapprochement par nom exact — pour proposer un lien vers le Bureau quand
+// la personne désignée sur la cellule s'y retrouve aussi.
+function findBoardMatch(responsable, boardMembers) {
   if (!responsable || !boardMembers) return null;
   const target = responsable.nom.trim().toLowerCase();
   return boardMembers.find((m) => m.nom.trim().toLowerCase() === target) || null;
@@ -57,16 +39,6 @@ function currentSeason() {
   const now = new Date();
   const year = now.getFullYear();
   return now.getMonth() >= 8 ? `${year}-${year + 1}` : `${year - 1}-${year}`;
-}
-
-// Priorité : le Bureau (à jour) > le "chef" lié au compte utilisateur > le
-// membre de la cellule dont le rôle mentionne "chef" (repli historique).
-function getResponsable(cell, boardMembers) {
-  const boardChef = findCellChefInBoard(cell, boardMembers);
-  if (boardChef) return { nom: boardChef.nom, email: boardChef.email, boardId: boardChef._id };
-  if (cell.chef?.nom) return { nom: cell.chef.nom, email: cell.chef.email };
-  const membre = cell.membres?.find((m) => `${m.roleFr} ${m.roleEn}`.toLowerCase().includes("chef"));
-  return membre ? { nom: membre.nom, email: null } : null;
 }
 
 function FacebookIcon() {
@@ -177,10 +149,8 @@ export default function ExpandableCells({ cells }) {
   const [selectedId, setSelectedId] = useState(null);
   const selected = cells.find((c) => c._id === selectedId);
   const { data: boardMembers } = useFetch(() => boardApi.list(), []);
-  const responsable = selected ? getResponsable(selected, boardMembers) : null;
-  const boardMatch = responsable?.boardId
-    ? boardMembers?.find((m) => m._id === responsable.boardId)
-    : findBoardMatchByName(responsable, boardMembers);
+  const responsable = selected ? getResponsable(selected) : null;
+  const boardMatch = findBoardMatch(responsable, boardMembers);
 
   useEffect(() => {
     if (!selectedId) return;
@@ -203,7 +173,7 @@ export default function ExpandableCells({ cells }) {
             key={cell._id}
             cell={cell}
             title={loc(cell, "nom")}
-            subtitle={getResponsable(cell, boardMembers)?.nom || ""}
+            subtitle={getResponsable(cell)?.nom || ""}
             onOpen={setSelectedId}
           />
         ))}

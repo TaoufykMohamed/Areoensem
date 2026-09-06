@@ -26,7 +26,7 @@
     "cells": "Cells",
     "events": "Events",
     "board": "Team",
-    "store": "Store",
+    "store": "AeroCollection",
     "partners": "Partners",
     "contact": "Contact",
     "join": "Join us",
@@ -111,7 +111,7 @@
     "title": "The team"
   },
   "store": {
-    "title": "Store",
+    "title": "AeroCollection",
     "category": "Product",
     "orderCta": "Order",
     "orderSuccess": "Order placed, we'll be in touch shortly.",

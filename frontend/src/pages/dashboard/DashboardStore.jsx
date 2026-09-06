@@ -80,7 +80,13 @@ export default function DashboardStore() {
     refetch();
   };
 
-  if (loading) return null;
+  // Uniquement au tout premier chargement : un refetch après création/
+  // suppression remet `loading` à true mais garde l'ancienne liste dans
+  // `products` (voir useFetch) — sur cette page, dont les requêtes peuvent
+  // être plus lentes (vidéos produit), tout planter en blanc à chaque
+  // refetch masquait le formulaire et donnait l'impression que la création
+  // n'avait servi à rien.
+  if (loading && !products) return null;
 
   return (
     <div>
